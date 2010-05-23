@@ -1,0 +1,159 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>11.3 Pseudopotentials</TITLE>
+<META NAME="description" CONTENT="11.3 Pseudopotentials">
+<META NAME="keywords" CONTENT="user_guide">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="user_guide.css">
+
+<LINK REL="next" HREF="node57.html">
+<LINK REL="previous" HREF="node55.html">
+<LINK REL="up" HREF="node53.html">
+<LINK REL="next" HREF="node57.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html1177"
+  HREF="node57.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html1173"
+  HREF="node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html1167"
+  HREF="node55.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html1175"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1178"
+  HREF="node57.html">11.4 Input data</A>
+<B> Up:</B> <A NAME="tex2html1174"
+  HREF="node53.html">11 Frequently Asked Questions</A>
+<B> Previous:</B> <A NAME="tex2html1168"
+  HREF="node55.html">11.2 Installation</A>
+ &nbsp; <B>  <A NAME="tex2html1176"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><UL>
+<LI><A NAME="tex2html1179"
+  HREF="node56.html#SECTION000123010000000000000">11.3.0.1 Can I mix USPP/NCPP/PAW ?</A>
+<LI><A NAME="tex2html1180"
+  HREF="node56.html#SECTION000123020000000000000">11.3.0.2 Where can I find pseudopotentials for atom X?</A>
+<LI><A NAME="tex2html1181"
+  HREF="node56.html#SECTION000123030000000000000">11.3.0.3 Where can I find pseudopotentials for rare-earth X?</A>
+<LI><A NAME="tex2html1182"
+  HREF="node56.html#SECTION000123040000000000000">11.3.0.4 Is there a converter from format XYZ to UPF?</A>
+</UL></UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H2><A NAME="SECTION000123000000000000000">
+11.3 Pseudopotentials</A>
+</H2>
+
+<P>
+
+<H4><A NAME="SECTION000123010000000000000">
+11.3.0.1 Can I mix USPP/NCPP/PAW ?</A>
+</H4>
+
+<P>
+Yes, you can (if implemented, of course: a few kinds of calculations
+are not available with USPP, a few more are not for PAW). A small
+restrictions exists in <TT>cp.x</TT>, expecting atoms with USPP listed before 
+those with NCPP, which in turn are expected before local PP's (if any).
+Otherwise you can mix and match, as long as the XC functional used in 
+the generation of the PP is the same for all PPs. Note that 
+it is the hardest atom that determines the cutoff.
+
+<P>
+
+<H4><A NAME="SECTION000123020000000000000">
+11.3.0.2 Where can I find pseudopotentials for atom X?</A>
+</H4>
+
+<P>
+First, a general rule: when you ask for a pseudopotential, you should
+always specify which kind of PP you need (NCPP, USPP
+PAW, full- or scalar-relativistic, for which XC functional,
+and for many elements, with how many electrons in valence). 
+If you do not find anything suitable in the ``pseudo'' page of the web 
+site links, we have bad news for you: you have to produce it by yourself. 
+You can use the <TT>atomic</TT> code: have a look first at the contents
+of the library of input data in <TT>atomic_doc/pseudo_gen</TT>.
+Otherwise, you can use any other code producing a file format that is either
+recognized by Q<SMALL>UANTUM </SMALL>ESPRESSO or for which a converter to the UPF format exists. 
+New contributions to the PP table are very appreciated (and very scarce).
+
+<P>
+
+<H4><A NAME="SECTION000123030000000000000">
+11.3.0.3 Where can I find pseudopotentials for rare-earth X?</A>
+</H4>
+
+<P>
+Please consider first if DFT is suitable for your system! In many cases, 
+it isn't (at least ``plain'' DFT: GGA and the like). If you are still
+convinced that it is, see above.
+
+<P>
+
+<H4><A NAME="SECTION000123040000000000000">
+11.3.0.4 Is there a converter from format XYZ to UPF?</A>
+</H4>
+
+<P>
+What is available (no warranty) is in directory <TT>upftools/</TT>.
+You are most welcome to contribute a new converter.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1177"
+  HREF="node57.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html1173"
+  HREF="node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html1167"
+  HREF="node55.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html1175"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1178"
+  HREF="node57.html">11.4 Input data</A>
+<B> Up:</B> <A NAME="tex2html1174"
+  HREF="node53.html">11 Frequently Asked Questions</A>
+<B> Previous:</B> <A NAME="tex2html1168"
+  HREF="node55.html">11.2 Installation</A>
+ &nbsp; <B>  <A NAME="tex2html1176"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Paolo Giannozzi
+2010-05-07
+</ADDRESS>
+</BODY>
+</HTML>

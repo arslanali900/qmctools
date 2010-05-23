@@ -1,0 +1,99 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>4 Using QUANTUM ESPRESSO</TITLE>
+<META NAME="description" CONTENT="4 Using QUANTUM ESPRESSO">
+<META NAME="keywords" CONTENT="user_guide">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="user_guide.css">
+
+<LINK REL="next" HREF="node24.html">
+<LINK REL="previous" HREF="node15.html">
+<LINK REL="up" HREF="user_guide.html">
+<LINK REL="next" HREF="node21.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html575"
+  HREF="node21.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html571"
+  HREF="user_guide.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html565"
+  HREF="node19.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html573"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html576"
+  HREF="node21.html">4.1 Input data</A>
+<B> Up:</B> <A NAME="tex2html572"
+  HREF="user_guide.html">User's Guide for Quantum-ESPRESSO</A>
+<B> Previous:</B> <A NAME="tex2html566"
+  HREF="node19.html">3.4 Tricks and problems</A>
+ &nbsp; <B>  <A NAME="tex2html574"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H1><A NAME="SECTION00050000000000000000">
+4 Using Q<SMALL>UANTUM </SMALL>ESPRESSO</A>
+</H1>
+
+<P>
+Input files for <TT>PWscf</TT> codes may be either written by hand 
+or produced via the <TT>PWgui</TT> graphical interface by Anton Kokalj, 
+included in the Q<SMALL>UANTUM </SMALL>ESPRESSO distribution. See <TT>PWgui-x.y.z/INSTALL</TT>
+(where x.y.z is the version number) for more info on <TT>PWgui</TT>, 
+or <TT>GUI/README</TT> if you are using CVS sources.
+
+<P>
+You may take the examples distributed with Q<SMALL>UANTUM </SMALL>ESPRESSO as
+templates for writing your own input files: see Sec.<A HREF="node13.html#SubSec:Examples">2.6</A>.
+In the following, whenever we mention "Example N", we refer to those. 
+Input files are those in the <TT>results/</TT> subdirectories, with names ending
+with <TT>.in</TT> 
+(they will appear after you have run the examples).
+
+<P>
+Note about XC: the type of XC used in the calculation is read from PP files. 
+All PPs must have been generated using the same XC. You can override
+this choice by setting input variable <TT>input_dft</TT> (see list of
+allowed values in <TT>Modules/funct.f90</TT>).
+
+<P>
+<BR><HR>
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><A NAME="tex2html577"
+  HREF="node21.html">4.1 Input data</A>
+<LI><A NAME="tex2html578"
+  HREF="node22.html">4.2 Data files</A>
+<LI><A NAME="tex2html579"
+  HREF="node23.html">4.3 Format of arrays containing charge density, potential, etc.</A>
+</UL>
+<!--End of Table of Child-Links-->
+<BR><HR>
+<ADDRESS>
+Paolo Giannozzi
+2010-05-07
+</ADDRESS>
+</BODY>
+</HTML>

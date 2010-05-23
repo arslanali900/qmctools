@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>4.1 Input data</TITLE>
+<META NAME="description" CONTENT="4.1 Input data">
+<META NAME="keywords" CONTENT="user_guide">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="user_guide.css">
+
+<LINK REL="next" HREF="node22.html">
+<LINK REL="previous" HREF="node20.html">
+<LINK REL="up" HREF="node20.html">
+<LINK REL="next" HREF="node22.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html590"
+  HREF="node22.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html586"
+  HREF="node20.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html580"
+  HREF="node20.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html588"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html591"
+  HREF="node22.html">4.2 Data files</A>
+<B> Up:</B> <A NAME="tex2html587"
+  HREF="node20.html">4 Using QUANTUM ESPRESSO</A>
+<B> Previous:</B> <A NAME="tex2html581"
+  HREF="node20.html">4 Using QUANTUM ESPRESSO</A>
+ &nbsp; <B>  <A NAME="tex2html589"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00051000000000000000">
+4.1 Input data</A>
+</H2>
+
+<P>
+Input data for the basic codes of the Q<SMALL>UANTUM </SMALL>ESPRESSO distribution, .x and .x,
+is organized as several namelists, followed by other fields
+introduced by keywords. The namelists are
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT">&amp;CONTROL:</TD>
+<TD ALIGN="LEFT">general variables controlling the run</TD>
+</TR>
+<TR><TD ALIGN="LEFT">&amp;SYSTEM:</TD>
+<TD ALIGN="LEFT">structural information on the system under investigation</TD>
+</TR>
+<TR><TD ALIGN="LEFT">&amp;ELECTRONS:</TD>
+<TD ALIGN="LEFT">electronic variables: self-consistency, smearing</TD>
+</TR>
+<TR><TD ALIGN="LEFT">&amp;IONS (optional):</TD>
+<TD ALIGN="LEFT">ionic variables: relaxation, dynamics</TD>
+</TR>
+<TR><TD ALIGN="LEFT">&amp;CELL (optional):</TD>
+<TD ALIGN="LEFT">variable-cell dynamics</TD>
+</TR>
+<TR><TD ALIGN="LEFT">&amp;EE  (optional):</TD>
+<TD ALIGN="LEFT">for density counter charge electrostatic corrections</TD>
+</TR>
+</TABLE>    
+<BR>
+Optional namelist may be omitted if the calculation to be performed
+does not require them. This depends on the value of variable calculation
+in namelist &amp;CONTROL. Most variables in namelists have default values. Only
+the following variables in &amp;SYSTEM must always be specified:
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT"><TT>ibrav</TT></TD>
+<TD ALIGN="LEFT">(integer)</TD>
+<TD ALIGN="LEFT">bravais-lattice index</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>celldm</TT></TD>
+<TD ALIGN="LEFT">(real, dimension 6)</TD>
+<TD ALIGN="LEFT">crystallographic constants</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>nat</TT></TD>
+<TD ALIGN="LEFT">(integer)</TD>
+<TD ALIGN="LEFT">number of atoms in the unit cell</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>ntyp</TT></TD>
+<TD ALIGN="LEFT">(integer)</TD>
+<TD ALIGN="LEFT">number of types of atoms in the unit cell</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>ecutwfc</TT></TD>
+<TD ALIGN="LEFT">(real)</TD>
+<TD ALIGN="LEFT">kinetic energy cutoff (Ry) for wavefunctions.</TD>
+</TR>
+</TABLE>    
+<BR>
+For metallic systems, you have to specify how metallicity is treated
+in
+variable <TT>occupations</TT>. If you choose <TT>occupations='smearing'</TT>,
+you have
+to specify the smearing width <TT>degauss</TT> and optionally the smearing
+type
+<TT>smearing</TT>. Spin-polarized systems must be treated as metallic system, except the 
+special case of a single k-point, for which occupation numbers can be fixed
+(<TT>occupations='from input'</TT> and card OCCUPATIONS).
+
+<P>
+Explanations for the meaning of variables <TT>ibrav</TT> and <TT>celldm</TT>,
+as well as on alternative ways to input structural data,
+are in files <TT>Doc/INPUT_PW.*</TT> (for .x) and <TT>Doc/INPUT_CP.*</TT>
+(for .x). These files are the reference for input data and describe 
+a large number of other variables as well. Almopst all variables have default 
+values, which may or may not fit your needs.
+
+<P>
+After the namelists, you have several fields (``cards'')
+introduced by keywords with self-explanatory names:
+<BLOCKQUOTE>
+ATOMIC_SPECIES
+<BR>
+ATOMIC_POSITIONS
+<BR>
+K_POINTS
+<BR>
+CELL_PARAMETERS (optional)
+<BR>
+OCCUPATIONS (optional)
+<BR>
+CLIMBING_IMAGES (optional)
+
+</BLOCKQUOTE>
+The keywords may be followed on the same line by an option. Unknown
+fields (including some that are specific to <TT>CP</TT>) are ignored by 
+<TT>PWscf</TT>(and vice versa, <TT>CP</TT> ignores <TT>PWscf</TT>-specific fields).
+See the files mentioned above for details on the available ``cards''.
+
+<P>
+Note about k points: The k-point grid can be either automatically generated 
+or manually provided as a list of k-points and a weight in the Irreducible
+Brillouin Zone only of the Bravais lattice of the crystal. The code will 
+generate (unless instructed not to do so: see variable <TT>nosym</TT>) all
+required k-point 
+and weights if the symmetry of the system is lower than the symmetry of the
+Bravais lattice. The automatic generation of k-points follows the convention
+of Monkhorst and Pack.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html590"
+  HREF="node22.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html586"
+  HREF="node20.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html580"
+  HREF="node20.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html588"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html591"
+  HREF="node22.html">4.2 Data files</A>
+<B> Up:</B> <A NAME="tex2html587"
+  HREF="node20.html">4 Using QUANTUM ESPRESSO</A>
+<B> Previous:</B> <A NAME="tex2html581"
+  HREF="node20.html">4 Using QUANTUM ESPRESSO</A>
+ &nbsp; <B>  <A NAME="tex2html589"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Paolo Giannozzi
+2010-05-07
+</ADDRESS>
+</BODY>
+</HTML>

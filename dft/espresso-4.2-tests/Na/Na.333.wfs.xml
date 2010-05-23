@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<?iotk version="1.2.0"?>
+<?iotk file_version="1.0"?>
+<?iotk binary="F"?>
+<qmcsystem>
+  <wavefunction name="psi0" target="e">
+<!-- Uncomment this out to use plane-wave basis functions
+    <determinantset type="PW" href="Na.PBE.TN.pwscf.h5" version="1.10">
+--> 
+      <determinantset type="bspline" href="Na.PBE.TN.pwscf.h5" sort="1" tilematrix="3 0 0 0 3 0 0 0 3" source="ion0" version="0.10">
+        <basisset ecut="2.000000000000000E+001">
+          <grid dir="0" npts="36" closed="no"/>
+          <grid dir="1" npts="36" closed="no"/>
+          <grid dir="2" npts="36" closed="no"/>
+        </basisset>
+        <h5tag name="twistIndex">
+           0
+        </h5tag>
+        <h5tag name="twistAngle">
+    0.000000000000000    0.000000000000000    0.000000000000000
+        </h5tag>
+        <slaterdeterminant>
+          <determinant id="updet" size="27">
+            <occupation mode="ground" spindataset="0">
+            </occupation>
+          </determinant>
+          <determinant id="downdet" size="27">
+            <occupation mode="ground" spindataset="0">
+            </occupation>
+          </determinant>
+        </slaterdeterminant>
+      </determinantset>
+    </wavefunction>
+  </qmcsystem>
+

@@ -1,0 +1,9 @@
+#=======================================
+# WANNIER90 	
+#=======================================
+
+F90=gfortran
+FCOPTS=$(FFLAGS) -x f95-cpp-input 
+LDOPTS=-g
+
+LIBS =  -llapack  -lblas  

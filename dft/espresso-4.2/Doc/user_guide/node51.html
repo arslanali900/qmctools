@@ -1,0 +1,100 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>10.2 PostProc</TITLE>
+<META NAME="description" CONTENT="10.2 PostProc">
+<META NAME="keywords" CONTENT="user_guide">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="user_guide.css">
+
+<LINK REL="next" HREF="node52.html">
+<LINK REL="previous" HREF="node50.html">
+<LINK REL="up" HREF="node49.html">
+<LINK REL="next" HREF="node52.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html1055"
+  HREF="node52.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html1051"
+  HREF="node49.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html1045"
+  HREF="node50.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html1053"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1056"
+  HREF="node52.html">10.3 .x errors</A>
+<B> Up:</B> <A NAME="tex2html1052"
+  HREF="node49.html">10 Troubleshooting</A>
+<B> Previous:</B> <A NAME="tex2html1046"
+  HREF="node50.html">10.1 .x problems</A>
+ &nbsp; <B>  <A NAME="tex2html1054"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><UL>
+<LI><A NAME="tex2html1057"
+  HREF="node51.html#SECTION000112010000000000000">10.2.0.1 Some postprocessing codes complain that they do not find some files</A>
+<LI><A NAME="tex2html1058"
+  HREF="node51.html#SECTION000112020000000000000">10.2.0.2 <EM>error in davcio</EM> in postprocessing codes</A>
+</UL></UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H2><A NAME="SECTION000112000000000000000">
+10.2 PostProc</A>
+</H2>
+
+<P>
+
+<H4><A NAME="SECTION000112010000000000000">
+10.2.0.1 Some postprocessing codes complain that they do not find some files</A>
+</H4>
+For Linux PC clusters in parallel execution: in at least some versions
+of MPICH, the current directory is set to the directory where the executable
+code resides, instead of being set to the directory where the code is executed.
+This MPICH weirdness may cause unexpected failures in some postprocessing
+codes that expect a data file in the current directory. Workaround: use
+symbolic links, or copy the executable to the current directory.
+
+<P>
+
+<H4><A NAME="SECTION000112020000000000000">
+10.2.0.2 <EM>error in davcio</EM> in postprocessing codes</A>
+</H4>
+Most likely you are not reading the correct data files, or you are not
+following the correct procedure for postprocessing. In parallel execution: 
+if you did not set <TT>wf_collect=.true.</TT>, the number of processors and 
+pools for the phonon run should be the same as for the
+self-consistent run; all files must be visible to all processors.
+
+<P>
+<BR><HR>
+<ADDRESS>
+Paolo Giannozzi
+2010-05-07
+</ADDRESS>
+</BODY>
+</HTML>

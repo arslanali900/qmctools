@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>11.5 Parallel execution</TITLE>
+<META NAME="description" CONTENT="11.5 Parallel execution">
+<META NAME="keywords" CONTENT="user_guide">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="user_guide.css">
+
+<LINK REL="next" HREF="node59.html">
+<LINK REL="previous" HREF="node57.html">
+<LINK REL="up" HREF="node53.html">
+<LINK REL="next" HREF="node59.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html1209"
+  HREF="node59.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html1205"
+  HREF="node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html1199"
+  HREF="node57.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html1207"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1210"
+  HREF="node59.html">11.6 Frequent errors during</A>
+<B> Up:</B> <A NAME="tex2html1206"
+  HREF="node53.html">11 Frequently Asked Questions</A>
+<B> Previous:</B> <A NAME="tex2html1200"
+  HREF="node57.html">11.4 Input data</A>
+ &nbsp; <B>  <A NAME="tex2html1208"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><UL>
+<LI><A NAME="tex2html1211"
+  HREF="node58.html#SECTION000125010000000000000">11.5.0.1 How do I choose the number of processors/how do I setup my parallel calculation?</A>
+<LI><A NAME="tex2html1212"
+  HREF="node58.html#SECTION000125020000000000000">11.5.0.2 Why is my parallel job running in such a lousy way?</A>
+<LI><A NAME="tex2html1213"
+  HREF="node58.html#SECTION000125030000000000000">11.5.0.3 Why is my parallel job crashing when reading input data / doing nothing?</A>
+<LI><A NAME="tex2html1214"
+  HREF="node58.html#SECTION000125040000000000000">11.5.0.4 The code stops with an <EM>error reading namelist xxxx</EM></A>
+<LI><A NAME="tex2html1215"
+  HREF="node58.html#SECTION000125050000000000000">11.5.0.5 Why is my parallel job crashing with mysterious errors?</A>
+</UL></UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H2><A NAME="SECTION000125000000000000000">
+11.5 Parallel execution</A>
+</H2>
+
+<P>
+Effective usage of parallelism requires some basic knowledge on how
+parallel machines work and how parallelism is implemented in
+Q<SMALL>UANTUM </SMALL>ESPRESSO. If you have no experience and no clear ideas (or not
+idea at all), consider reading Sec.<A HREF="node15.html#Sec:para">3</A>.
+
+<P>
+
+<H4><A NAME="SECTION000125010000000000000">
+11.5.0.1 How do I choose the number of processors/how do I setup my parallel calculation?</A>
+</H4>
+
+<P>
+Please see above.
+
+<P>
+
+<H4><A NAME="SECTION000125020000000000000">
+11.5.0.2 Why is my parallel job running in such a lousy way?</A>
+</H4>
+
+<P>
+A frequent reason for lousy parallel performances is a
+conflict between MPI parallelization (implemented in Q<SMALL>UANTUM </SMALL>ESPRESSO)
+and the autoparallelizing feature of MKL libraries. Set the
+environment variable <TT>OPEN_MP_THREADS</TT> to 1. 
+See Sec.<A HREF="node15.html#Sec:para">3</A> for more info.
+
+<P>
+
+<H4><A NAME="SECTION000125030000000000000">
+11.5.0.3 Why is my parallel job crashing when reading input data / doing nothing?</A>
+</H4>
+
+<P>
+If the same data work in serial execution, use
+<TT>code -inp input_file</TT> instead of <TT>code &lt;
+<tex2html_verbatim_mark> input_file</TT>. 
+Some MPI libraries do not properly handle input redirection.
+
+<P>
+
+<H4><A NAME="SECTION000125040000000000000">
+11.5.0.4 The code stops with an <EM>error reading namelist xxxx</EM></A>
+</H4>
+
+<P>
+Most likely there is a misspelled variable in namelist xxxx.
+If there isn't any (have you looked carefully? really?? REALLY???), 
+beware control characters like DOS control-M: they can confuse
+the namelist-reading code. If this happens to the first namelist 
+to be read (usually "&amp;CONTROL") in parallel execution, see above.
+
+<P>
+
+<H4><A NAME="SECTION000125050000000000000">
+11.5.0.5 Why is my parallel job crashing with mysterious errors?</A>
+</H4>
+
+<P>
+Mysterious, unpredictable, erratic errors in parallel execution are
+almost always coming from bugs in the compiler or/and in the MPI 
+libraries and sometimes even to flacky hardware. Sorry, not our fault.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1209"
+  HREF="node59.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html1205"
+  HREF="node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html1199"
+  HREF="node57.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html1207"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1210"
+  HREF="node59.html">11.6 Frequent errors during</A>
+<B> Up:</B> <A NAME="tex2html1206"
+  HREF="node53.html">11 Frequently Asked Questions</A>
+<B> Previous:</B> <A NAME="tex2html1200"
+  HREF="node57.html">11.4 Input data</A>
+ &nbsp; <B>  <A NAME="tex2html1208"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Paolo Giannozzi
+2010-05-07
+</ADDRESS>
+</BODY>
+</HTML>

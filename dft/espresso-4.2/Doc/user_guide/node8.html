@@ -1,0 +1,223 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>2.1 Download</TITLE>
+<META NAME="description" CONTENT="2.1 Download">
+<META NAME="keywords" CONTENT="user_guide">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="user_guide.css">
+
+<LINK REL="next" HREF="node9.html">
+<LINK REL="previous" HREF="node7.html">
+<LINK REL="up" HREF="node7.html">
+<LINK REL="next" HREF="node9.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html393"
+  HREF="node9.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html389"
+  HREF="node7.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html383"
+  HREF="node7.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html391"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html394"
+  HREF="node9.html">2.2 Prerequisites</A>
+<B> Up:</B> <A NAME="tex2html390"
+  HREF="node7.html">2 Installation</A>
+<B> Previous:</B> <A NAME="tex2html384"
+  HREF="node7.html">2 Installation</A>
+ &nbsp; <B>  <A NAME="tex2html392"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00031000000000000000">
+2.1 Download</A>
+</H2>
+
+<P>
+Presently, Q<SMALL>UANTUM </SMALL>ESPRESSO is only distributed in source form; 
+some precompiled executables (binary files) are provided only for 
+<TT>PWgui</TT>. 
+Stable releases of the Q<SMALL>UANTUM </SMALL>ESPRESSO source package (current version 
+is 4.2.0) can be downloaded from this URL: 
+<BR><TT>http://www.quantum-espresso.org/download.php</TT>.
+
+<P>
+Uncompress and unpack the core distribution using the command:
+<PRE>
+     tar zxvf espresso-X.Y.Z.tar.gz
+</PRE>
+(a hyphen before "zxvf" is optional) where <TT>X.Y.Z</TT> stands for the
+verison number. If your version of <TT>tar</TT> 
+doesn't recognize the "z" flag:
+<PRE>
+     gunzip -c espresso-X.Y.Z.tar.gz | tar xvf -
+</PRE>
+A directory <TT>espresso-X.Y.Z/</TT> will be created. Given the size 
+of the complete distribution, you may need to download more packages
+and to unpack them following the same procedure (they will unpack into 
+the same directory). Plug-ins should instead be downloaded into
+subdirectory <TT>plugin/archive</TT> but not unpacked or uncompressed:
+command <TT>make</TT> will take care of this during installation.
+
+<P>
+Occasionally, patches for the current version, fixing some errors and bugs,
+may be distributed as a "diff" file. In order to install a patch (for 
+instance):
+<PRE>
+   cd espresso-X.Y.Z/
+   patch -p1 &lt; /path/to/the/diff/file/patch-file.diff
+</PRE>
+If more than one patch is present, they should be applied in the correct order.
+
+<P>
+Daily snapshots of the development version can be downloaded from the
+developers' site <TT>qe-forge.org</TT>: follow the link ''Quantum ESPRESSO'', 
+then ''SCM''. Beware: the development version 
+is, well, under development: use at your own risk! The bravest 
+may access the development version via anonymous CVS 
+(Concurrent Version System): see the Developer Manual
+(<TT>Doc/developer_man.pdf</TT>), section ''Using CVS''.
+
+<P>
+The Q<SMALL>UANTUM </SMALL>ESPRESSO distribution contains several directories. Some of them are
+common to all packages:
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT"><TT>Modules/</TT></TD>
+<TD ALIGN="LEFT">source files for modules that are common to all programs</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>include/</TT></TD>
+<TD ALIGN="LEFT">files *.h included by fortran and C source files</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>clib/</TT></TD>
+<TD ALIGN="LEFT">external libraries written in C</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>flib/</TT></TD>
+<TD ALIGN="LEFT">external libraries written in Fortran</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>iotk/ </TT></TD>
+<TD ALIGN="LEFT">Input/Output Toolkit</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>install/</TT></TD>
+<TD ALIGN="LEFT">installation scripts and utilities</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>pseudo</TT>/</TD>
+<TD ALIGN="LEFT">pseudopotential files used by examples</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>upftools/</TT></TD>
+<TD ALIGN="LEFT">converters to unified pseudopotential format (UPF)</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>examples/</TT></TD>
+<TD ALIGN="LEFT">sample input and output files</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>Doc/</TT></TD>
+<TD ALIGN="LEFT">general documentation</TD>
+</TR>
+</TABLE>
+
+<BR>
+while others are specific to a single package:
+
+<P>
+<TABLE CELLPADDING=3>
+<TR><TD ALIGN="LEFT"><TT>PW/</TT></TD>
+<TD ALIGN="LEFT"><TT>PWscf</TT>: source files for scf calculations (.x)</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>pwtools/</TT></TD>
+<TD ALIGN="LEFT"><TT>PWscf</TT>: source files for miscellaneous analysis programs</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>tests/</TT></TD>
+<TD ALIGN="LEFT"><TT>PWscf</TT>:  automated tests</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>PP/</TT></TD>
+<TD ALIGN="LEFT"><TT>PostProc</TT>: source files for post-processing of .x                    data file</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>PH/</TT></TD>
+<TD ALIGN="LEFT"><TT>PHonon</TT>: source files for phonon calculations (.x)
+                   and analysis</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>Gamma/</TT></TD>
+<TD ALIGN="LEFT"><TT>PHonon</TT>: source files for Gamma-only phonon calculation
+                  (<TT>phcg.x</TT>)</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>D3/</TT></TD>
+<TD ALIGN="LEFT"><TT>PHonon</TT>: source files for third-order derivative 
+                  calculations (<TT>d3.x</TT>)</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>PWCOND/</TT></TD>
+<TD ALIGN="LEFT"><TT>PWcond</TT>: source files for conductance calculations
+                  (<TT>pwcond.x</TT>)</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>vdW/</TT></TD>
+<TD ALIGN="LEFT"><TT>VdW</TT>: source files for molecular polarizability
+                  calculation at finite frequency</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>CPV/</TT></TD>
+<TD ALIGN="LEFT"><TT>CP</TT>: source files for Car-Parrinello code (.x)</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>atomic/</TT></TD>
+<TD ALIGN="LEFT"><TT>atomic</TT>: source files for the pseudopotential
+                   generation package (<TT>ld1.x</TT>)</TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>atomic_doc/</TT></TD>
+<TD ALIGN="LEFT">Documentation, tests and examples for <TT>atomic</TT></TD>
+</TR>
+<TR><TD ALIGN="LEFT"><TT>GUI/</TT></TD>
+<TD ALIGN="LEFT"><TT>PWGui</TT>: Graphical User Interface</TD>
+</TR>
+</TABLE>
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html393"
+  HREF="node9.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html389"
+  HREF="node7.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html383"
+  HREF="node7.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html391"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html394"
+  HREF="node9.html">2.2 Prerequisites</A>
+<B> Up:</B> <A NAME="tex2html390"
+  HREF="node7.html">2 Installation</A>
+<B> Previous:</B> <A NAME="tex2html384"
+  HREF="node7.html">2 Installation</A>
+ &nbsp; <B>  <A NAME="tex2html392"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Paolo Giannozzi
+2010-05-07
+</ADDRESS>
+</BODY>
+</HTML>

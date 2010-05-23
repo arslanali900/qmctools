@@ -1,0 +1,115 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>11.6 Frequent errors during execution</TITLE>
+<META NAME="description" CONTENT="11.6 Frequent errors during execution">
+<META NAME="keywords" CONTENT="user_guide">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="user_guide.css">
+
+<LINK REL="next" HREF="node60.html">
+<LINK REL="previous" HREF="node58.html">
+<LINK REL="up" HREF="node53.html">
+<LINK REL="next" HREF="node60.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html1226"
+  HREF="node60.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html1222"
+  HREF="node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html1216"
+  HREF="node58.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html1224"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1227"
+  HREF="node60.html">11.7 Self Consistency</A>
+<B> Up:</B> <A NAME="tex2html1223"
+  HREF="node53.html">11 Frequently Asked Questions</A>
+<B> Previous:</B> <A NAME="tex2html1217"
+  HREF="node58.html">11.5 Parallel execution</A>
+ &nbsp; <B>  <A NAME="tex2html1225"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><UL>
+<LI><A NAME="tex2html1228"
+  HREF="node59.html#SECTION000126010000000000000">11.6.0.1 Why is the code saying <EM>Wrong atomic coordinates</EM>?</A>
+<LI><A NAME="tex2html1229"
+  HREF="node59.html#SECTION000126020000000000000">11.6.0.2 The code stops with an <EM>error in davcio</EM></A>
+<LI><A NAME="tex2html1230"
+  HREF="node59.html#SECTION000126030000000000000">11.6.0.3 The code stops with a <EM>wrong charge</EM> error</A>
+</UL></UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H2><A NAME="SECTION000126000000000000000">
+11.6 Frequent errors during execution</A>
+</H2>
+
+<P>
+
+<H4><A NAME="SECTION000126010000000000000">
+11.6.0.1 Why is the code saying <EM>Wrong atomic coordinates</EM>?</A>
+</H4>
+
+<P>
+Because they are: two or more atoms in the list of atoms have
+overlapping, or anyway too close, positions. Can't you see why? look better
+(or use XCrySDen: see above) and remember that the code checks periodic
+images as well. 
+
+<P>
+
+<H4><A NAME="SECTION000126020000000000000">
+11.6.0.2 The code stops with an <EM>error in davcio</EM></A>
+</H4>
+
+<P>
+Possible reasons: disk is full; <TT>outdir</TT> is not writable for
+any reason; you changed some parameter(s) in the input (like 
+<TT>wf_collect</TT>, or the number of processors/pools) without 
+doing a bit of cleanup in your temporary files; you were running 
+more than one instance of <TT>pw.x</TT> in the same temporary
+directory with the same file names. 
+
+<P>
+
+<H4><A NAME="SECTION000126030000000000000">
+11.6.0.3 The code stops with a <EM>wrong charge</EM> error</A>
+</H4>
+
+<P>
+In most cases: you are treating a metallic system
+as if it were insulating.
+
+<P>
+<BR><HR>
+<ADDRESS>
+Paolo Giannozzi
+2010-05-07
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,4 @@
+&inputPP
+    prefix = 'Na.HSE.TN' ,
+    outdir = '.'
+/

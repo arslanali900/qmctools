@@ -1,0 +1,258 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>10.3 .x errors</TITLE>
+<META NAME="description" CONTENT="10.3 .x errors">
+<META NAME="keywords" CONTENT="user_guide">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="user_guide.css">
+
+<LINK REL="previous" HREF="node51.html">
+<LINK REL="up" HREF="node49.html">
+<LINK REL="next" HREF="node53.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html1067"
+  HREF="node53.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html1063"
+  HREF="node49.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html1059"
+  HREF="node51.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html1065"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1068"
+  HREF="node53.html">11 Frequently Asked Questions</A>
+<B> Up:</B> <A NAME="tex2html1064"
+  HREF="node49.html">10 Troubleshooting</A>
+<B> Previous:</B> <A NAME="tex2html1060"
+  HREF="node51.html">10.2 PostProc</A>
+ &nbsp; <B>  <A NAME="tex2html1066"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><UL>
+<LI><A NAME="tex2html1069"
+  HREF="node52.html#SECTION000113010000000000000">10.3.0.1 .x stops with <EM>error reading file</EM></A>
+<LI><A NAME="tex2html1070"
+  HREF="node52.html#SECTION000113020000000000000">10.3.0.2 .x mumbles something like <EM>cannot recover</EM> or <EM>error
+  reading recover file</EM></A>
+<LI><A NAME="tex2html1071"
+  HREF="node52.html#SECTION000113030000000000000">10.3.0.3 .x says <EM>occupation numbers probably wrong</EM> and
+ continues</A>
+<LI><A NAME="tex2html1072"
+  HREF="node52.html#SECTION000113040000000000000">10.3.0.4 .x does not yield acoustic modes with <IMG
+ WIDTH="17" HEIGHT="19" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.gif"
+ ALT="$ \omega$"> = 0
+<tex2html_verbatim_mark> at <I>q</I> = 0
+<tex2html_verbatim_mark></A>
+<LI><A NAME="tex2html1073"
+  HREF="node52.html#SECTION000113050000000000000">10.3.0.5 .x yields really lousy phonons, with bad or negative
+  frequencies or wrong symmetries or gross ASR violations</A>
+<LI><A NAME="tex2html1074"
+  HREF="node52.html#SECTION000113060000000000000">10.3.0.6 <EM>Wrong degeneracy</EM> error in star_q</A>
+</UL></UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H2><A NAME="SECTION000113000000000000000">
+10.3 .x errors</A>
+</H2>
+
+<P>
+
+<H4><A NAME="SECTION000113010000000000000">
+10.3.0.1 .x stops with <EM>error reading file</EM></A>
+</H4>
+The data file produced by .x
+is bad or incomplete or produced by an incompatible version of the code.
+In parallel execution: if you did not set <TT>wf_collect=.true.</TT>, the number
+of processors and pools for the phonon run should be the same as for the
+self-consistent run; all files must be visible to all processors.
+
+<P>
+
+<H4><A NAME="SECTION000113020000000000000">
+10.3.0.2 .x mumbles something like <EM>cannot recover</EM> or <EM>error
+  reading recover file</EM></A>
+</H4> 
+You have a bad restart file from a preceding failed execution.
+Remove all files <TT>recover*</TT> in <TT>outdir</TT>.
+
+<P>
+
+<H4><A NAME="SECTION000113030000000000000">
+10.3.0.3 .x says <EM>occupation numbers probably wrong</EM> and
+ continues</A>
+</H4> You have a
+metallic or spin-polarized system but occupations are not set to 
+<TT>'smearing'</TT>.
+
+<P>
+
+<H4><A NAME="SECTION000113040000000000000">
+10.3.0.4 .x does not yield acoustic modes with <IMG
+ WIDTH="17" HEIGHT="19" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.gif"
+ ALT="$ \omega$"> = 0
+<tex2html_verbatim_mark> at <I>q</I> = 0
+<tex2html_verbatim_mark></A>
+</H4>
+This may not be an error: the Acoustic Sum Rule (ASR) is never exactly
+verified, because the system is never exactly translationally
+invariant as it should be.  The calculated frequency of the acoustic
+mode is typically less than 10 cm<SUP>-1</SUP>
+<tex2html_verbatim_mark>, but in some cases it may be
+much higher, up to 100 cm<SUP>-1</SUP>
+<tex2html_verbatim_mark>. The ultimate test is to diagonalize
+the dynamical matrix with program <TT>dynmat.x</TT>, imposing the ASR. If you
+obtain an acoustic mode with a much smaller <IMG
+ WIDTH="17" HEIGHT="19" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.gif"
+ ALT="$ \omega$">
+<tex2html_verbatim_mark> (let us say 
+<!-- MATH
+ $< 1 \mbox{cm}^{-1}$
+ -->
+&lt; 1cm<SUP>-1</SUP>
+<tex2html_verbatim_mark> ) 
+with all other modes virtually unchanged, you can trust your results.
+
+<P>
+''The problem is [...] in the fact that the XC 
+energy is computed in real space on a discrete grid and hence the
+total energy is invariant (...) only for translation in the FFT
+grid. Increasing the charge density cutoff increases the grid density
+thus making the integral more exact thus reducing the problem,
+unfortunately rather slowly...This problem is usually more severe for
+GGA  than with LDA because the GGA functionals have functional forms
+that vary more strongly with the position; particularly so for
+isolated molecules or system with significant portions of "vacuum"
+because in the exponential tail of the charge density a) the finite
+cutoff  (hence there is an effect due to cutoff) induces oscillations
+in rho and b) the reduced gradient is diverging.''(info by Stefano de
+Gironcoli, June 2008) 
+
+<P>
+
+<H4><A NAME="SECTION000113050000000000000">
+10.3.0.5 .x yields really lousy phonons, with bad or negative
+  frequencies or wrong symmetries or gross ASR violations</A>
+</H4> 
+Possible reasons
+
+<UL>
+<LI>if this happens only for acoustic modes at <I>q</I> = 0
+<tex2html_verbatim_mark> that should
+  have <IMG
+ WIDTH="17" HEIGHT="19" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.gif"
+ ALT="$ \omega$"> = 0
+<tex2html_verbatim_mark>: Acoustic Sum Rule violation, see the item before
+  this one.
+</LI>
+<LI>wrong data file read.
+</LI>
+<LI>wrong atomic masses given in input will yield wrong frequencies
+  (but the content of file fildyn should be valid, since the force
+  constants, not the dynamical matrix, are written to file). 
+</LI>
+<LI>convergence threshold for either SCF (<TT>conv_thr</TT>) or phonon
+  calculation (<TT>tr2_ph</TT>) too large: try to reduce them. 
+</LI>
+<LI>maybe your system does have negative or strange phonon
+  frequencies, with the approximations you used. A negative frequency
+  signals a mechanical instability of the chosen structure. Check that
+  the structure is reasonable, and check the following parameters: 
+
+<UL>
+<LI>The cutoff for wavefunctions, <TT>ecutwfc</TT>
+</LI>
+<LI>For USPP: the cutoff for the charge density, <TT>ecutrho</TT>
+</LI>
+<LI>The k-point grid, especially for metallic systems.
+</LI>
+</UL>
+</LI>
+</UL>
+Note that "negative" frequencies are actually imaginary: the negative
+sign flags eigenvalues of the dynamical matrix for which <!-- MATH
+ $\omega^2 <
+0$
+ -->
+<IMG
+ WIDTH="24" HEIGHT="39" ALIGN="MIDDLE" BORDER="0"
+ SRC="img29.gif"
+ ALT="$ \omega^{2}_{}$"> &lt; 0
+<tex2html_verbatim_mark>. 
+
+<P>
+
+<H4><A NAME="SECTION000113060000000000000">
+10.3.0.6 <EM>Wrong degeneracy</EM> error in star_q</A>
+</H4>
+Verify the q-vector for which you are calculating phonons. In order to
+check whether a symmetry operation belongs to the small group of <I>q</I>
+<tex2html_verbatim_mark>,
+the code compares <I>q</I>
+<tex2html_verbatim_mark> and the rotated <I>q</I>
+<tex2html_verbatim_mark>, with an acceptance tolerance of  
+10<SUP>-5</SUP>
+<tex2html_verbatim_mark> (set in routine <TT>PW/eqvect.f90</TT>). You may run into trouble if
+your q-vector differs from a high-symmetry point by an amount in that
+order of magnitude.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1067"
+  HREF="node53.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html1063"
+  HREF="node49.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html1059"
+  HREF="node51.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html1065"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1068"
+  HREF="node53.html">11 Frequently Asked Questions</A>
+<B> Up:</B> <A NAME="tex2html1064"
+  HREF="node49.html">10 Troubleshooting</A>
+<B> Previous:</B> <A NAME="tex2html1060"
+  HREF="node51.html">10.2 PostProc</A>
+ &nbsp; <B>  <A NAME="tex2html1066"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Paolo Giannozzi
+2010-05-07
+</ADDRESS>
+</BODY>
+</HTML>

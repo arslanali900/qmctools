@@ -1,0 +1,184 @@
+\contentsline {section}{\numberline {1}Introduction}{3}{section.1}
+\contentsline {subsection}{\numberline {1.1}What can {\sc Quantum ESPRESSO}\ do}{4}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}People}{6}{subsection.1.2}
+\contentsline {subsection}{\numberline {1.3}Contacts}{8}{subsection.1.3}
+\contentsline {subsection}{\numberline {1.4}Terms of use}{8}{subsection.1.4}
+\contentsline {section}{\numberline {2}Installation}{9}{section.2}
+\contentsline {subsection}{\numberline {2.1}Download}{9}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Prerequisites}{10}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}\texttt {configure}}{11}{subsection.2.3}
+\contentsline {subsubsection}{\numberline {2.3.1}Manual configuration}{12}{subsubsection.2.3.1}
+\contentsline {subsection}{\numberline {2.4}Libraries}{13}{subsection.2.4}
+\contentsline {paragraph}{BLAS and LAPACK}{13}{section*.2}
+\contentsline {paragraph}{FFT}{13}{section*.3}
+\contentsline {paragraph}{MPI libraries}{14}{section*.4}
+\contentsline {paragraph}{Other libraries}{14}{section*.5}
+\contentsline {subsubsection}{\numberline {2.4.1}If optimized libraries are not found}{14}{subsubsection.2.4.1}
+\contentsline {subsection}{\numberline {2.5}Compilation}{14}{subsection.2.5}
+\contentsline {paragraph}{Other utilities}{17}{section*.6}
+\contentsline {subsection}{\numberline {2.6}Running examples}{17}{subsection.2.6}
+\contentsline {subsection}{\numberline {2.7}Installation tricks and problems}{19}{subsection.2.7}
+\contentsline {subsubsection}{\numberline {2.7.1}All architectures}{19}{subsubsection.2.7.1}
+\contentsline {subsubsection}{\numberline {2.7.2}Cray XT machines}{19}{subsubsection.2.7.2}
+\contentsline {subsubsection}{\numberline {2.7.3}IBM AIX}{19}{subsubsection.2.7.3}
+\contentsline {subsubsection}{\numberline {2.7.4}Linux PC}{20}{subsubsection.2.7.4}
+\contentsline {paragraph}{Linux PCs with Portland compiler (pgf90)}{20}{section*.7}
+\contentsline {paragraph}{Linux PCs with Pathscale compiler}{20}{section*.8}
+\contentsline {paragraph}{Linux PCs with gfortran}{20}{section*.9}
+\contentsline {paragraph}{Linux PCs with g95}{21}{section*.10}
+\contentsline {paragraph}{Linux PCs with Sun Studio compiler}{21}{section*.11}
+\contentsline {paragraph}{Linux PCs with AMD Open64 suite}{21}{section*.12}
+\contentsline {paragraph}{Linux PCs with Intel compiler (ifort)}{21}{section*.13}
+\contentsline {paragraph}{Linux PCs with MKL libraries}{21}{section*.14}
+\contentsline {paragraph}{Linux PCs with ACML libraries}{22}{section*.15}
+\contentsline {subsubsection}{\numberline {2.7.5}Linux PC clusters with MPI}{22}{subsubsection.2.7.5}
+\contentsline {subsubsection}{\numberline {2.7.6}Intel Mac OS X}{23}{subsubsection.2.7.6}
+\contentsline {paragraph}{Intel Mac OS X with ifort}{23}{section*.16}
+\contentsline {paragraph}{Intel Mac OS X 10.4 with g95 and gfortran}{23}{section*.17}
+\contentsline {paragraph}{Intel Mac OS X 10.6}{23}{section*.18}
+\contentsline {subsubsection}{\numberline {2.7.7}SGI, Alpha}{23}{subsubsection.2.7.7}
+\contentsline {section}{\numberline {3}Parallelism}{24}{section.3}
+\contentsline {subsection}{\numberline {3.1}Understanding Parallelism}{24}{subsection.3.1}
+\contentsline {subsection}{\numberline {3.2}Running on parallel machines}{24}{subsection.3.2}
+\contentsline {subsection}{\numberline {3.3}Parallelization levels}{25}{subsection.3.3}
+\contentsline {paragraph}{Massively parallel calculations}{27}{section*.19}
+\contentsline {subsubsection}{\numberline {3.3.1}Understanding parallel I/O}{27}{subsubsection.3.3.1}
+\contentsline {paragraph}{Cray XT3}{28}{section*.20}
+\contentsline {subsection}{\numberline {3.4}Tricks and problems}{28}{subsection.3.4}
+\contentsline {paragraph}{Trouble with input files}{28}{section*.21}
+\contentsline {paragraph}{Trouble with MKL and MPI parallelization}{29}{section*.22}
+\contentsline {paragraph}{Trouble with compilers and MPI libraries}{29}{section*.23}
+\contentsline {section}{\numberline {4}Using {\sc Quantum ESPRESSO}}{30}{section.4}
+\contentsline {subsection}{\numberline {4.1}Input data}{30}{subsection.4.1}
+\contentsline {subsection}{\numberline {4.2}Data files}{31}{subsection.4.2}
+\contentsline {subsection}{\numberline {4.3}Format of arrays containing charge density, potential, etc.}{31}{subsection.4.3}
+\contentsline {section}{\numberline {5}Using \texttt {PWscf}}{32}{section.5}
+\contentsline {subsection}{\numberline {5.1}Electronic structure calculations}{32}{subsection.5.1}
+\contentsline {paragraph}{Single-point (fixed-ion) SCF calculation}{32}{section*.24}
+\contentsline {paragraph}{Band structure calculation}{32}{section*.25}
+\contentsline {paragraph}{Noncollinear magnetization, spin-orbit interactions}{32}{section*.26}
+\contentsline {paragraph}{DFT+U}{33}{section*.27}
+\contentsline {paragraph}{Dispersion Interactions (DFT-D)}{33}{section*.28}
+\contentsline {paragraph}{Hartree-Fock and Hybrid functionals}{33}{section*.29}
+\contentsline {paragraph}{Polarization via Berry Phase}{33}{section*.30}
+\contentsline {paragraph}{Finite electric fields}{33}{section*.31}
+\contentsline {subsection}{\numberline {5.2}Optimization and dynamics}{34}{subsection.5.2}
+\contentsline {paragraph}{Structural optimization}{34}{section*.32}
+\contentsline {paragraph}{Molecular Dynamics}{34}{section*.33}
+\contentsline {paragraph}{Variable-cell molecular dynamics}{34}{section*.34}
+\contentsline {subsection}{\numberline {5.3}Nudged Elastic Band calculation}{34}{subsection.5.3}
+\contentsline {section}{\numberline {6}Phonon calculations}{36}{section.6}
+\contentsline {subsection}{\numberline {6.1}Single-q calculation}{36}{subsection.6.1}
+\contentsline {subsection}{\numberline {6.2}Calculation of interatomic force constants in real space}{36}{subsection.6.2}
+\contentsline {subsection}{\numberline {6.3}Calculation of electron-phonon interaction coefficients}{37}{subsection.6.3}
+\contentsline {subsection}{\numberline {6.4}Distributed Phonon calculations}{37}{subsection.6.4}
+\contentsline {section}{\numberline {7}Post-processing}{38}{section.7}
+\contentsline {subsection}{\numberline {7.1}Plotting selected quantities}{38}{subsection.7.1}
+\contentsline {subsection}{\numberline {7.2}Band structure, Fermi surface}{38}{subsection.7.2}
+\contentsline {subsection}{\numberline {7.3}Projection over atomic states, DOS}{38}{subsection.7.3}
+\contentsline {subsection}{\numberline {7.4}Wannier functions}{39}{subsection.7.4}
+\contentsline {subsection}{\numberline {7.5}Other tools}{39}{subsection.7.5}
+\contentsline {section}{\numberline {8}Using CP}{39}{section.8}
+\contentsline {subsection}{\numberline {8.1}Reaching the electronic ground state}{41}{subsection.8.1}
+\contentsline {subsection}{\numberline {8.2}Relax the system}{42}{subsection.8.2}
+\contentsline {subsection}{\numberline {8.3}CP dynamics}{44}{subsection.8.3}
+\contentsline {paragraph}{ Varying the temperature }{45}{section*.35}
+\contentsline {paragraph}{ No\'se thermostat for electrons }{45}{section*.36}
+\contentsline {subsection}{\numberline {8.4}Advanced usage}{46}{subsection.8.4}
+\contentsline {subsubsection}{\numberline {8.4.1} Self-interaction Correction }{46}{subsubsection.8.4.1}
+\contentsline {subsubsection}{\numberline {8.4.2} ensemble-DFT }{47}{subsubsection.8.4.2}
+\contentsline {subsubsection}{\numberline {8.4.3}Treatment of USPPs}{49}{subsubsection.8.4.3}
+\contentsline {section}{\numberline {9}Performances}{50}{section.9}
+\contentsline {subsection}{\numberline {9.1}Execution time}{50}{subsection.9.1}
+\contentsline {subsection}{\numberline {9.2}Memory requirements}{51}{subsection.9.2}
+\contentsline {subsection}{\numberline {9.3}File space requirements}{51}{subsection.9.3}
+\contentsline {subsection}{\numberline {9.4}Parallelization issues}{51}{subsection.9.4}
+\contentsline {section}{\numberline {10}Troubleshooting}{53}{section.10}
+\contentsline {subsection}{\numberline {10.1}\texttt {pw.x} problems}{53}{subsection.10.1}
+\contentsline {paragraph}{\texttt {pw.x} says 'error while loading shared libraries' or 'cannot open shared object file' and does not start}{53}{section*.37}
+\contentsline {paragraph}{errors in examples with parallel execution}{53}{section*.38}
+\contentsline {paragraph}{\texttt {pw.x} prints the first few lines and then nothing happens (parallel execution)}{53}{section*.39}
+\contentsline {paragraph}{\texttt {pw.x} stops with error while reading data}{54}{section*.40}
+\contentsline {paragraph}{\texttt {pw.x} mumbles something like {\em cannot recover} or {\em error reading recover file}}{54}{section*.41}
+\contentsline {paragraph}{\texttt {pw.x} stops with {\em inconsistent DFT} error}{54}{section*.42}
+\contentsline {paragraph}{\texttt {pw.x} stops with error in cdiaghg or rdiaghg}{54}{section*.43}
+\contentsline {paragraph}{\texttt {pw.x} crashes with no error message at all}{55}{section*.44}
+\contentsline {paragraph}{\texttt {pw.x} crashes with {\em segmentation fault} or similarly obscure messages}{55}{section*.45}
+\contentsline {paragraph}{\texttt {pw.x} works for simple systems, but not for large systems or whenever more RAM is needed}{55}{section*.46}
+\contentsline {paragraph}{\texttt {pw.x} crashes with {\em error in davcio}}{56}{section*.47}
+\contentsline {paragraph}{\texttt {pw.x} crashes in parallel execution with an obscure message related to MPI errors}{56}{section*.48}
+\contentsline {paragraph}{\texttt {pw.x} stops with error message {\em the system is metallic, specify occupations}}{56}{section*.49}
+\contentsline {paragraph}{\texttt {pw.x} stops with \texttt {internal error: cannot braket Ef}}{56}{section*.50}
+\contentsline {paragraph}{\texttt {pw.x} yields \texttt {internal error: cannot braket Ef} message but does not stop}{57}{section*.51}
+\contentsline {paragraph}{\texttt {pw.x} runs but nothing happens}{57}{section*.52}
+\contentsline {paragraph}{\texttt {pw.x} yields weird results}{57}{section*.53}
+\contentsline {paragraph}{FFT grid is machine-dependent}{57}{section*.54}
+\contentsline {paragraph}{\texttt {pw.x} does not find all the symmetries you expected}{58}{section*.55}
+\contentsline {paragraph}{{\em Warning: symmetry operation \# N not allowed}}{58}{section*.56}
+\contentsline {paragraph}{Self-consistency is slow or does not converge at all}{58}{section*.57}
+\contentsline {paragraph}{I do not get the same results in different machines!}{59}{section*.58}
+\contentsline {paragraph}{Execution time is time-dependent!}{59}{section*.59}
+\contentsline {paragraph}{{\em Warning : N eigenvectors not converged}}{59}{section*.60}
+\contentsline {paragraph}{{\em Warning : negative or imaginary charge...}, or {\em ...core charge ...}, or {\em npt with rhoup$<0$...} or {\em rho dw$<0$...}}{59}{section*.61}
+\contentsline {paragraph}{Structural optimization is slow or does not converge or ends with a mysterious bfgs error}{59}{section*.62}
+\contentsline {paragraph}{\texttt {pw.x} stops during variable-cell optimization in checkallsym with {\em non orthogonal operation} error}{60}{section*.63}
+\contentsline {subsection}{\numberline {10.2}PostProc}{60}{subsection.10.2}
+\contentsline {paragraph}{Some postprocessing codes complain that they do not find some files}{60}{section*.64}
+\contentsline {paragraph}{{\em error in davcio} in postprocessing codes}{60}{section*.65}
+\contentsline {subsection}{\numberline {10.3}\texttt {ph.x} errors}{61}{subsection.10.3}
+\contentsline {paragraph}{\texttt {ph.x} stops with {\em error reading file}}{61}{section*.66}
+\contentsline {paragraph}{\texttt {ph.x} mumbles something like {\em cannot recover} or {\em error reading recover file}}{61}{section*.67}
+\contentsline {paragraph}{\texttt {ph.x} says {\em occupation numbers probably wrong} and continues}{61}{section*.68}
+\contentsline {paragraph}{\texttt {ph.x} does not yield acoustic modes with $\omega =0$ at $q=0$}{61}{section*.69}
+\contentsline {paragraph}{\texttt {ph.x} yields really lousy phonons, with bad or negative frequencies or wrong symmetries or gross ASR violations}{61}{section*.70}
+\contentsline {paragraph}{{\em Wrong degeneracy} error in star\_q}{62}{section*.71}
+\contentsline {section}{\numberline {11}Frequently Asked Questions (FAQ)}{62}{section.11}
+\contentsline {subsection}{\numberline {11.1}General}{62}{subsection.11.1}
+\contentsline {subsection}{\numberline {11.2}Installation}{62}{subsection.11.2}
+\contentsline {paragraph}{What Fortran compiler do I need to compile {\sc Quantum ESPRESSO}?}{62}{section*.72}
+\contentsline {paragraph}{Why is \texttt {configure}\ saying that I have no fortran compiler?}{62}{section*.73}
+\contentsline {paragraph}{Why is \texttt {configure}\ saying that my fortran compiler doesn't work?}{62}{section*.74}
+\contentsline {paragraph}{\texttt {configure}\ doesn't recognize my system, what should I do?}{63}{section*.75}
+\contentsline {paragraph}{Why doesn't \texttt {configure}\ recognize that I have a parallel machine?}{63}{section*.76}
+\contentsline {paragraph}{Compilation fails with {\em internal error}, what should I do?}{63}{section*.77}
+\contentsline {paragraph}{Compilation fails at linking stage: {\em symbol ... not found}}{63}{section*.78}
+\contentsline {subsection}{\numberline {11.3}Pseudopotentials}{63}{subsection.11.3}
+\contentsline {paragraph}{Can I mix USPP/NCPP/PAW ?}{63}{section*.79}
+\contentsline {paragraph}{Where can I find pseudopotentials for atom X?}{63}{section*.80}
+\contentsline {paragraph}{Where can I find pseudopotentials for rare-earth X?}{64}{section*.81}
+\contentsline {paragraph}{Is there a converter from format XYZ to UPF?}{64}{section*.82}
+\contentsline {subsection}{\numberline {11.4}Input data}{64}{subsection.11.4}
+\contentsline {paragraph}{Where can I find the crystal structure/atomic positions of XYZ?}{64}{section*.83}
+\contentsline {paragraph}{How can I generate a supercell?}{64}{section*.84}
+\contentsline {paragraph}{Where can I find the Brillouin Zone/high-symmetry points/irreps for XYZ?}{64}{section*.85}
+\contentsline {paragraph}{Where can I find Monkhorst-Pack grids of k-points?}{64}{section*.86}
+\contentsline {subsection}{\numberline {11.5}Parallel execution}{65}{subsection.11.5}
+\contentsline {paragraph}{How do I choose the number of processors/how do I setup my parallel calculation?}{65}{section*.87}
+\contentsline {paragraph}{Why is my parallel job running in such a lousy way?}{65}{section*.88}
+\contentsline {paragraph}{Why is my parallel job crashing when reading input data / doing nothing?}{65}{section*.89}
+\contentsline {paragraph}{The code stops with an {\em error reading namelist xxxx}}{65}{section*.90}
+\contentsline {paragraph}{Why is my parallel job crashing with mysterious errors?}{65}{section*.91}
+\contentsline {subsection}{\numberline {11.6}Frequent errors during execution}{65}{subsection.11.6}
+\contentsline {paragraph}{Why is the code saying {\em Wrong atomic coordinates}?}{65}{section*.92}
+\contentsline {paragraph}{The code stops with an {\em error in davcio}}{65}{section*.93}
+\contentsline {paragraph}{The code stops with a {\em wrong charge} error}{65}{section*.94}
+\contentsline {subsection}{\numberline {11.7}Self Consistency}{66}{subsection.11.7}
+\contentsline {paragraph}{What are the units for quantity XYZ?}{66}{section*.95}
+\contentsline {paragraph}{Self-consistency is slow or does not converge at all}{66}{section*.96}
+\contentsline {paragraph}{What is the difference between total and absolute magnetization?}{66}{section*.97}
+\contentsline {paragraph}{How can I calculate magnetic moments for each atom?}{66}{section*.98}
+\contentsline {paragraph}{What is the order of $Y_{lm}$ components in projected DOS / projection of atomic wavefunctions?}{66}{section*.99}
+\contentsline {paragraph}{Why is the sum of partial Lowdin charges not equal to the total charge?}{66}{section*.100}
+\contentsline {paragraph}{I cannot find the Fermi energy, where is it?}{67}{section*.101}
+\contentsline {paragraph}{What is the reference level for Kohn-Sham energies? Why do I get positive values for Kohn-Sham levels?}{67}{section*.102}
+\contentsline {paragraph}{Why do I get a strange value of the Fermi energy?}{67}{section*.103}
+\contentsline {paragraph}{Why I don't get zero pressure/stress at equilibrium?}{67}{section*.104}
+\contentsline {paragraph}{Why do I get {\em negative starting charge}?}{67}{section*.105}
+\contentsline {paragraph}{How do I calculate the work function?}{67}{section*.106}
+\contentsline {subsection}{\numberline {11.8} Phonons }{68}{subsection.11.8}
+\contentsline {paragraph}{ Is there a simple way to determine the symmetry of a given phonon mode?}{68}{section*.107}
+\contentsline {paragraph}{I am not getting zero acoustic mode frequencies, why? }{68}{section*.108}
+\contentsline {paragraph}{Why do I get negative phonon frequencies? }{68}{section*.109}
+\contentsline {paragraph}{Why do I get a message {\em no elec. field with metals}? }{68}{section*.110}
+\contentsline {paragraph}{How can I calculate Raman/IR coefficients in metals?}{68}{section*.111}
+\contentsline {paragraph}{How can I calculate the electron-phonon coefficients in insulators?}{68}{section*.112}

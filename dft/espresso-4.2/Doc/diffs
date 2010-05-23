@@ -1,0 +1,380 @@
+? ChangeLog-4.1
+? ChangeLog-4.1.html
+? developer_man.out
+? developer_man.pdf
+? diffs
+? user_guide.aux
+? user_guide.log
+? user_guide.out
+? user_guide.pdf
+? user_guide.toc
+Index: release-notes
+===================================================================
+RCS file: /cvsroot/q-e/espresso/Doc/release-notes,v
+retrieving revision 1.43
+diff -w -i -b -r1.43 release-notes
+19c19,22
+<   many processors to use for orthonormalization/subspace diagonalization
+---
+>   many processors to use for linar-algebra (orthonormalization or
+>   subspace diagonalization) parallelization. Note that the default value
+>   for ndiag/northo has changed as well: 1 if ScaLAPACK is not compiled,
+>   Nproc/2 if Scalapack is compiled
+25,26c28,29
+<   * Major reorganization of the distribution itself: external packages
+<     no longer in the repository
+---
+>   * Major reorganization of the distribution itself:
+>     external packages no longer in the repository
+Index: user_guide.tex
+===================================================================
+RCS file: /cvsroot/q-e/espresso/Doc/user_guide.tex,v
+retrieving revision 1.34
+diff -w -i -b -r1.34 user_guide.tex
+448c448
+< A directory \texttt{espresso-\version/} will be created. Given the size 
+---
+> A directory \texttt{espresso-X.Y.Z/} will be created. Given the size 
+685,687c685,690
+< of the various variables. The difficult part will be to locate libraries. For the
+< choice of preprocessing flags, refer to the documentation in 
+< \texttt{include/defs.h.README}.
+---
+> of the various variables. The difficult part will be to locate libraries.
+> Note that you will need to select appopriate preprocessing flags
+> in conjunction with the desired or available
+> libraries (e.g. (e.g. you need to add \texttt{-D\_\_FFTW}) to \texttt{DFLAGS}
+> if you want to link internal FFTW). For a correct choice of preprocessing 
+> flags, refer to the documentation in \texttt{include/defs.h.README}.
+797c800,801
+< \item \texttt{make ph} produces the following codes for phonon calculations:
+---
+> \item \texttt{make ph} produces the following codes in \texttt{PH/}
+> for phonon calculations:
+799c803
+<   \item \texttt{PH/ph.x}: Calculates phonon frequencies and displacement patterns,
+---
+>   \item \ph.x: Calculates phonon frequencies and displacement patterns,
+874c878
+< code  \texttt{voronoy.x} (removed from distribution after v.4.1).
+---
+> code  \texttt{voronoy.x} (removed from distribution since v.4.2).
+930,931c934,942
+< Let us first consider the examples. A list of examples and
+< of what each example does is contained in \texttt{examples/README}. 
+---
+> Let us first consider the tests. Automated tests for \pw.x\ are in directory 
+> \texttt{tests/}. File \texttt{tests/README} contains a list of what is tested.
+> To run tests, follow the directions in the header if file 
+> \texttt{check\_pw.x.j}, edit variables PARA\_PREFIX, PARA\_POSTFIX 
+> if needed (see below). Same for \cp.x, this time in directory 
+> \texttt{cptests/}.
+> 
+> Let us now consder examples. A list of examples and of what each example
+> does is contained in \texttt{examples/README}. 
+956c967,968
+< details. In order to do that, edit again the \texttt{environment\_variables} file
+---
+> details. In order to do that, edit again the \texttt{environment\_variables} 
+> file
+998,1003d1009
+< Automated tests for \pw.x\ are in directory \texttt{tests/}. The
+< file \texttt{tests/README} contains a list of what is tested.
+< To run them, go into file \texttt{check\_pw.x.j}, edit variables 
+< PARA\_PREFIX, PARA\_POSTFIX if needed, follow the
+< explanations in the header of the files. Same for \cp.x,
+< this time in directory \texttt{cptests/}.
+1231c1237
+< are doing. See the section  on parallelism for more info on this
+---
+> are doing. See Sec.\ref{Sec:para} for more info on this
+1269c1275,1276
+< Newer Mac OS-X machines with Intel CPUs are supported by \configure,
+---
+> Newer Mac OS-X machines (10.4 and later) with Intel CPUs are supported 
+> by \configure,
+1270a1278
+> Parallel compilation with OpenMPI also works.
+1280c1288
+< \paragraph{Intel Mac OS X 10.4-10.6 with g95 and gfortran}
+---
+> \paragraph{Intel Mac OS X 10.4 with g95 and gfortran}
+1282,1285c1290,1292
+< The stable and unstable versions of g95 are known to work. Recent
+< gfortran versions also work, but they may require an updated version
+< of Developer Tools (XCode 2.4.1 or 2.5), that can be downloaded from
+< Apple. Some tests fails with mysterious errors, that disappear if
+---
+> An updated version of Developer Tools (XCode 2.4.1 or 2.5), that can be 
+> downloaded from Apple, may be needed. Some tests fails with mysterious 
+> errors, that disappear if
+1291c1298,1318
+< (Info by Paolo Giannozzi, jan.2008, still valid as of April 2010)
+---
+> (Info by Paolo Giannozzi, jan.2008, updated April 2010)
+> 
+> \paragraph{Intel Mac OS X 10.6}
+> 
+> I have performed some limited amount of tests, and everything seems to
+> be fine under macports supplied environment up to now. I have installed
+> using the following manner:
+> \begin{verbatim}}
+>    port install gcc43\\
+>    port install g95
+> \end{verbatim}
+> (rename apple supplied mpi to something else)\\
+> (dowload and install openmpi )
+> \begin{verbatim}}
+>   ./configure CC=gcc-mp-4.3 CPP=cpp-mp-4.3 CXX=g++-mp-4.3 F77=g95 FC=g95
+> \end{verbatim}
+> (download and install \qe)
+> \begin{verbatim}}
+>   ./configure CC=gcc-mp-4.3 CPP=cpp-mp-4.3 CXX=g++-mp-4.3 F77=g95 FC=g95
+> \end{verbatim}
+> (Info by Osman Baris Malcioglu, May 2010)
+1337,1338c1364,1367
+< multithreading FFTs. If you are using MKL, you may want 
+< to select FFTW3 (set {\texttt{CPPFLAGS=-D\_\_FFTW3...}
+---
+> multithreading FFTs. If you are using MKL,\footnote{Beware: 
+> MKL v.10.2.2 has a buggy \texttt{dsyev} yielding wrong results 
+> with more than one thread; fixed in v.10.2.4}
+> you may want to select FFTW3 (set \texttt{CPPFLAGS=-D\_\_FFTW3...}
+1430c1459
+<                 \_ ortho groups
+---
+>                 \_ linear-algebra groups
+1459c1488
+< {\bf ortho group}:
+---
+> {\bf linear-algebra group}:
+1466c1495
+< across the "ortho group", a subgroup of the pool of processors,
+---
+> across the ``linear-algebra group'', a subgroup of the pool of processors,
+1468c1497
+< in the ortho group is given by $n^2$, where $n$ is an integer;
+---
+> in the linear-algebra group is given by $n^2$, where $n$ is an integer;
+1511c1540
+< "ortho group" parallelization. Without a judicious choice of
+---
+> "linear-algebra" parallelization. Without a judicious choice of
+1513c1542
+< CPU requirements. In particular, the "ortho group" parallelization is
+---
+> CPU requirements. In particular, the linear-algebra parallelization is
+1730c1759
+< \paragraph{Input data}
+---
+> \subsubsection{Input data}
+1795c1824,1842
+< \subsubsection{Typical cases}
+---
+> \subsubsection{Data files}
+> 
+> The output data files are written in the directory specified by variable
+> \texttt{outdir}, with names specified by variable \texttt{prefix} (a string that is prepended
+> to all file names, whose default value is: \texttt{prefix='pwscf'}). The \texttt{iotk}
+> toolkit is used to write the file in a XML format, whose definition can
+> be found in the Developer Manual. In order to use the data directory
+> on a different machine, you need to convert the binary files to formatted
+> and back, using the \texttt{bin/iotk} script.
+> 
+> The execution stops if you create a file \texttt{prefix.EXIT} in the working 
+> directory. NOTA BENE: this is the directory where the program 
+> is executed, NOT the directory \texttt{outdir} defined in input, where files 
+> are written. Note that with some versions of MPI, the working directory 
+> is the directory where the \pw.x\ executable is! The advantage of this 
+> procedure is that all files are properly closed, whereas  just killing 
+> the process may leave data and output files in unusable state.
+> 
+> \subsection{Typical cases}
+1845a1893,1904
+> \paragraph{Finite electric fields}
+> There are two different implementations of macroscopic electric fields
+> in \pw.x: via an external sawtooth potential (input variable
+> \texttt{tefield=.true.}) and via the modern theory of polarizability
+> (\texttt{lelfield=.true.}).
+> The former is useful for surfaces, especially in conjunction
+> with dipolar corrections (\texttt{dipfield=.true.}):
+> see \texttt{examples/dipole\_example} for an example of application. 
+> Electrc fields viia modern theopry of polarization are documented in
+> example 31. The exact meaning of the related variables, for both
+> cases, is explained in the general input documentation.
+> 
+1869c1928,1929
+< information used by QE to restart a path calculation, its format depends on the input
+---
+> information used by \qe\ 
+> to restart a path calculation, its format depends on the input
+1894c1954
+< Carefully choose the initial path. Remember that QE assumes continuity
+---
+> Carefully choose the initial path. Remember that \qe\ assumes continuity
+1923,1941c1983
+< \subsubsection{Data files}
+< 
+< The output data files are written in the directory specified by variable
+< \texttt{outdir}, with names specified by variable \texttt{prefix} (a string that is prepended
+< to all file names, whose default value is: \texttt{prefix='pwscf'}). The \texttt{iotk}
+< toolkit is used to write the file in a XML format, whose definition can
+< be found in the Developer Manual. In order to use the data directory
+< on a different machine, you need to convert the binary files to formatted
+< and back, using the \texttt{bin/iotk} script.
+< 
+< The execution stops if you create a file \texttt{prefix.EXIT} in the working 
+< directory. NOTA BENE: this is the directory where the program 
+< is executed, NOT the directory \texttt{outdir} defined in input, where files 
+< are written. Note that with some versions of MPI, the working directory 
+< is the directory where the \pw.x\ executable is! The advantage of this 
+< procedure is that all files are properly closed, whereas  just killing 
+< the process may leave data and output files in unusable state.
+< 
+< \subsection{Hartree-Fock and Hybrid functionals}
+---
+> \paragraph{Hartree-Fock and Hybrid functionals}
+1944,1946c1986,1989
+< that include some Hartree-Fock exchange, can be performed by adding
+< \texttt{-DEXX} to the preprocessing options \texttt{DFLAGS} in file 
+< \texttt{make.sys}. Issue command \texttt{make clean} before recompiling. 
+---
+> that include some Hartree-Fock exchange, currently require that
+> \texttt{-DEXX} is added to the preprocessing options \texttt{DFLAGS} in file 
+> \texttt{make.sys} before compilation (if you change this after the first
+> compilation, \texttt{make clean}, recompile). 
+1970a2014,2015
+> In the following, we will indicate by $q$ the phonon wavevectors, 
+> whle $k$ will indicate Bloch vectors used for summing over the Brillouin Zone.
+1972c2017
+< Since version 4 it is possible to safely stop execution of \ph.x code using
+---
+> Since version 4.0 it is possible to safely stop execution of \ph.x code using
+1974,1975c2019,2020
+< working directory. Execution can be resumed by setting 'recover=.true.' in the
+< subsequent input data.
+---
+> working directory. Execution can be resumed by setting \texttt{recover=.true.} 
+> in thesubsequent input data.
+1979c2024
+< The phonon code \ph.x calculates normal modes at a given q-vector, starting
+---
+> The phonon code \ph.x\ calculates normal modes at a given q-vector, starting
+1982c2027
+< with calculation='phonon' was performed as an intermediate step is no
+---
+> with \texttt{calculation='phonon} was performed as an intermediate step is no
+1984c2029
+< specify lnscf=.true. for $q\ne 0$.
+---
+> specify \texttt{lnscf=.true.} for $q\ne 0$.
+1993,1996c2038,2042
+< (most of them having a default value) is described in file INPUT PH. Variables
+< outdir and prefix must be the same as in the input data of \pw.x. Presently
+< you must also specify amass (real, dimension ntyp): the atomic mass of each
+< atomic type.
+---
+> (most of them having a default value) is described in file 
+> \texttt{INPUT\_PH.*}. Variables \texttt{outdir} and \texttt{prefix} 
+> must be the same as in the input data of \pw.x. Presently
+> you must also specify \texttt{amass(i)} (a real variable): the atomic mass 
+> of atomic type $i$.
+2006c2052,2053
+< option epsil=.true. to \ph.x.
+---
+> option \texttt{epsil=.true.} to \ph.x. This is however not possible (because
+> not physical!) for metals (i.e. any system subject to a broadening).
+2008,2010c2055,2058
+< Use program dynmat.x to calculate the correct LO-TO splitting, IR cross
+< sections, and to impose various forms of ASR. If \ph.x was instructed to 
+< calculate Raman coefficients, dynmat.x will also calculate Raman cross sections
+---
+> At q = 0, use program \texttt{dynmat.x} to calculate the correct LO-TO 
+> splitting, IR cross sections, and to impose various forms of ASR. 
+> If \ph.x\ was instructed to calculate Raman coefficients, 
+> \texttt{dynmat.x} will also calculate Raman cross sections
+2011a2060
+> Input documentation in the header of \texttt{PH/dynmat.f90}.
+2017c2066
+< First, dynamical matrices D(q) are calculated and saved for a suitable uniform 
+---
+> First, dynamical matrices are calculated and saved for a suitable uniform 
+2020,2023c2069,2073
+< simpler procedure is to specify variable ldisp=.true. and to set variables
+< nq1,nq2,nq3 to some suitable Monkhorst-Pack grid, that will be automatically
+< generated, centered at q = 0. Do not forget to specify epsil=.true.
+< in the input data of \ph.x if you want the correct TO-LO splitting in polar
+---
+> simpler procedure is to specify variable \texttt{ldisp=.true.} and to set 
+> variables \texttt{nq1}, \texttt{nq2}, \texttt{nq3} to some suitable 
+> Monkhorst-Pack grid, that will be automatically generated, centered at q = 0. 
+> Do not forget to specify \texttt{epsil=.true.} in the input data of \ph.x 
+> if you want the correct TO-LO splitting in polar
+2026c2076
+< Second, code q2r.x reads the D(q) dynamical matrices produced in the
+---
+> Second, code \texttt{q2r.x} reads the dynamical matrices produced in the
+2029c2079,2081
+< of q-vectors. Program matdyn.x may be used to produce phonon modes and
+---
+> of q-vectors. Input documentation in the header of \texttt{PH/q2r.f90}.
+> 
+> Program \texttt{matdyn.x} may be used to produce phonon modes and
+2031c2083,2085
+< See Example 06.
+---
+> Input documentation in the header of \texttt{PH/matdyn.f90}.
+> 
+> For more details, see Example 06.
+2035,2044c2089,2106
+< The calculation of electron-phonon coefficients in metals is made difficult by
+< the slow convergence of the sum at the Fermi energy. It is convenient to 
+< calculate phonons, for each q-vector of a suitable grid, using a
+< smaller k-point 
+< grid, saving the dynamical matrix and the self-consistent first-order variation
+< of the potential (variable fildvscf). Then a non-SCF calculation with
+< a larger k-point grid is performed. Finally the electron-phonon calculation is
+< performed by specifying elph=.true., trans=.false., and the input files
+< fildvscf, fildyn. The electron-phonon coefficients are calculated using several
+< values of gaussian broadening (see PH/elphon.f90) because this quickly
+---
+> The calculation of electron-phonon coefficients in metals is made difficult 
+> by the slow convergence of the sum at the Fermi energy. It is convenient to 
+> use a coarse k-point grid to calculate phonons on a suitable wavevector grid;
+> a dense k-point grid to calculate the sum at the Fermi energy. The calculation
+> proceeds in this way:
+> \begin{enumerate}
+> \item a scf calculation for the dense k-point grid (or a scf calculation 
+> followed by a non-scf one on the dense k-point grid); specify 
+> option \texttt{la2f=.true.} to \pw.x\ in order to save a file with 
+> the eigenvalues on the dense k-point grid. The latter MUST contain 
+> all k and k+q grid points used in the subsequent electron-phonon 
+> calculation. All grids MUST be unshifted, i.e. include k=0.
+> \item a normal scf + phonon dispersion calculation on the coarse k-point
+> grid, specifying option \texttt{elph=.true.}. and the file name where
+> the self-consistent first-order variation of the potential is to be 
+> stored: variable \texttt{fildvscf}).
+> The electron-phonon coefficients are calculated using several
+> values of gaussian broadening (see \texttt{PH/elphon.f90}) because this quickly
+2047,2052c2109,2114
+< 
+< All of the above must be repeated for all desired q-vectors and the final
+< result is summed over all q-vectors, using lambda.x. The input
+< data for the latter is described in the header of lambda.f90.
+< 
+< See Example 07.
+---
+> \item Finally, you can use \texttt{matdyn.x} and \texttt{lambda.x} 
+> (input documentation in the header of \texttt{PH/lambda.f90})
+> to get the $\alpha^2F(\omega)$ function, the electron-phonon coefficient
+> $\lambda$, and an estimate of the critical temperature $T_c$.
+> \end{enumerate}
+> For more details, see Example 07.
+2058,2059c2120,2123
+< \pw.x. Such quantities are saved by \pw.x into the output data file(s). 
+< Postprocessing codes are in the PP/ directory.
+---
+> \pw.x\. Such quantities are saved by \pw.x\ into the output data file(s). 
+> Postprocessing codes are in the \texttt{PP/} directory. All codes for 
+> which input documentation is not explicitly mentioned have documentation
+> in the header of the fortran sources.

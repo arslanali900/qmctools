@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<?iotk version="1.2.0"?>
+<?iotk file_version="1.0"?>
+<?iotk binary="F"?>
+<qmcsystem>
+  <simulationcell name="global">
+<parameter name="scale">3.0</parameter>
+    <parameter name="lattice" units="bohr">
+    8.103000000000000    0.000000000000000    0.000000000000000
+    0.000000000000000    8.103000000000000    0.000000000000000
+    0.000000000000000    0.000000000000000    8.103000000000000
+    </parameter>
+    <parameter name="reciprocal" units="2pi/bohr">
+    0.123411082315192    0.000000000000000    0.000000000000000
+    0.000000000000000    0.123411082315192    0.000000000000000
+    0.000000000000000    0.000000000000000    0.123411082315192
+    </parameter>
+    <parameter name="bconds">
+p p p
+    </parameter>
+    <parameter name="LR_dim_cutoff">
+15
+    </parameter>
+  </simulationcell>
+  <particleset name="e" random="yes">
+    <group name="u" size="27">
+      <parameter name="charge">
+          -1
+      </parameter>
+    </group>
+    <group name="d" size="27">
+      <parameter name="charge">
+          -1
+      </parameter>
+    </group>
+  </particleset>
+</qmcsystem>
+

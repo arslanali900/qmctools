@@ -1,0 +1,285 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>5.1 Electronic structure calculations</TITLE>
+<META NAME="description" CONTENT="5.1 Electronic structure calculations">
+<META NAME="keywords" CONTENT="user_guide">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="user_guide.css">
+
+<LINK REL="next" HREF="node26.html">
+<LINK REL="previous" HREF="node24.html">
+<LINK REL="up" HREF="node24.html">
+<LINK REL="next" HREF="node26.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html650"
+  HREF="node26.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html646"
+  HREF="node24.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html640"
+  HREF="node24.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html648"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html651"
+  HREF="node26.html">5.2 Optimization and dynamics</A>
+<B> Up:</B> <A NAME="tex2html647"
+  HREF="node24.html">5 Using PWscf</A>
+<B> Previous:</B> <A NAME="tex2html641"
+  HREF="node24.html">5 Using PWscf</A>
+ &nbsp; <B>  <A NAME="tex2html649"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><UL>
+<LI><A NAME="tex2html652"
+  HREF="node25.html#SECTION00061010000000000000">5.1.0.1 Single-point (fixed-ion) SCF calculation</A>
+<LI><A NAME="tex2html653"
+  HREF="node25.html#SECTION00061020000000000000">5.1.0.2 Band structure calculation</A>
+<LI><A NAME="tex2html654"
+  HREF="node25.html#SECTION00061030000000000000">5.1.0.3 Noncollinear magnetization, spin-orbit interactions</A>
+<LI><A NAME="tex2html655"
+  HREF="node25.html#SECTION00061040000000000000">5.1.0.4 DFT+U</A>
+<LI><A NAME="tex2html656"
+  HREF="node25.html#SECTION00061050000000000000">5.1.0.5 Dispersion Interactions (DFT-D)</A>
+<LI><A NAME="tex2html657"
+  HREF="node25.html#SECTION00061060000000000000">5.1.0.6 Hartree-Fock and Hybrid functionals</A>
+<LI><A NAME="tex2html658"
+  HREF="node25.html#SECTION00061070000000000000">5.1.0.7 Polarization via Berry Phase</A>
+<LI><A NAME="tex2html659"
+  HREF="node25.html#SECTION00061080000000000000">5.1.0.8 Finite electric fields</A>
+</UL></UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H2><A NAME="SECTION00061000000000000000">
+5.1 Electronic structure calculations</A>
+</H2>
+
+<H4><A NAME="SECTION00061010000000000000">
+5.1.0.1 Single-point (fixed-ion) SCF calculation</A>
+</H4> 
+Set <TT>calculation='scf'</TT> (this is actually the default).
+Namelists &amp;IONS and &amp;CELL will be ignored. See Example 01.
+
+<P>
+
+<H4><A NAME="SECTION00061020000000000000">
+5.1.0.2 Band structure calculation</A>
+</H4>
+First perform a SCF calculation as above;
+then do a non-SCF calculation with the desired k-point grid and 
+number <TT>nbnd</TT> of bands. 
+Specify <TT>calculation='bands'</TT> if you are interested in calculating
+only the Kohn-Sham states for the given set of k-points; specify
+<TT>calculation='nscf'</TT> if you are interested in further processing 
+of the results of non-SCF calculations (for instance, in DOS calculations).
+In the latter case, you should specio a uniform grid of points.
+For DOS calculations you should choose <TT>occupations='tetrahedra'</TT>, 
+together with an automatically generated uniform k-point grid 
+(card K_POINTS with option ``automatic'').
+Specify <TT>nosym=.true.</TT> to avoid generation of additional k-points in
+low symmetry cases. Variables <TT>prefix</TT> and <TT>outdir</TT>, which determine
+the names of input or output files, should be the same in the two runs.
+See Examples 01, 05, 08,
+
+<P>
+NOTA BENE: until v.4.0, atomic positions for a non scf calculations 
+were read from input, while the scf potential was read from the data file
+of the scf calculation. Since v.4.1, both atomic positions and the scf
+potential are read from the data file so that consistency is guaranteed.
+
+<P>
+
+<H4><A NAME="SECTION00061030000000000000">
+5.1.0.3 Noncollinear magnetization, spin-orbit interactions</A>
+</H4>
+
+<P>
+The following input variables are relevant for noncollinear and
+spin-orbit calculations: 
+<BLOCKQUOTE>
+<TT>noncolin</TT>
+<BR>      <TT>lspinorb</TT>
+<BR>      <TT>starting_magnetization</TT> (one for each type of atoms)
+
+</BLOCKQUOTE>
+To make a spin-orbit calculation <TT>noncolin</TT> must be true. 
+If <TT>starting_magnetization</TT> is set to zero (or not given) 
+the code makes a spin-orbit calculation without spin magnetization 
+(it assumes that time reversal symmetry holds and it does not calculate 
+the magnetization). The states are still two-component spinors but the
+total magnetization is zero. 
+
+<P>
+If <TT>starting_magnetization</TT> is different from zero, it makes a non
+collinear spin polarized calculation with spin-orbit interaction. The 
+final spin magnetization might be zero or different from zero depending 
+on the system. 
+
+<P>
+Furthermore to make a spin-orbit calculation you must use fully
+relativistic pseudopotentials at least for the atoms in which you
+think that spin-orbit interaction is large. If all the pseudopotentials 
+are scalar
+relativistic the calculation becomes equivalent to a noncolinear
+calculation without spin orbit. (Andrea Dal Corso, 2007-07-27)
+See Example 13 for non-collinear magnetism, Example 22
+for spin-orbit interactions.
+
+<P>
+
+<H4><A NAME="SECTION00061040000000000000">
+5.1.0.4 DFT+U</A>
+</H4>
+DFT+U (formerly known as LDA+U) calculation can be
+performed within a simplified rotationally invariant form 
+of the <I>U</I>
+<tex2html_verbatim_mark> Hubbard correction. See Example 25 and references 
+quoted therein.
+
+<P>
+
+<H4><A NAME="SECTION00061050000000000000">
+5.1.0.5 Dispersion Interactions (DFT-D)</A>
+</H4>
+For DFT-D (DFT + semiempirical dispersion interactions), see the
+description of input variables <TT>london*</TT>, sample files
+<TT>tests/vdw.*</TT>, and the comments in source file
+<TT>Modules/mm_dispersion.f90</TT>.
+
+<P>
+
+<H4><A NAME="SECTION00061060000000000000">
+5.1.0.6 Hartree-Fock and Hybrid functionals</A>
+</H4>
+
+<P>
+Calculations in the Hartree-Fock approximation, or using hybrid XC functionals 
+that include some Hartree-Fock exchange, currently require that
+<TT>-DEXX</TT> is added to the preprocessing options <TT>DFLAGS</TT> in file 
+<TT>make.sys</TT> before compilation (if you change this after the first
+compilation, <TT>make clean</TT>, recompile). 
+Documentation on usage can be found in subdirectory 
+<TT>examples/EXX_example/</TT>.
+
+<P>
+The algorithm is quite standard: see for instance Chawla and Voth, 
+JCP bf 108, 4697 (1998); Sorouri, Foulkes and Hine, JCP <B>124</B>, 
+064105 (2006); Spencer and Alavi, PRB <B>77</B>, 193110 (2008). 
+Basically, one generates auxiliary densities <!-- MATH
+ $\rho_{-q}=\phi^{*}_{k+q}*\psi_k$
+ -->
+<IMG
+ WIDTH="32" HEIGHT="33" ALIGN="MIDDLE" BORDER="0"
+ SRC="img19.gif"
+ ALT="$ \rho_{{-q}}^{}$"> = <IMG
+ WIDTH="41" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="img20.gif"
+ ALT="$ \phi^{{*}}_{{k+q}}$">*<IMG
+ WIDTH="25" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="img21.gif"
+ ALT="$ \psi_{k}^{}$">
+<tex2html_verbatim_mark>
+in real space and transforms them to reciprocal space using FFT;
+the Poisson equation is solved and the resulting potential is transformed 
+back to real space using FFT, then multiplied by <!-- MATH
+ $\phi_{k+q}$
+ -->
+<IMG
+ WIDTH="41" HEIGHT="35" ALIGN="MIDDLE" BORDER="0"
+ SRC="img22.gif"
+ ALT="$ \phi_{{k+q}}^{}$">
+<tex2html_verbatim_mark> and the
+results are accumulated.
+The only tricky point is the treatment of the <!-- MATH
+ $q\rightarrow 0$
+ -->
+<I>q</I> <IMG
+ WIDTH="24" HEIGHT="19" ALIGN="BOTTOM" BORDER="0"
+ SRC="img23.gif"
+ ALT="$ \rightarrow$"> 0
+<tex2html_verbatim_mark> limit,
+which is described in the Appendix A.5 of the Q<SMALL>UANTUM </SMALL>ESPRESSO paper mentioned 
+in the Introduction (note the reference to the Gygi and Baldereschi paper). 
+See also J. Comp. Chem. <B>29</B>, 2098 (2008);
+JACS <B>129</B>, 10402 (2007) for examples of applications.
+
+<P>
+
+<H4><A NAME="SECTION00061070000000000000">
+5.1.0.7 Polarization via Berry Phase</A>
+</H4>
+See Example 10, file <TT>example10/README</TT>, and the documentation 
+in the header of <TT>PW/bp_c_phase.f90</TT>. 
+
+<P>
+
+<H4><A NAME="SECTION00061080000000000000">
+5.1.0.8 Finite electric fields</A>
+</H4>
+There are two different implementations of macroscopic electric fields
+in .x: via an external sawtooth potential (input variable
+<TT>tefield=.true.</TT>) and via the modern theory of polarizability
+(<TT>lelfield=.true.</TT>).
+The former is useful for surfaces, especially in conjunction
+with dipolar corrections (<TT>dipfield=.true.</TT>):
+see <TT>examples/dipole_example</TT> for an example of application. 
+Electric fields via modern theory of polarization are documented in
+example 31. The exact meaning of the related variables, for both
+cases, is explained in the general input documentation.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html650"
+  HREF="node26.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html646"
+  HREF="node24.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html640"
+  HREF="node24.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html648"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html651"
+  HREF="node26.html">5.2 Optimization and dynamics</A>
+<B> Up:</B> <A NAME="tex2html647"
+  HREF="node24.html">5 Using PWscf</A>
+<B> Previous:</B> <A NAME="tex2html641"
+  HREF="node24.html">5 Using PWscf</A>
+ &nbsp; <B>  <A NAME="tex2html649"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Paolo Giannozzi
+2010-05-07
+</ADDRESS>
+</BODY>
+</HTML>

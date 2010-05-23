@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>6.3 Calculation of electron-phonon interaction coefficients</TITLE>
+<META NAME="description" CONTENT="6.3 Calculation of electron-phonon interaction coefficients">
+<META NAME="keywords" CONTENT="user_guide">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="user_guide.css">
+
+<LINK REL="next" HREF="node32.html">
+<LINK REL="previous" HREF="node30.html">
+<LINK REL="up" HREF="node28.html">
+<LINK REL="next" HREF="node32.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html735"
+  HREF="node32.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html731"
+  HREF="node28.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html725"
+  HREF="node30.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html733"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html736"
+  HREF="node32.html">6.4 Distributed Phonon calculations</A>
+<B> Up:</B> <A NAME="tex2html732"
+  HREF="node28.html">6 Phonon calculations</A>
+<B> Previous:</B> <A NAME="tex2html726"
+  HREF="node30.html">6.2 Calculation of interatomic</A>
+ &nbsp; <B>  <A NAME="tex2html734"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00073000000000000000">
+6.3 Calculation of electron-phonon interaction coefficients</A>
+</H2>
+
+<P>
+The calculation of electron-phonon coefficients in metals is made difficult 
+by the slow convergence of the sum at the Fermi energy. It is convenient to 
+use a coarse k-point grid to calculate phonons on a suitable wavevector grid;
+a dense k-point grid to calculate the sum at the Fermi energy. The calculation
+proceeds in this way:
+
+<OL>
+<LI>a scf calculation for the dense k-point grid (or a scf calculation 
+followed by a non-scf one on the dense k-point grid); specify 
+option <TT>la2f=.true.</TT> to .x in order to save a file with 
+the eigenvalues on the dense k-point grid. The latter MUST contain 
+all k and k+q grid points used in the subsequent electron-phonon 
+calculation. All grids MUST be unshifted, i.e. include <I>k</I> = 0
+<tex2html_verbatim_mark>.
+</LI>
+<LI>a normal scf + phonon dispersion calculation on the coarse k-point
+grid, specifying option <TT>elph=.true.</TT>. and the file name where
+the self-consistent first-order variation of the potential is to be 
+stored: variable <TT>fildvscf</TT>).
+The electron-phonon coefficients are calculated using several
+values of gaussian broadening (see <TT>PH/elphon.f90</TT>) because this quickly
+shows whether results are converged or not with respect to the k-point grid
+and Gaussian broadening.
+</LI>
+<LI>Finally, you can use <TT>matdyn.x</TT> and <TT>lambda.x</TT> 
+(input documentation in the header of <TT>PH/lambda.f90</TT>)
+to get the <!-- MATH
+ $\alpha^2F(\omega)$
+ -->
+<IMG
+ WIDTH="24" HEIGHT="39" ALIGN="MIDDLE" BORDER="0"
+ SRC="img5.gif"
+ ALT="$ \alpha^{2}_{}$"><I>F</I>(<IMG
+ WIDTH="17" HEIGHT="19" ALIGN="BOTTOM" BORDER="0"
+ SRC="img1.gif"
+ ALT="$ \omega$">)
+<tex2html_verbatim_mark> function, the electron-phonon coefficient
+<IMG
+ WIDTH="15" HEIGHT="20" ALIGN="BOTTOM" BORDER="0"
+ SRC="img4.gif"
+ ALT="$ \lambda$">
+<tex2html_verbatim_mark>, and an estimate of the critical temperature <I>T</I><SUB>c</SUB>
+<tex2html_verbatim_mark>.
+</LI>
+</OL>
+For more details, see Example 07.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html735"
+  HREF="node32.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html731"
+  HREF="node28.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html725"
+  HREF="node30.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html733"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html736"
+  HREF="node32.html">6.4 Distributed Phonon calculations</A>
+<B> Up:</B> <A NAME="tex2html732"
+  HREF="node28.html">6 Phonon calculations</A>
+<B> Previous:</B> <A NAME="tex2html726"
+  HREF="node30.html">6.2 Calculation of interatomic</A>
+ &nbsp; <B>  <A NAME="tex2html734"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Paolo Giannozzi
+2010-05-07
+</ADDRESS>
+</BODY>
+</HTML>

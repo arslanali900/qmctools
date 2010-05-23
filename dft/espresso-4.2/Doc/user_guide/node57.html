@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>11.4 Input data</TITLE>
+<META NAME="description" CONTENT="11.4 Input data">
+<META NAME="keywords" CONTENT="user_guide">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="user_guide.css">
+
+<LINK REL="next" HREF="node58.html">
+<LINK REL="previous" HREF="node56.html">
+<LINK REL="up" HREF="node53.html">
+<LINK REL="next" HREF="node58.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html1193"
+  HREF="node58.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html1189"
+  HREF="node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html1183"
+  HREF="node56.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html1191"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1194"
+  HREF="node58.html">11.5 Parallel execution</A>
+<B> Up:</B> <A NAME="tex2html1190"
+  HREF="node53.html">11 Frequently Asked Questions</A>
+<B> Previous:</B> <A NAME="tex2html1184"
+  HREF="node56.html">11.3 Pseudopotentials</A>
+ &nbsp; <B>  <A NAME="tex2html1192"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><UL>
+<LI><A NAME="tex2html1195"
+  HREF="node57.html#SECTION000124010000000000000">11.4.0.1 Where can I find the crystal structure/atomic positions of XYZ?</A>
+<LI><A NAME="tex2html1196"
+  HREF="node57.html#SECTION000124020000000000000">11.4.0.2 How can I generate a supercell?</A>
+<LI><A NAME="tex2html1197"
+  HREF="node57.html#SECTION000124030000000000000">11.4.0.3 Where can I find the Brillouin Zone/high-symmetry
+  points/irreps for XYZ?</A>
+<LI><A NAME="tex2html1198"
+  HREF="node57.html#SECTION000124040000000000000">11.4.0.4 Where can I find Monkhorst-Pack grids of k-points?</A>
+</UL></UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H2><A NAME="SECTION000124000000000000000">
+11.4 Input data</A>
+</H2>
+
+<P>
+A large percentage of the problems reported to the mailing list are
+caused by incorrect input data. Before reporting a problem with
+strange crashes or strange results, <EM>please</EM> have
+a look at your structure with XCrySDen. XCrySDen can directly
+visualise the structure from both <TT>PWscf</TT> input data:
+<PRE>
+   xcrysden --pwi "input-data-file"
+</PRE>
+and from <TT>PWscf</TT> output as well:
+<PRE>
+   xcrysden --pwo "output-file".
+</PRE>
+Unlike most other visualizers, XCrySDen is periodicity-aware: you can
+easily visualize periodically repeated cells.
+You are advised to always use XCrySDen to check your input data! 
+
+<P>
+
+<H4><A NAME="SECTION000124010000000000000">
+11.4.0.1 Where can I find the crystal structure/atomic positions of XYZ?</A>
+</H4>
+
+<P>
+The following site contains a lot of crystal structures: 
+<TT>http://cst-www.nrl.navy.mil/lattice</TT>.
+<BR>"Since this seems to come up often, I'd like to point out that the
+American Mineralogist Crystal Structure Database
+(<TT>http://rruff.geo.arizona.edu/AMS/amcsd</TT>) 
+is another excellent place to
+find structures, though you will have to use it in conjunction with
+the Bilbao crystallography server (<TT>http://www.cryst.ehu.es</TT>),  
+and have some understanding of space groups and Wyckoff positions".
+
+<P>
+
+<H4><A NAME="SECTION000124020000000000000">
+11.4.0.2 How can I generate a supercell?</A>
+</H4>
+
+<P>
+If you need to create a supercell and are too lazy to create a 
+small program to translate atoms, you can
+
+<UL>
+<LI>``use the 'spacegroup' program in EXCITING package 
+(http://exciting-code.org) to generate the supercell,
+use 'fropho' (http://fropho.sourceforge.net) to check the symmetry''
+(Kun Yin, April 2009)
+</LI>
+<LI>``use the PHON code: http://chianti.geol.ucl.ac.uk/~dario/''
+(Eyvaz Isaev, April 2009).
+</LI>
+</UL>
+
+<P>
+
+<H4><A NAME="SECTION000124030000000000000">
+11.4.0.3 Where can I find the Brillouin Zone/high-symmetry
+  points/irreps for XYZ?</A>
+</H4> 
+
+<P>
+"You might find this web site useful:
+<TT>http://www.cryst.ehu.es/cryst/get_kvec.html</TT>" (info by Cyrille
+Barreteau, nov. 2007). Or else: in textbooks, such as e.g. <EM>The
+mathematical theory of symmetry in solids</EM> by Bradley and Cracknell.
+
+<P>
+
+<H4><A NAME="SECTION000124040000000000000">
+11.4.0.4 Where can I find Monkhorst-Pack grids of k-points?</A>
+</H4>
+
+<P>
+Auxiliary code <TT>kpoints.x</TT>, found in <TT>pwtools/</TT> and 
+produced by <TT>make tools</TT>, generates uniform grids of k-points 
+that are equivalent to Monkhorst-Pack grids. 
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1193"
+  HREF="node58.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html1189"
+  HREF="node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html1183"
+  HREF="node56.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html1191"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1194"
+  HREF="node58.html">11.5 Parallel execution</A>
+<B> Up:</B> <A NAME="tex2html1190"
+  HREF="node53.html">11 Frequently Asked Questions</A>
+<B> Previous:</B> <A NAME="tex2html1184"
+  HREF="node56.html">11.3 Pseudopotentials</A>
+ &nbsp; <B>  <A NAME="tex2html1192"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Paolo Giannozzi
+2010-05-07
+</ADDRESS>
+</BODY>
+</HTML>

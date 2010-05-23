@@ -1,0 +1,508 @@
+This is pdfeTeX, Version 3.141592-1.21a-2.2 (Web2C 7.5.4) (format=pdflatex 2008.1.7)  7 MAY 2010 09:16
+entering extended mode
+**user_guide.tex
+(./user_guide.tex
+LaTeX2e <2003/12/01>
+Babel <v3.8d> and hyphenation patterns for american, french, german, ngerman, b
+ahasa, basque, bulgarian, catalan, croatian, czech, danish, dutch, esperanto, e
+stonian, finnish, greek, icelandic, irish, italian, latin, magyar, norsk, polis
+h, portuges, romanian, russian, serbian, slovak, slovene, spanish, swedish, tur
+kish, ukrainian, nohyphenation, loaded.
+(/usr/share/texmf/tex/latex/base/article.cls
+Document Class: article 2004/02/16 v1.4f Standard LaTeX document class
+(/usr/share/texmf/tex/latex/base/size12.clo
+File: size12.clo 2004/02/16 v1.4f Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/usr/share/texmf/tex/latex/html/html.sty
+(/usr/share/texmf/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2003/11/30 v6.74m Hypertext links for LaTeX
+
+(/usr/share/texmf/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+\@linkdim=\dimen103
+\Hy@linkcounter=\count87
+\Hy@pagecounter=\count88
+
+(/usr/share/texmf/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2003/11/30 v6.74m Hyperref: PDFDocEncoding definition (HO)
+)
+(/usr/share/texmf/tex/latex/hyperref/hyperref.cfg
+File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive and teTeX
+)
+Package hyperref Info: Hyper figures OFF on input line 1880.
+Package hyperref Info: Link nesting OFF on input line 1885.
+Package hyperref Info: Hyper index ON on input line 1888.
+Package hyperref Info: Plain pages ON on input line 1893.
+Package hyperref Info: Backreferencing OFF on input line 1900.
+
+Implicit mode ON; LaTeX internals redefined
+Package hyperref Info: Bookmarks ON on input line 2004.
+(/usr/share/texmf/tex/latex/html/url.sty
+Package: url 1999/03/02  ver 1.4  Verb mode for urls, email addresses, and file
+ names
+)
+LaTeX Info: Redefining \url on input line 2143.
+\Fld@menulength=\count89
+\Field@Width=\dimen104
+\Fld@charsize=\dimen105
+\Choice@toks=\toks15
+\Field@toks=\toks16
+Package hyperref Info: Hyper figures OFF on input line 2618.
+Package hyperref Info: Link nesting OFF on input line 2623.
+Package hyperref Info: Hyper index ON on input line 2626.
+Package hyperref Info: backreferencing OFF on input line 2633.
+Package hyperref Info: Link coloring OFF on input line 2638.
+\c@Item=\count90
+\c@Hfootnote=\count91
+)
+*hyperref using default driver hpdftex*
+(/usr/share/texmf/tex/latex/hyperref/hpdftex.def
+File: hpdftex.def 2003/11/30 v6.74m Hyperref driver for pdfTeX
+
+(/usr/share/texmf/tex/latex/psnfss/pifont.sty
+Package: pifont 2004/09/15 PSNFSS-v9.2 Pi font support (SPQR) 
+LaTeX Font Info:    Try loading font information for U+pzd on input line 63.
+
+(/usr/share/texmf/tex/latex/psnfss/upzd.fd
+File: upzd.fd 2001/06/04 font definitions for U/pzd.
+)
+LaTeX Font Info:    Try loading font information for U+psy on input line 64.
+
+(/usr/share/texmf/tex/latex/psnfss/upsy.fd
+File: upsy.fd 2001/06/04 font definitions for U/psy.
+))
+\Fld@listcount=\count92
+\@outlinefile=\write3
+)
+Package: html 1999/07/19 v1.38 hypertext commands for latex2html (nd, hws, rrm)
+
+\c@lpart=\count93
+\c@lchapter=\count94
+\c@chapter=\count95
+\c@lsection=\count96
+\c@lsubsection=\count97
+\c@lsubsubsection=\count98
+\c@lparagraph=\count99
+\c@lsubparagraph=\count100
+\c@lsubsubparagraph=\count101
+\ptrfile=\write4
+)
+(/usr/share/texmf/tex/latex/graphics/graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf/tex/latex/graphics/graphics.sty
+Package: graphics 2001/07/07 v1.0n Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/usr/share/texmf/tex/latex/graphics/graphics.cfg
+File: graphics.cfg 2005/02/03 v1.3 graphics configuration of teTeX/TeXLive
+)
+Package graphics Info: Driver file: pdftex.def on input line 80.
+
+(/usr/share/texmf/tex/latex/graphics/pdftex.def
+File: pdftex.def 2002/06/19 v0.03k graphics/color for pdftex
+\Gread@gobject=\count102
+))
+\Gin@req@height=\dimen106
+\Gin@req@width=\dimen107
+) (./user_guide.aux)
+\openout1 = `user_guide.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 26.
+LaTeX Font Info:    ... okay on input line 26.
+Package hyperref Info: Link coloring OFF on input line 26.
+
+(/usr/share/texmf/tex/latex/hyperref/nameref.sty
+Package: nameref 2003/12/03 v2.21 Cross-referencing by name of section
+\c@section@level=\count103
+)
+LaTeX Info: Redefining \ref on input line 26.
+LaTeX Info: Redefining \pageref on input line 26.
+ (./user_guide.out)
+(./user_guide.out)
+\openout3 = `user_guide.out'.
+
+ (/usr/share/texmf/tex/context/base/supp-pdf.tex
+(/usr/share/texmf/tex/context/base/supp-mis.tex
+loading : Context Support Macros / Miscellaneous (2004.10.26)
+\protectiondepth=\count104
+\scratchcounter=\count105
+\scratchtoks=\toks17
+\scratchdimen=\dimen108
+\scratchskip=\skip43
+\scratchmuskip=\muskip10
+\scratchbox=\box26
+\scratchread=\read1
+\scratchwrite=\write5
+\zeropoint=\dimen109
+\onepoint=\dimen110
+\onebasepoint=\dimen111
+\minusone=\count106
+\thousandpoint=\dimen112
+\onerealpoint=\dimen113
+\emptytoks=\toks18
+\nextbox=\box27
+\nextdepth=\dimen114
+\everyline=\toks19
+\!!counta=\count107
+\!!countb=\count108
+\recursecounter=\count109
+)
+loading : Context Support Macros / PDF (2004.03.26)
+\nofMPsegments=\count110
+\nofMParguments=\count111
+\MPscratchCnt=\count112
+\MPscratchDim=\dimen115
+\MPnumerator=\count113
+\everyMPtoPDFconversion=\toks20
+) <quantum_espresso.pdf, id=299, 532.99126pt x 181.67876pt>
+File: quantum_espresso.pdf Graphic file (type pdf)
+
+<use quantum_espresso.pdf> <democritos.pdf, id=300, 557.08125pt x 174.72507pt>
+File: democritos.pdf Graphic file (type pdf)
+
+<use democritos.pdf>
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <14.4> on input line 59.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 59.
+ (./user_guide.toc
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 2.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 2.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 2.
+ [1
+
+{/usr/share/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <./quantum_espresso.p
+df> <./democritos.pdf>]
+LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <12> not available
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 55.
+ [2])
+\tf@toc=\write6
+\openout6 = `user_guide.toc'.
+
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 73.
+
+(/usr/share/texmf/tex/latex/base/omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 73.
+ [3]
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\<def>-command' on input line 169.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\f@encoding' on input line 169.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\<let>-command' on input line 169.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\<def>-command' on input line 169.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\f@family' on input line 169.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\<def>-command' on input line 169.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\f@series' on input line 169.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\<def>-command' on input line 169.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\f@shape' on input line 169.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\<def>-command' on input line 169.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\font@name' on input line 169.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\OT1/cmr/m/sc/14.4' on input line 169.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\ignorespaces' on input line 169.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\<def>-command' on input line 169.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\f@shape' on input line 169.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\<def>-command' on input line 169.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\font@name' on input line 169.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\OT1/cmr/m/sc/14.4' on input line 169.
+
+[4] [5] [6]
+Overfull \hbox (17.65913pt too wide) in paragraph at lines 337--345
+\OT1/cmr/m/n/12 Guido Roma (CEA), Gabriele Sclauzero (SISSA), Sylvie Stucki (IR
+-RMA), Pas-cal Thibaudeau
+ []
+
+[7] [8]
+Overfull \hbox (7.10959pt too wide) in paragraph at lines 431--437
+\OT1/cmr/m/n/12 cuta-bles (bi-nary files) are pro-vided only for \OT1/cmtt/m/n/
+12 PWgui\OT1/cmr/m/n/12 . Sta-ble re-leases of the \OT1/cmr/m/sc/12 Quan-tum ES
+PRESSO
+ []
+
+[9]
+Overfull \hbox (5.39389pt too wide) in paragraph at lines 490--512
+[][] 
+ []
+
+LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <14.4> not available
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 544.
+[10]
+Overfull \hbox (37.16194pt too wide) in paragraph at lines 575--587
+[][] 
+ []
+
+[11] [12]
+Underfull \hbox (badness 10000) in paragraph at lines 715--716
+
+ []
+
+[13]
+Overfull \hbox (1.82379pt too wide) in paragraph at lines 767--772
+\OT1/cmr/m/n/12 stalled in non-standard places. You should ex-am-ine the fi-nal
+ value of \OT1/cmtt/m/n/12 BLAS[]LIBS, LAPACK[]LIBS,
+ []
+
+[14]
+Overfull \hbox (20.33295pt too wide) in paragraph at lines 841--843
+[]\OT1/cmtt/m/n/12 make cp \OT1/cmr/m/n/12 pro-duces the Car-Parrinello code \O
+T1/cmtt/m/n/12 CPV/cp.x \OT1/cmr/m/n/12 and the post-pro-cess-ing code \OT1/cmt
+t/m/n/12 CPV/cppp.x\OT1/cmr/m/n/12 . 
+ []
+
+[15]
+Overfull \hbox (39.8744pt too wide) in paragraph at lines 873--877
+\OT1/cmr/m/n/12 (\OT1/cmtt/m/n/12 http://www.tcm.phy.cam.ac.uk/~mdt26/casino.ht
+ml\OT1/cmr/m/n/12 ). See the header of \OT1/cmtt/m/n/12 PP/pw2casino.f90
+ []
+
+[16]
+Overfull \hbox (1.99118pt too wide) in paragraph at lines 917--923
+\OT1/cmr/m/n/12 quency molec-u-lar po-lar-iz-abil-ity us-ing the ap-prox-i-mate
+d Thomas-Fermi + von Weiz^^?acker scheme,
+ []
+
+[17] [18] [19] [20]
+Overfull \hbox (9.35583pt too wide) in paragraph at lines 1173--1179
+\OT1/cmtt/m/n/12 http://developer.amd.com/cpu/open64/pages/default.aspx\OT1/cmr
+/m/n/12 ) can be freely down-loaded from
+ []
+
+
+Overfull \hbox (12.2807pt too wide) in paragraph at lines 1182--1190
+\OT1/cmr/m/n/12 Linux): \OT1/cmtt/m/n/12 http://software.intel.com/en-us/articl
+es/intel-software-developer-support\OT1/cmr/m/n/12 . 
+ []
+
+[21] [22] [23]
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 1392.
+ [24]
+Overfull \hbox (11.58232pt too wide) in paragraph at lines 1451--1453
+\OT1/cmr/m/n/12 This should also work in-ter-ac-tively, with en-vi-ron-ment var
+i-ables NPROC set to 16, MP[]HOSTFILE
+ []
+
+[25] [26] [27] [28] [29]
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\<def>-command' on input line 1761.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\f@encoding' on input line 1761.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\<let>-command' on input line 1761.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\<def>-command' on input line 1761.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\f@family' on input line 1761.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\<def>-command' on input line 1761.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\f@series' on input line 1761.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\<def>-command' on input line 1761.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\f@shape' on input line 1761.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\<def>-command' on input line 1761.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\font@name' on input line 1761.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\OT1/cmr/m/sc/17.28' on input line 1761.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\ignorespaces' on input line 1761.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\<def>-command' on input line 1761.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\f@shape' on input line 1761.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\<def>-command' on input line 1761.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\font@name' on input line 1761.
+
+
+Package hyperref Warning: Token not allowed in a PDFDocEncoded string,
+(hyperref)                removing `\OT1/cmr/m/sc/17.28' on input line 1761.
+
+
+Overfull \hbox (6.68239pt too wide) in paragraph at lines 1763--1768
+\OT1/cmtt/m/n/12 PWgui-x.y.z/INSTALL \OT1/cmr/m/n/12 (where x.y.z is the ver-si
+on num-ber) for more info on \OT1/cmtt/m/n/12 PWgui\OT1/cmr/m/n/12 , or \OT1/cm
+tt/m/n/12 GUI/README
+ []
+
+[30] [31]
+LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <17.28> not available
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 1915.
+
+
+Overfull \hbox (17.21085pt too wide) in paragraph at lines 1927--1942
+\OT1/cmr/m/n/12 cal-cu-la-tion with the de-sired k-point grid and num-ber \OT1/
+cmtt/m/n/12 nbnd \OT1/cmr/m/n/12 of bands. Spec-ify \OT1/cmtt/m/n/12 calculatio
+n='bands'
+ []
+
+[32] [33] [34] [35] [36] [37] [38] [39] [40] [41] [42] [43] [44] [45] [46]
+[47] [48] [49] [50] [51]
+Overfull \hbox (21.37143pt too wide) in paragraph at lines 3142--3150
+\OT1/cmr/m/n/12 on the avail-able com-mu-ni-ca-tion hard-ware. For PC clus-ters
+, Open-MPI (\OT1/cmtt/m/n/12 http://www.openmpi.org/\OT1/cmr/m/n/12 )
+ []
+
+[52] [53] [54]
+Overfull \hbox (34.44049pt too wide) in paragraph at lines 3296--3299
+\OT1/cmr/m/n/12 mem-ory than the de-fault David-son al-go-rithm. If you stick t
+o the lat-ter, use \OT1/cmtt/m/n/12 diago[]david[]ndim=2\OT1/cmr/m/n/12 . 
+ []
+
+[55] [56] [57] [58] [59]
+Overfull \hbox (29.32014pt too wide) in paragraph at lines 3608--3610
+[]\OT1/cmr/m/n/12 use a symmetry-conserving al-go-rithm: the Wentz-cov-itch al-
+go-rithm (\OT1/cmtt/m/n/12 cell dynamics='damp-w'\OT1/cmr/m/n/12 )
+ []
+
+[60] [61] [62] [63] [64] [65] [66] [67] [68] (./user_guide.aux)
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 3240 strings out of 94500
+ 42486 string characters out of 1173670
+ 92033 words of memory out of 1000000
+ 6116 multiletter control sequences out of 10000+50000
+ 13930 words of font info for 49 fonts, out of 500000 for 2000
+ 580 hyphenation exceptions out of 1000
+ 34i,8n,41p,236b,309s stack positions out of 1500i,500n,5000p,200000b,5000s
+PDF statistics:
+ 880 PDF objects out of 300000
+ 284 named destinations out of 131072
+ 611 words of extra memory for PDF output out of 65536
+</usr/share/texmf/fonts/type1/bluesky/cm/cmex10.pfb></usr/share/texmf/fonts/t
+ype1/bluesky/cm/cmbxti10.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmsy8.pfb
+></usr/share/texmf/fonts/type1/bluesky/cm/cmtt10.pfb></usr/share/texmf/fonts/ty
+pe1/bluesky/cm/cmr10.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmr7.pfb></us
+r/share/texmf/fonts/type1/bluesky/cm/cmmi8.pfb></usr/share/texmf/fonts/type1/bl
+uesky/cm/cmr8.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmmi12.pfb></usr/sha
+re/texmf/fonts/type1/bluesky/cm/cmti12.pfb></usr/share/texmf/fonts/type1/bluesk
+y/cm/cmsy10.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmtt12.pfb></usr/share
+/texmf/fonts/type1/bluesky/cm/cmr12.pfb></usr/share/texmf/fonts/type1/bluesky/c
+m/cmbx12.pfb></usr/share/texmf/fonts/type1/bluesky/cm/cmcsc10.pfb></usr/share/t
+exmf/fonts/type1/bluesky/cm/cmr17.pfb>
+Output written on user_guide.pdf (68 pages, 600695 bytes).

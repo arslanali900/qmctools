@@ -1,0 +1,128 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>7.1 Plotting selected quantities</TITLE>
+<META NAME="description" CONTENT="7.1 Plotting selected quantities">
+<META NAME="keywords" CONTENT="user_guide">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="user_guide.css">
+
+<LINK REL="next" HREF="node35.html">
+<LINK REL="previous" HREF="node33.html">
+<LINK REL="up" HREF="node33.html">
+<LINK REL="next" HREF="node35.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html774"
+  HREF="node35.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html770"
+  HREF="node33.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html764"
+  HREF="node33.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html772"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html775"
+  HREF="node35.html">7.2 Band structure, Fermi</A>
+<B> Up:</B> <A NAME="tex2html771"
+  HREF="node33.html">7 Post-processing</A>
+<B> Previous:</B> <A NAME="tex2html765"
+  HREF="node33.html">7 Post-processing</A>
+ &nbsp; <B>  <A NAME="tex2html773"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00081000000000000000">
+7.1 Plotting selected quantities</A>
+</H2>
+
+<P>
+The main postprocessing code <TT>pp.x</TT> reads data file(s), extracts or calculates 
+the selected quantity, writes it into a format that is suitable for plotting.
+
+<P>
+Quantities that can be read or calculated are:
+<BLOCKQUOTE>
+charge density
+<BR>
+spin polarization
+<BR>
+various potentials
+<BR>
+local density of states at <I>E</I><SUB>F</SUB>
+<tex2html_verbatim_mark>
+<BR>
+local density of electronic entropy
+<BR>
+STM images
+<BR>
+selected squared wavefunction
+<BR>
+ELF (electron localization function)
+<BR>
+planar averages
+<BR>
+integrated local density of states
+
+</BLOCKQUOTE>
+Various types of plotting (along a line, on a plane, three-dimensional, polar)
+and output formats (including the popular cube format) can be specified.
+The output files can be directly read by the free plotting system Gnuplot
+(1D or 2D plots), or by code <TT>plotrho.x</TT> that comes with <TT>PostProc</TT> (2D plots),
+or by advanced plotting software XCrySDen and gOpenMol (3D plots).
+
+<P>
+See file <TT>Doc/INPUT_PP.*</TT> for a detailed description of the input for code <TT>pp.x</TT>.
+See Example 05 for an example of a charge density plot, Example 16
+for an example of STM image simulation.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html774"
+  HREF="node35.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html770"
+  HREF="node33.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html764"
+  HREF="node33.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html772"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html775"
+  HREF="node35.html">7.2 Band structure, Fermi</A>
+<B> Up:</B> <A NAME="tex2html771"
+  HREF="node33.html">7 Post-processing</A>
+<B> Previous:</B> <A NAME="tex2html765"
+  HREF="node33.html">7 Post-processing</A>
+ &nbsp; <B>  <A NAME="tex2html773"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Paolo Giannozzi
+2010-05-07
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,352 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>11.7 Self Consistency</TITLE>
+<META NAME="description" CONTENT="11.7 Self Consistency">
+<META NAME="keywords" CONTENT="user_guide">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="user_guide.css">
+
+<LINK REL="next" HREF="node61.html">
+<LINK REL="previous" HREF="node59.html">
+<LINK REL="up" HREF="node53.html">
+<LINK REL="next" HREF="node61.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html1241"
+  HREF="node61.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html1237"
+  HREF="node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html1231"
+  HREF="node59.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html1239"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1242"
+  HREF="node61.html">11.8 Phonons</A>
+<B> Up:</B> <A NAME="tex2html1238"
+  HREF="node53.html">11 Frequently Asked Questions</A>
+<B> Previous:</B> <A NAME="tex2html1232"
+  HREF="node59.html">11.6 Frequent errors during</A>
+ &nbsp; <B>  <A NAME="tex2html1240"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><UL>
+<LI><A NAME="tex2html1243"
+  HREF="node60.html#SECTION000127010000000000000">11.7.0.1 What are the units for quantity XYZ?</A>
+<LI><A NAME="tex2html1244"
+  HREF="node60.html#SECTION000127020000000000000">11.7.0.2 Self-consistency is slow or does not converge at all</A>
+<LI><A NAME="tex2html1245"
+  HREF="node60.html#SECTION000127030000000000000">11.7.0.3 What is the difference between total and absolute magnetization?</A>
+<LI><A NAME="tex2html1246"
+  HREF="node60.html#SECTION000127040000000000000">11.7.0.4 How can I calculate magnetic moments for each atom?</A>
+<LI><A NAME="tex2html1247"
+  HREF="node60.html#SECTION000127050000000000000">11.7.0.5 What is the order of <I>Y</I><SUB>lm</SUB>
+<tex2html_verbatim_mark> components in projected
+  DOS / projection of atomic wavefunctions?</A>
+<LI><A NAME="tex2html1248"
+  HREF="node60.html#SECTION000127060000000000000">11.7.0.6 Why is the sum of partial Lowdin charges not equal to
+  the total charge?</A>
+<LI><A NAME="tex2html1249"
+  HREF="node60.html#SECTION000127070000000000000">11.7.0.7 I cannot find the Fermi energy, where is it?</A>
+<LI><A NAME="tex2html1250"
+  HREF="node60.html#SECTION000127080000000000000">11.7.0.8 What is the reference level for Kohn-Sham energies? 
+Why do I get positive values for Kohn-Sham levels?</A>
+<LI><A NAME="tex2html1251"
+  HREF="node60.html#SECTION000127090000000000000">11.7.0.9 Why do I get a strange value of the Fermi energy?</A>
+<LI><A NAME="tex2html1252"
+  HREF="node60.html#SECTION0001270100000000000000">11.7.0.10 Why I don't get zero pressure/stress at equilibrium?</A>
+<LI><A NAME="tex2html1253"
+  HREF="node60.html#SECTION0001270110000000000000">11.7.0.11 Why do I get <EM>negative starting charge</EM>?</A>
+<LI><A NAME="tex2html1254"
+  HREF="node60.html#SECTION0001270120000000000000">11.7.0.12 How do I calculate the work function?</A>
+</UL></UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H2><A NAME="SECTION000127000000000000000">
+11.7 Self Consistency</A>
+</H2>
+
+<P>
+
+<H4><A NAME="SECTION000127010000000000000">
+11.7.0.1 What are the units for quantity XYZ?</A>
+</H4>
+
+<P>
+Unless otherwise specified, all <TT>PWscf</TT> input and output
+quantities are in atomic "Rydberg" units, i.e. energies in Ry, lengths
+in Bohr radii, etc.. Note that <TT>CP</TT> uses instead atomic "Hartree" 
+units: energies in Ha, lengths in Bohr radii. 
+
+<P>
+
+<H4><A NAME="SECTION000127020000000000000">
+11.7.0.2 Self-consistency is slow or does not converge at all</A>
+</H4>
+
+<P>
+In most cases: your input data is bad, or else your system is metallic
+and you are treating it as an insulator. If this is not the case:
+reduce <TT>mixing_beta</TT> to <!-- MATH
+ $\sim 0.3\div 0.1$
+ -->
+<IMG
+ WIDTH="19" HEIGHT="19" ALIGN="BOTTOM" BORDER="0"
+ SRC="img2.gif"
+ ALT="$ \sim$"> 0.3 &#247; 0.1
+<tex2html_verbatim_mark> or smaller, 
+try the <TT>mixing_mode</TT> value that is more
+  appropriate for your problem.
+
+<P>
+
+<H4><A NAME="SECTION000127030000000000000">
+11.7.0.3 What is the difference between total and absolute magnetization?</A>
+</H4>
+
+<P>
+The total magnetization is the integral of the magnetization
+in the cell: 
+<P><!-- MATH
+ \begin{displaymath}
+M_T = \int (n_{up}-n_{down}) d^3r.
+\end{displaymath}
+ -->
+</P>
+<DIV ALIGN="CENTER">
+<I>M</I><SUB>T</SUB> = <IMG
+ WIDTH="20" HEIGHT="55" ALIGN="MIDDLE" BORDER="0"
+ SRC="img30.gif"
+ ALT="$\displaystyle \int$">(<I>n</I><SUB>up</SUB> - <I>n</I><SUB>down</SUB>)<I>d</I><SUP>3</SUP><I>r</I>.
+</DIV><P>
+<tex2html_verbatim_mark></P>
+The absolute magnetization is the integral of the absolute value of
+the magnetization in the cell:
+<P><!-- MATH
+ \begin{displaymath}
+M_A= \int |n_{up}-n_{down}| d^3r.
+\end{displaymath}
+ -->
+</P>
+<DIV ALIGN="CENTER">
+<I>M</I><SUB>A</SUB> = <IMG
+ WIDTH="20" HEIGHT="55" ALIGN="MIDDLE" BORDER="0"
+ SRC="img30.gif"
+ ALT="$\displaystyle \int$">| <I>n</I><SUB>up</SUB> - <I>n</I><SUB>down</SUB>| <I>d</I><SUP>3</SUP><I>r</I>.
+</DIV><P>
+<tex2html_verbatim_mark></P>
+In a simple ferromagnetic material they should be equal (except
+possibly for an overall sign)`. In simple antiferromagnets (like FeO,
+NiO) <I>M</I><SUB>T</SUB>
+<tex2html_verbatim_mark> is zero and <I>M</I><SUB>A</SUB>
+<tex2html_verbatim_mark> is twice the magnetization of each of the
+two atoms. (info by Stefano de Gironcoli) 
+
+<P>
+
+<H4><A NAME="SECTION000127040000000000000">
+11.7.0.4 How can I calculate magnetic moments for each atom?</A>
+</H4> 
+
+<P>
+There is no 'right' way of defining the local magnetic moment
+around an atom in a multi-atom system. However an approximate way to define
+it is via the projected density of states on the atomic orbitals (code
+projwfc.x, see example08 for its use as a postprocessing tool). This
+code generate many files with the density of states projected on each
+atomic wavefunction of each atom and a BIG amount of data on the
+standard output, the last few lines of which contain the decomposition
+of Lowdin charges on angular momentum and spin component of each atom.
+
+<P>
+
+<H4><A NAME="SECTION000127050000000000000">
+11.7.0.5 What is the order of <I>Y</I><SUB>lm</SUB>
+<tex2html_verbatim_mark> components in projected
+  DOS / projection of atomic wavefunctions?</A>
+</H4>
+
+<P>
+See input data documentation for <TT>projwfc.x</TT>.
+
+<P>
+
+<H4><A NAME="SECTION000127060000000000000">
+11.7.0.6 Why is the sum of partial Lowdin charges not equal to
+  the total charge?</A>
+</H4> 
+
+<P>
+"Lowdin charges (as well as other conventional atomic charges) do not
+satisfy any sum rule. You can easily convince yourself that ths is the
+case because the atomic orbitals that are used to calculate them are
+arbitrary to some extent. If yu like, you can think that the missing
+charge is "delocalized" or "bonding" charge, but this would be another
+way of naming the conventional (to some extent) character of Lowdin
+charge." (Stefano Baroni, Sept. 2008).  
+
+<P>
+See also the definition of "spilling parameter": Sanchez-Portal et
+al., Sol. State Commun. 95, 685 (1995). The spilling parameter
+measures the ability of the basis provided by the pseudo-atomic wfc to
+represent the PW eigenstates, by measuring how much of the subspace of
+the Hamiltonian eigenstates falls outside the subspace spanned by the
+atomic basis. 
+
+<P>
+
+<H4><A NAME="SECTION000127070000000000000">
+11.7.0.7 I cannot find the Fermi energy, where is it?</A>
+</H4>  
+
+<P>
+It is printed in the output. If not, the information on gaussian smearing,
+needed to calculate a sensible Fermi energy, was not provided in input.
+In this case, .x prints instead the highest occupied and lowest
+unoccupied levels. If not, the number of bands to be calculated was not 
+provided in input and .x calculates occupied bands only.
+
+<P>
+
+<H4><A NAME="SECTION000127080000000000000">
+11.7.0.8 What is the reference level for Kohn-Sham energies? 
+Why do I get positive values for Kohn-Sham levels?</A>
+</H4>
+
+<P>
+The reference level is an ill-defined quantity in calculations
+in solids with periodic boundary conditions. Absolute values of
+Kohn-Sham eigenvalues are meaningless. 
+
+<P>
+
+<H4><A NAME="SECTION000127090000000000000">
+11.7.0.9 Why do I get a strange value of the Fermi energy?</A>
+</H4>
+
+<P>
+"The value of the Fermi energy (as well as of any energy, for that
+matter) depends of the reference level. What you are referring to is
+probably the "Fermi energy referred to the vacuum level" (i.e.  
+the work function). In order to obtain that, you need to know what the
+vacuum level is, which cannot be said from a bulk calculation only"
+(Stefano Baroni, Sept. 2008). 
+
+<P>
+
+<H4><A NAME="SECTION0001270100000000000000">
+11.7.0.10 Why I don't get zero pressure/stress at equilibrium?</A>
+</H4>
+
+<P>
+It depends. If you make a calculation with fixed cell parameters, you
+will never get exactly zero pressure/stress, unless you use the cell
+that yields perfect equilibrium for your pseudopotentials,  cutoffs,
+k-points, etc.. Such cell will anyway be slightly different from the
+experimental one. Note however that pressures/stresses in the order of
+a few KBar correspond to very small differences in terms of lattice parameters.
+
+<P>
+If you obtain the equilibrium cell from a variable-cell optimization,
+do not forget that the pressure/stress calculated with the modified
+kinetic energy functional (very useful for variable-cell calculations)
+slightly differ from those calculated without it. Also note that the
+PW basis set used during variable-cell calculations is
+determined by the given cutoff and the <EM>initial</EM> cell. If you
+make a calculation with the final geometry at the same cutoff,
+you may get slightly different  results. The difference should
+be small, though, unless you are using a too low cutoff for your
+system.
+
+<P>
+
+<H4><A NAME="SECTION0001270110000000000000">
+11.7.0.11 Why do I get <EM>negative starting charge</EM>?</A>
+</H4>
+Self-consistency requires an initial guess for the charge density in
+order to bootstrap the iterative algorithm. This first guess is
+usually built from a superposition of atomic charges, constructed from
+pseudopotential data. 
+
+<P>
+More often than not, this charges are a slightly too hard to be
+expanded very accurately in PWs, hence some aliasing error
+will be introduced. Especially if the unit cell is big and mostly
+empty, some local low negative charge density will be produced. 
+
+<P>
+''This is NOT harmful at all, the negative charge density is handled
+properly by the code and will disappear during the self-consistent
+cycles'', but if it is very high (let's say more than 0.001*number of
+electrons) it may be a symptom that your charge density cutoff is too
+low. (L. Paulatto - November 2008)
+
+<P>
+
+<H4><A NAME="SECTION0001270120000000000000">
+11.7.0.12 How do I calculate the work function?</A>
+</H4>
+
+<P>
+Work function = (average potential in the vacuum) - (Fermi
+Energy). The former is estimated in a supercell with the slab
+geometry, by looking at the average of the electrostatic potential
+(typically without the XC part). See the example in
+examples/WorkFct_example. 
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html1241"
+  HREF="node61.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html1237"
+  HREF="node53.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html1231"
+  HREF="node59.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html1239"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html1242"
+  HREF="node61.html">11.8 Phonons</A>
+<B> Up:</B> <A NAME="tex2html1238"
+  HREF="node53.html">11 Frequently Asked Questions</A>
+<B> Previous:</B> <A NAME="tex2html1232"
+  HREF="node59.html">11.6 Frequent errors during</A>
+ &nbsp; <B>  <A NAME="tex2html1240"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Paolo Giannozzi
+2010-05-07
+</ADDRESS>
+</BODY>
+</HTML>

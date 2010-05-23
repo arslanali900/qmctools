@@ -1,0 +1,165 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>5.2 Optimization and dynamics</TITLE>
+<META NAME="description" CONTENT="5.2 Optimization and dynamics">
+<META NAME="keywords" CONTENT="user_guide">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="user_guide.css">
+
+<LINK REL="next" HREF="node27.html">
+<LINK REL="previous" HREF="node25.html">
+<LINK REL="up" HREF="node24.html">
+<LINK REL="next" HREF="node27.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html670"
+  HREF="node27.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html666"
+  HREF="node24.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html660"
+  HREF="node25.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html668"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html671"
+  HREF="node27.html">5.3 Nudged Elastic Band</A>
+<B> Up:</B> <A NAME="tex2html667"
+  HREF="node24.html">5 Using PWscf</A>
+<B> Previous:</B> <A NAME="tex2html661"
+  HREF="node25.html">5.1 Electronic structure calculations</A>
+ &nbsp; <B>  <A NAME="tex2html669"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+<!--Table of Child-Links-->
+<A NAME="CHILD_LINKS"><STRONG>Subsections</STRONG></A>
+
+<UL>
+<LI><UL>
+<LI><A NAME="tex2html672"
+  HREF="node26.html#SECTION00062010000000000000">5.2.0.1 Structural optimization</A>
+<LI><A NAME="tex2html673"
+  HREF="node26.html#SECTION00062020000000000000">5.2.0.2 Molecular Dynamics</A>
+<LI><A NAME="tex2html674"
+  HREF="node26.html#SECTION00062030000000000000">5.2.0.3 Variable-cell molecular dynamics</A>
+</UL></UL>
+<!--End of Table of Child-Links-->
+<HR>
+
+<H2><A NAME="SECTION00062000000000000000">
+5.2 Optimization and dynamics</A>
+</H2>
+
+<P>
+
+<H4><A NAME="SECTION00062010000000000000">
+5.2.0.1 Structural optimization</A>
+</H4>
+For fixed-cell optimization, specify <TT>calculation='relax'</TT> and 
+add namelist &amp;IONS. All options for a single SCF calculation apply, 
+plus a few others. You
+may follow a structural optimization with a non-SCF band-structure
+calculation (since v.4.1, you do not need any longer to update the 
+atomic positions in the input file for non scf calculation).
+<BR>
+See Example 03.
+
+<P>
+
+<H4><A NAME="SECTION00062020000000000000">
+5.2.0.2 Molecular Dynamics</A>
+</H4> 
+Specify <TT>calculation='md'</TT>, the time step <TT>dt</TT>, and possibly the number of MD stops <TT>nstep</TT>.
+Use variable <TT>ion_dynamics</TT> in namelist &amp;IONS for a fine-grained control
+of the kind of dynamics. Other options for setting the initial
+temperature and for thermalization using velocity rescaling are
+available. Remember: this is MD on the electronic ground state, not
+Car-Parrinello MD.
+See Example 04.
+
+<P>
+
+<H4><A NAME="SECTION00062030000000000000">
+5.2.0.3 Variable-cell molecular dynamics</A>
+</H4>
+
+<P>
+"A common mistake many new users make is to set the time step <TT>dt</TT>
+improperly to the same order of magnitude as for CP algorithm, or
+not setting <TT>dt</TT> at all. This will produce a ``not evolving dynamics''.
+Good values for the original RMW (RM Wentzcovitch) dynamics are 
+<TT>dt</TT> <!-- MATH
+ $= 50 \div 70$
+ -->
+= 50 &#247; 70
+<tex2html_verbatim_mark>. The choice of the cell mass is a delicate matter. An
+off-optimal mass will make convergence slower. Too small masses, as
+well as too long time steps, can make the algorithm unstable. A good
+cell mass will make the oscillation times for internal degrees of
+freedom comparable to cell degrees of freedom in non-damped
+Variable-Cell MD. Test calculations are advisable before extensive
+calculation. I have tested the damping algorithm that I have developed
+and it has worked well so far. It allows for a much longer time step
+(dt=<!-- MATH
+ $100 \div 150$
+ -->
+100 &#247; 150
+<tex2html_verbatim_mark>) than the RMW one and is much more stable with very
+small cell masses, which is useful when the cell shape, not the
+internal degrees of freedom, is far out of equilibrium. It also
+converges in a smaller number of steps than RMW." (Info from Cesar Da
+Silva: the new damping algorithm is the default since v. 3.1).
+
+<P>
+See also <TT>examples/VCSexample</TT>.
+
+<P>
+<HR>
+<!--Navigation Panel-->
+<A NAME="tex2html670"
+  HREF="node27.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html666"
+  HREF="node24.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html660"
+  HREF="node25.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html668"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html671"
+  HREF="node27.html">5.3 Nudged Elastic Band</A>
+<B> Up:</B> <A NAME="tex2html667"
+  HREF="node24.html">5 Using PWscf</A>
+<B> Previous:</B> <A NAME="tex2html661"
+  HREF="node25.html">5.1 Electronic structure calculations</A>
+ &nbsp; <B>  <A NAME="tex2html669"
+  HREF="node1.html">Contents</A></B> 
+<!--End of Navigation Panel-->
+<ADDRESS>
+Paolo Giannozzi
+2010-05-07
+</ADDRESS>
+</BODY>
+</HTML>

@@ -1,0 +1,73 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}
+\BOOKMARK [2][-]{subsection.1.1}{What can Quantum ESPRESSO do}{section.1}
+\BOOKMARK [2][-]{subsection.1.2}{People}{section.1}
+\BOOKMARK [2][-]{subsection.1.3}{Contacts}{section.1}
+\BOOKMARK [2][-]{subsection.1.4}{Terms of use}{section.1}
+\BOOKMARK [1][-]{section.2}{Installation}{}
+\BOOKMARK [2][-]{subsection.2.1}{Download}{section.2}
+\BOOKMARK [2][-]{subsection.2.2}{Prerequisites}{section.2}
+\BOOKMARK [2][-]{subsection.2.3}{configure}{section.2}
+\BOOKMARK [3][-]{subsubsection.2.3.1}{Manual configuration}{subsection.2.3}
+\BOOKMARK [2][-]{subsection.2.4}{Libraries}{section.2}
+\BOOKMARK [3][-]{subsubsection.2.4.1}{If optimized libraries are not found}{subsection.2.4}
+\BOOKMARK [2][-]{subsection.2.5}{Compilation}{section.2}
+\BOOKMARK [2][-]{subsection.2.6}{Running examples}{section.2}
+\BOOKMARK [2][-]{subsection.2.7}{Installation tricks and problems}{section.2}
+\BOOKMARK [3][-]{subsubsection.2.7.1}{All architectures}{subsection.2.7}
+\BOOKMARK [3][-]{subsubsection.2.7.2}{Cray XT machines}{subsection.2.7}
+\BOOKMARK [3][-]{subsubsection.2.7.3}{IBM AIX}{subsection.2.7}
+\BOOKMARK [3][-]{subsubsection.2.7.4}{Linux PC}{subsection.2.7}
+\BOOKMARK [3][-]{subsubsection.2.7.5}{Linux PC clusters with MPI}{subsection.2.7}
+\BOOKMARK [3][-]{subsubsection.2.7.6}{Intel Mac OS X}{subsection.2.7}
+\BOOKMARK [3][-]{subsubsection.2.7.7}{SGI, Alpha}{subsection.2.7}
+\BOOKMARK [1][-]{section.3}{Parallelism}{}
+\BOOKMARK [2][-]{subsection.3.1}{Understanding Parallelism}{section.3}
+\BOOKMARK [2][-]{subsection.3.2}{Running on parallel machines}{section.3}
+\BOOKMARK [2][-]{subsection.3.3}{Parallelization levels}{section.3}
+\BOOKMARK [3][-]{subsubsection.3.3.1}{Understanding parallel I/O}{subsection.3.3}
+\BOOKMARK [2][-]{subsection.3.4}{Tricks and problems}{section.3}
+\BOOKMARK [1][-]{section.4}{Using Quantum ESPRESSO}{}
+\BOOKMARK [2][-]{subsection.4.1}{Input data}{section.4}
+\BOOKMARK [2][-]{subsection.4.2}{Data files}{section.4}
+\BOOKMARK [2][-]{subsection.4.3}{Format of arrays containing charge density, potential, etc.}{section.4}
+\BOOKMARK [1][-]{section.5}{Using PWscf}{}
+\BOOKMARK [2][-]{subsection.5.1}{Electronic structure calculations}{section.5}
+\BOOKMARK [2][-]{subsection.5.2}{Optimization and dynamics}{section.5}
+\BOOKMARK [2][-]{subsection.5.3}{Nudged Elastic Band calculation}{section.5}
+\BOOKMARK [1][-]{section.6}{Phonon calculations}{}
+\BOOKMARK [2][-]{subsection.6.1}{Single-q calculation}{section.6}
+\BOOKMARK [2][-]{subsection.6.2}{Calculation of interatomic force constants in real space}{section.6}
+\BOOKMARK [2][-]{subsection.6.3}{Calculation of electron-phonon interaction coefficients}{section.6}
+\BOOKMARK [2][-]{subsection.6.4}{Distributed Phonon calculations}{section.6}
+\BOOKMARK [1][-]{section.7}{Post-processing}{}
+\BOOKMARK [2][-]{subsection.7.1}{Plotting selected quantities}{section.7}
+\BOOKMARK [2][-]{subsection.7.2}{Band structure, Fermi surface}{section.7}
+\BOOKMARK [2][-]{subsection.7.3}{Projection over atomic states, DOS}{section.7}
+\BOOKMARK [2][-]{subsection.7.4}{Wannier functions}{section.7}
+\BOOKMARK [2][-]{subsection.7.5}{Other tools}{section.7}
+\BOOKMARK [1][-]{section.8}{Using CP}{}
+\BOOKMARK [2][-]{subsection.8.1}{Reaching the electronic ground state}{section.8}
+\BOOKMARK [2][-]{subsection.8.2}{Relax the system}{section.8}
+\BOOKMARK [2][-]{subsection.8.3}{CP dynamics}{section.8}
+\BOOKMARK [2][-]{subsection.8.4}{Advanced usage}{section.8}
+\BOOKMARK [3][-]{subsubsection.8.4.1}{ Self-interaction Correction }{subsection.8.4}
+\BOOKMARK [3][-]{subsubsection.8.4.2}{ ensemble-DFT }{subsection.8.4}
+\BOOKMARK [3][-]{subsubsection.8.4.3}{Treatment of USPPs}{subsection.8.4}
+\BOOKMARK [1][-]{section.9}{Performances}{}
+\BOOKMARK [2][-]{subsection.9.1}{Execution time}{section.9}
+\BOOKMARK [2][-]{subsection.9.2}{Memory requirements}{section.9}
+\BOOKMARK [2][-]{subsection.9.3}{File space requirements}{section.9}
+\BOOKMARK [2][-]{subsection.9.4}{Parallelization issues}{section.9}
+\BOOKMARK [1][-]{section.10}{Troubleshooting}{}
+\BOOKMARK [2][-]{subsection.10.1}{pw.x problems}{section.10}
+\BOOKMARK [2][-]{subsection.10.2}{PostProc}{section.10}
+\BOOKMARK [2][-]{subsection.10.3}{ph.x errors}{section.10}
+\BOOKMARK [1][-]{section.11}{Frequently Asked Questions \(FAQ\)}{}
+\BOOKMARK [2][-]{subsection.11.1}{General}{section.11}
+\BOOKMARK [2][-]{subsection.11.2}{Installation}{section.11}
+\BOOKMARK [2][-]{subsection.11.3}{Pseudopotentials}{section.11}
+\BOOKMARK [2][-]{subsection.11.4}{Input data}{section.11}
+\BOOKMARK [2][-]{subsection.11.5}{Parallel execution}{section.11}
+\BOOKMARK [2][-]{subsection.11.6}{Frequent errors during execution}{section.11}
+\BOOKMARK [2][-]{subsection.11.7}{Self Consistency}{section.11}
+\BOOKMARK [2][-]{subsection.11.8}{ Phonons }{section.11}

@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+
+<!--Converted with LaTeX2HTML 2002-2-1 (1.71)
+original version by:  Nikos Drakos, CBLU, University of Leeds
+* revised and updated by:  Marcus Hennecke, Ross Moore, Herb Swan
+* with significant contributions from:
+  Jens Lippmann, Marek Rouchal, Martin Wilck and others -->
+<HTML>
+<HEAD>
+<TITLE>7.5 Other tools</TITLE>
+<META NAME="description" CONTENT="7.5 Other tools">
+<META NAME="keywords" CONTENT="user_guide">
+<META NAME="resource-type" CONTENT="document">
+<META NAME="distribution" CONTENT="global">
+
+<META NAME="Generator" CONTENT="LaTeX2HTML v2002-2-1">
+<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css">
+
+<LINK REL="STYLESHEET" HREF="user_guide.css">
+
+<LINK REL="previous" HREF="node37.html">
+<LINK REL="up" HREF="node33.html">
+<LINK REL="next" HREF="node39.html">
+</HEAD>
+
+<BODY >
+<!--Navigation Panel-->
+<A NAME="tex2html820"
+  HREF="node39.html">
+<IMG WIDTH="37" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="next" SRC="next.gif"></A> 
+<A NAME="tex2html816"
+  HREF="node33.html">
+<IMG WIDTH="26" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="up" SRC="up.gif"></A> 
+<A NAME="tex2html812"
+  HREF="node37.html">
+<IMG WIDTH="63" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="previous" SRC="prev.gif"></A> 
+<A NAME="tex2html818"
+  HREF="node1.html">
+<IMG WIDTH="65" HEIGHT="24" ALIGN="BOTTOM" BORDER="0" ALT="contents" SRC="contents.gif"></A>  
+<BR>
+<B> Next:</B> <A NAME="tex2html821"
+  HREF="node39.html">8 Using CP</A>
+<B> Up:</B> <A NAME="tex2html817"
+  HREF="node33.html">7 Post-processing</A>
+<B> Previous:</B> <A NAME="tex2html813"
+  HREF="node37.html">7.4 Wannier functions</A>
+ &nbsp; <B>  <A NAME="tex2html819"
+  HREF="node1.html">Contents</A></B> 
+<BR>
+<BR>
+<!--End of Navigation Panel-->
+
+<H2><A NAME="SECTION00085000000000000000">
+7.5 Other tools</A>
+</H2>
+
+<P>
+Code <TT>sumpdos.x</TT> can be used to sum selected PDOS, produced by
+<TT>projwfc.x</TT>, by specifiying the names of files
+containing the desired PDOS. Type <TT>sumpdos.x -h</TT> or look into the source
+code for more details. 
+
+<P>
+Code <TT>epsilon.x</TT> calculates RPA frequency-dependent complex dielectric function. Documentation is in <TT>Doc/eps_man.tex</TT>.
+
+<P>
+The code <TT>path_int.x</TT> is intended to be used in the framework of NEB
+calculations. It is a tool to generate a new path (what is actually
+generated is the restart file) starting from an old one through
+interpolation (cubic splines). The new path can be discretized with a
+different number of images (this is its main purpose), images are
+equispaced and the interpolation can be also 
+performed on a subsection of the old path. The input file needed by
+<TT>path_int.x</TT> can be easily set up  with the help of the self-explanatory
+<TT>path_int.sh</TT> shell script. 
+
+<P>
+<BR><HR>
+<ADDRESS>
+Paolo Giannozzi
+2010-05-07
+</ADDRESS>
+</BODY>
+</HTML>

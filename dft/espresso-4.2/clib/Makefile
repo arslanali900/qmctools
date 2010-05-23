@@ -1,0 +1,29 @@
+# Makefile for clib
+
+include ../make.sys
+
+OBJS = \
+customize_signals.o \
+stack.o \
+c_mkdir.o \
+cptimer.o \
+eval_infix.o \
+fft_stick.o \
+indici.o \
+memstat.o \
+qsort.o \
+esh5_interfaces.o
+
+all : clib.a
+
+clib.a : $(OBJS) 
+	$(AR) $(ARFLAGS) $@ $?
+	$(RANLIB) $@
+
+source :
+	co -l $(OBJS:.o=.c)
+
+clean :
+	- rm -f clib.a *.o *.mod *.i core*
+
+include make.depend

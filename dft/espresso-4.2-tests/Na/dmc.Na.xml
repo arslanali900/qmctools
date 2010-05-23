@@ -1,0 +1,70 @@
+<?xml version="1.0"?>                                    
+<simulation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.mcc.uiuc.edu/qmc/schema/molecu.xsd">
+<project id='na.PBE.TN'  series="0">                                                                                                                 
+<application name="qmcapp" role="molecu" class="serial" version="0.2">                                                                          
+</application>                                                                                                                                  
+</project>                                                                                                                                      
+<random seed="1" />                                                                                                            
+<include href='Na.PBE.TN.ptcl.xml' />                                                                                                                    
+<include href='Na.PBE.TN.wfs.xml' />
+<qmcsystem >                                                                                                                                    
+
+<hamiltonian name="h0" type="generic" target="e">
+<constant name="IonIon" type="coulomb" source="ion0" target="ion0"/>
+<pairpot name="ElecElec" type="coulomb" source="e" target="e"/>
+<pairpot type="pseudo" name="PseudoPot" source="ion0" wavefunction="psi0" format="xml">
+  <pseudo elementType="Na" href="Na.TN_DF.xml"/>
+</pairpot>
+<pairpot type="cpp" name="CorePol" source="ion0" target="e">
+    <element name="Na" alpha="0.9776" rb="1.0307"/>
+</pairpot>
+<estimator type="momentum" psi="psi0" source="e">
+<kpoints mode="auto" grid="7" samples="4">
+</kpoints>
+<q mode="auto">
+</q>
+</estimator>
+</hamiltonian>
+</qmcsystem>
+<!--
+<loop max="3">
+<qmc method="linear" move="pbyp" checkpoint="100" gpu="no">
+<parameter name="blocks">     4  </parameter>
+<parameter name="warmupsteps"> 16 </parameter>
+<parameter name="stepsbetweensamples">    3 </parameter>
+<parameter name="timestep">  6.0 </parameter>
+<parameter name="samples">  8000 </parameter>
+<parameter name="useDrift">  yes </parameter>
+<estimator name="LocalEnergy" hdf5="no"/>
+<cost name="energy">                   0.25 </cost>
+<cost name="unreweightedvariance">     0.0 </cost>
+<cost name="reweightedvariance">       0.75 </cost>
+<parameter name="beta">  1  </parameter>
+<parameter name="max_its">               1  </parameter>
+<parameter name="exp0">                  -9 </parameter>
+<parameter name="alloweddifference"> 2.0e-9 </parameter>
+<parameter name="bigchange">1</parameter>
+<parameter name="stabilizerscale">  2 </parameter>
+<parameter name="nstabilizers"> 3 </parameter>
+<parameter name="eigcg">     2 </parameter>
+<parameter name="quadstep"> 1.0 </parameter>
+</qmc>
+</loop>
+-->
+<qmc method="vmc" multiple="no" warp="no" move="pbyp">
+<estimator name="LocalEnergy" hdf5="no"/>
+<parameter name="blocks">200</parameter>
+<parameter name="steps">250</parameter>
+<parameter name="samples">100</parameter>
+<parameter name="timeStep">6.0</parameter>
+</qmc>
+<!--
+<qmc method="dmc" multiple="no" warp="no" move="pbyp">
+<parameter name="nonlocalmoves"> yes </parameter>
+<parameter name="blocks">25</parameter>
+<parameter name="steps">200</parameter>
+<parameter name="timestep">5.0e-2</parameter>
+<estimator name="LocalEnergy" hdf5="no"/>
+</qmc>
+-->
+</simulation>
