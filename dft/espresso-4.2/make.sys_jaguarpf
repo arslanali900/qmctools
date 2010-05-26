@@ -31,7 +31,7 @@
 # With the exception of IBM xlf, FDFLAGS = $(DFLAGS)
 # For IBM xlf, FDFLAGS is the same as DFLAGS with separating commas 
 
-DFLAGS         =  -D__GFORTRAN -D__STD_F95 -D__FFTW -DEXX -DH5_USE_16_API
+DFLAGS         =  -D__GFORTRAN -D__STD_F95 -D__FFTW -DEXX -DH5_USE_16_API -D__MPI -D__PARA
 FDFLAGS        = $(DFLAGS)
 
 # IFLAGS = how to locate directories where files to be included are
