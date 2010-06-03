@@ -11,6 +11,7 @@
  * - esh5_close_eigg : close eigenstates
  * - esh5_open_eigr : open eigenstates_nx_ny_nz
  * - esh5_close_eigr : close eigenstates_nx_ny_nz
+ * 
  */
 #include <stdio.h> 
 #include <string.h>
@@ -58,6 +59,8 @@ static int psi_r_is_complex=1;
 /* append data */
 static int append_h5=0;
 static int iteration=0;
+static H5E_auto_t err_func;
+static void *client_data=0;
 
 
 /** create a file and write version & application
@@ -68,6 +71,9 @@ static int iteration=0;
  */
 void F77_FUNC_(esh5_open_file,ESH5_OPEN_FILE)(const char* fname, const int* length, int* old)
 {
+  H5Eget_auto (&err_func, &client_data);
+  H5Eset_auto (NULL, NULL);
+
   append_h5=*old;
 
   char * hfname = ( char * ) malloc( (*length) + 1 ) ;
@@ -75,12 +81,13 @@ void F77_FUNC_(esh5_open_file,ESH5_OPEN_FILE)(const char* fname, const int* leng
   hfname[*length] = '\0' ; 
 
   if(h_file>=0) H5Fclose(h_file); 
-  if((append_h5)||(iteration))
-  {
-    printf("esh5 open existing %s\n",hfname);
-    h_file = H5Fopen(hfname,H5F_ACC_RDWR,H5P_DEFAULT);
-  }
-  else
+  h_file = H5Fopen(hfname,H5F_ACC_RDWR,H5P_DEFAULT);
+  //if((append_h5)||(iteration))
+  //{
+  //  printf("esh5 open existing %s\n",hfname);
+  //  h_file = H5Fopen(hfname,H5F_ACC_RDWR,H5P_DEFAULT);
+  //}
+  if(h_file<0)
   {
     printf("esh5 create %s\n",hfname);
     h_file = H5Fcreate(hfname,H5F_ACC_TRUNC,H5P_DEFAULT,H5P_DEFAULT);
@@ -114,6 +121,7 @@ void F77_FUNC_(esh5_close_file,ESH5_CLOSE_FILE)()
 {
   if(h_file>=0) H5Fclose(h_file);
   h_file=-1;
+  H5Eset_auto (err_func, client_data);
 }
 
 /** create electrons and create sub groups
@@ -126,8 +134,7 @@ void F77_FUNC_(esh5_close_file,ESH5_CLOSE_FILE)()
  */
 void F77_FUNC_(esh5_open_electrons,ESH5_OPEN_ELECTRONS)
   ( const int* nels_up, const int* nels_down , const int* nspins
-    , const int* nkpts , const int *nband , const int* ngr,
-    const int* is_complex
+    , const int* nkpts , const int *nband , const int* ngr
   )
 {
   //save the values
@@ -139,12 +146,10 @@ void F77_FUNC_(esh5_open_electrons,ESH5_OPEN_ELECTRONS)
   num_grid[2]=ngr[2];
   num_bands=*nband;
 
-  if((append_h5)||(iteration>1))
+  h_ptcls = H5Gopen(h_file,"electrons");
+  if(h_ptcls<0)
   {
-    h_ptcls = H5Gopen(h_file,"electrons");
-  } 
-  else
-  {
+    printf("Creating electrons\n");
     h_ptcls = H5Gcreate(h_file,"electrons",0);
 
     //save the number of up and down electrons
@@ -155,7 +160,7 @@ void F77_FUNC_(esh5_open_electrons,ESH5_OPEN_ELECTRONS)
     ret=H5LTmake_dataset(h_ptcls,"number_of_spins",1,&dim1,H5T_NATIVE_INT,nspins);
     ret=H5LTmake_dataset(h_ptcls,"number_of_kpoints",1,&dim1,H5T_NATIVE_INT,nkpts);
     ret=H5LTmake_dataset(h_ptcls,"psi_r_mesh",1,&dim3,H5T_NATIVE_INT,ngr);
-    ret=H5LTmake_dataset(h_ptcls,"psi_r_is_complex",1,&dim1,H5T_NATIVE_INT,is_complex);
+    //ret=H5LTmake_dataset(h_ptcls,"psi_r_is_complex",1,&dim1,H5T_NATIVE_INT,is_complex);
 
     //create kpoint/spin/state groups
     for(int ik=0; ik<*nkpts; ++ik)
@@ -211,9 +216,9 @@ void F77_FUNC_(esh5_open_kpoint,ESH5_OPEN_KPOINT)(const int* ik)
     fprintf (stderr, "Creating %s\n", kname);
     h_kpoint = H5Gcreate(h_ptcls,kname,0);
   }
-  assert (h_kpoint >= 0);
+ // assert (h_kpoint >= 0);
 }
-/* close kpoint */
+///* close kpoint */
 void F77_FUNC_(esh5_close_kpoint,ESH5_CLOSE_KPOINT)()
 {
   H5Gclose(h_kpoint);
@@ -291,6 +296,18 @@ void F77_FUNC_(esh5_write_psi_g,ESH5_WRITE_PSI_G)(const int* ibnd
   //  fprintf (stderr, "  ngtot = %d\n", *ngtot);
   herr_t ret=H5LTmake_dataset(h_spin,aname,2,dims,H5T_NATIVE_DOUBLE,eigv);
   assert (ret >= 0);
+
+  if(h_ptcls>-1)
+  {
+    hid_t pid=H5Dopen(h_ptcls,"psi_r_is_complex");
+    if(pid<0)
+    {
+      const hsize_t dim1=1;
+      ret=H5LTmake_dataset(h_ptcls,"psi_r_is_complex",1,&dim1,H5T_NATIVE_INT,&psi_r_is_complex);
+    }
+    else
+      H5Dclose(pid);
+  }
 }
 
 /* write eigen value and eigen vector for (ibnd, ispin) */
