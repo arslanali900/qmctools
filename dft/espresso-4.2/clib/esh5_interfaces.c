@@ -191,13 +191,13 @@ void F77_FUNC_(esh5_open_electrons,ESH5_OPEN_ELECTRONS)
 
 void F77_FUNC_(esh5_close_electrons,ESH5_CLOSE_ELECTRONS) ()
 {
-  if(append_h5)
-  {
+  //if(append_h5)
+  //{
     //write if psi_r is complex
-    hsize_t dim1=1;
-    printf("psi_r_is_complex");
-    herr_t ret=H5LTmake_dataset(h_ptcls,"psi_r_is_complex",1,&dim1,H5T_NATIVE_INT,&psi_r_is_complex);
-  }
+  hsize_t dim1=1;
+  printf("psi_r_is_complex");
+  herr_t ret=H5LTmake_dataset(h_ptcls,"psi_r_is_complex",1,&dim1,H5T_NATIVE_INT,&psi_r_is_complex);
+  //}
 
   H5Gclose(h_ptcls);
   h_ptcls=-1;
