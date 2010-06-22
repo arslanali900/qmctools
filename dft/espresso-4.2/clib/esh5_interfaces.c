@@ -191,14 +191,6 @@ void F77_FUNC_(esh5_open_electrons,ESH5_OPEN_ELECTRONS)
 
 void F77_FUNC_(esh5_close_electrons,ESH5_CLOSE_ELECTRONS) ()
 {
-  //if(append_h5)
-  //{
-    //write if psi_r is complex
-  hsize_t dim1=1;
-  printf("psi_r_is_complex");
-  herr_t ret=H5LTmake_dataset(h_ptcls,"psi_r_is_complex",1,&dim1,H5T_NATIVE_INT,&psi_r_is_complex);
-  //}
-
   H5Gclose(h_ptcls);
   h_ptcls=-1;
 }
@@ -277,7 +269,7 @@ void F77_FUNC_(esh5_write_eigvalues,ESH5_WRITE_EIGVALUES)(const double* eigval)
   hsize_t dim3=(hsize_t)num_bands;
   herr_t ret=H5LTmake_dataset(h_spin,"eigenvalues",1,&dim3,H5T_NATIVE_DOUBLE,eigval);
   H5Fflush(h_spin,H5F_SCOPE_GLOBAL);
-  assert (ret >= 0);
+  //assert (ret >= 0);
 }
 
 
@@ -296,18 +288,6 @@ void F77_FUNC_(esh5_write_psi_g,ESH5_WRITE_PSI_G)(const int* ibnd
   //  fprintf (stderr, "  ngtot = %d\n", *ngtot);
   herr_t ret=H5LTmake_dataset(h_spin,aname,2,dims,H5T_NATIVE_DOUBLE,eigv);
   assert (ret >= 0);
-
-  if(h_ptcls>-1)
-  {
-    hid_t pid=H5Dopen(h_ptcls,"psi_r_is_complex");
-    if(pid<0)
-    {
-      const hsize_t dim1=1;
-      ret=H5LTmake_dataset(h_ptcls,"psi_r_is_complex",1,&dim1,H5T_NATIVE_INT,&psi_r_is_complex);
-    }
-    else
-      H5Dclose(pid);
-  }
 }
 
 /* write eigen value and eigen vector for (ibnd, ispin) */
@@ -315,18 +295,27 @@ void F77_FUNC_(esh5_write_psi_r,ESH5_WRITE_PSI_R)(const int* ibnd
     , const double* eigr, const int* use_complex
     )
 {
+  static int first_time=1;
   //need to flag this if they are not the same
   psi_r_is_complex=*use_complex;
   char aname[64];
   sprintf(aname,"state_%i/psi_r",(*ibnd)-1);
   hsize_t dims_out=(hsize_t)(psi_r_is_complex)?4:3;
-  hsize_t dims[4];
+  hsize_t dims[4],dim1=1;
   dims[0] = num_grid[0];
   dims[1] = num_grid[1];
   dims[2] = num_grid[2];
   dims[3] = 2;
   herr_t ret=H5LTmake_dataset(h_spin,aname,dims_out,dims,H5T_NATIVE_DOUBLE,eigr);
-  assert (ret >= 0);
+  if(first_time)
+  {
+    first_time=0;
+    hid_t pid=H5Dopen(h_ptcls,"psi_r_is_complex");
+    if(pid<0)
+      ret=H5LTmake_dataset(h_ptcls,"psi_r_is_complex",1,&dim1,H5T_NATIVE_INT,&psi_r_is_complex);
+    else
+      ret = H5Dwrite(pid, H5T_NATIVE_INT, H5S_ALL, H5S_ALL, H5P_DEFAULT,&psi_r_is_complex);
+  }
 }
 
 
