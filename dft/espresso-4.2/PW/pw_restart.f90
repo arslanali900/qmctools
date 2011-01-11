@@ -330,7 +330,8 @@ MODULE pw_restart
         nelec_tot= NINT(nelec)
         nup=NINT(nelup)
         ndown=NINT(neldw)
-        CALL esh5_open_electrons(nup, ndown,nspin,nks,nbnd,n_rgrid)
+        !!!need to send num_k_points not nks
+        CALL esh5_open_electrons(nup, ndown,nspin,num_k_points,nbnd,n_rgrid)
         
           !!! ESHDF END
 
