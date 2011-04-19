@@ -1,6 +1,7 @@
 PROJECT(qmctools)
 
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+enable_language (Fortran)
 
 #####################################################
 SET(CMAKE_FALLBACK FALSE)
@@ -141,12 +142,13 @@ SET(ENABLE_GTK_GUI 0)
 SET(HAVE_EINSPLINE 0)
 SET(HAVE_EINSPLINE_EXT 0)
 set(ENABLE_TAU_PROFILE 0 CACHE BOOL "Enable tau for profiling")
+SET(HAVE_COMMON 1)
 set(TAU_HOME $ENV{TAU_HOME})
 
 ######################################################
 # Directory where customize cmake files reside
 ######################################################
-SET (PROJECT_CMAKE ${qmcpack_SOURCE_DIR}/CMake)
+SET (PROJECT_CMAKE ${qmctools_SOURCE_DIR}/CMake)
 
 ######################################################
 # Get the current SVN version
@@ -304,6 +306,12 @@ INCLUDE(${PROJECT_CMAKE}/FindLibxml2.cmake)
 INCLUDE(${PROJECT_CMAKE}/FindHDF5.cmake)
 INCLUDE(${PROJECT_CMAKE}/FindZLIB.cmake)
 INCLUDE(${PROJECT_CMAKE}/FindSZLIB.cmake)
+INCLUDE(${PROJECT_CMAKE}/FindGSL.cmake)
+INCLUDE(${PROJECT_CMAKE}/FindBlitzpp.cmake)
+
+IF(BLITZ_FOUND)
+INCLUDE_DIRECTORIES(${BLITZ_INCLUDE_DIR} ${BLITZ_PLATFORM_INCLUDE_DIR})
+ENDIF(BLITZ_FOUND)
 
 IF(LIBXML2_FOUND)
   INCLUDE_DIRECTORIES(${LIBXML2_INCLUDE_DIR})
@@ -325,6 +333,12 @@ ELSE(HDF5_FOUND)
   MESSAGE(FATAL_ERROR "Require hdf5 1.6.4 or higher. Set HDF5_HOME")
 ENDIF(HDF5_FOUND)
 
+IF(GSL_FOUND)
+  INCLUDE_DIRECTORIES(${GSL_INCLUDE_DIR})
+  LINK_LIBRARIES(${GSL_LIBRARY})
+  set(HAVE_LIBGSL 1)
+ENDIF(GSL_FOUND)
+ 
 #IF(Boost_FOUND)
 #  SET(HAVE_LIBBOOST 1)
 #  MESSAGE(STATUS "Setting Boost_INCLUDE_DIR="${Boost_INCLUDE_DIR})
@@ -362,8 +376,6 @@ if(EINSPLINE_FOUND)
   IF(HAVE_EINSPLINE_EXT)
     INCLUDE_DIRECTORIES(${EINSPLINE_INCLUDE_DIR})
     LINK_LIBRARIES(${EINSPLINE_LIBRARIES})  
-  ELSE(HAVE_EINSPLINE_EXT)
-    SUBDIRS(src/einspline)
   ENDIF(HAVE_EINSPLINE_EXT)
   MESSAGE(STATUS "EINSPLINE_INCLUDE_DIR="${EINSPLINE_INCLUDE_DIR})
 endif()
@@ -411,5 +423,8 @@ if(HAVE_MPI)
   ADD_DEFINITIONS(-DMPICH_SKIP_MPICXX)
 endif()
 #ADD_DEFINITIONS(-DDISABLE_WS_CELL)
+CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/src/config.h.cmake.in
+               ${PROJECT_BINARY_DIR}/src/config.h)
 
-SUBDIRS(src)
+
+SUBDIRS(src/Common src)
