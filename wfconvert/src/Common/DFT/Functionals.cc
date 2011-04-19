@@ -15,10 +15,10 @@
 /////////////////////////////////////////////////////////////
 
 #include "Functionals.h"
-#include "config.h"
+#include "Common/config.h"
 #include <cmath>
 #include <iostream>
-#include "../Blitz.h"
+#include "Common/Blitz.h"
 
 using namespace std;
 

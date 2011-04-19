@@ -7,9 +7,14 @@
 #ifndef QMCTOOLS_CONFIGURATION_H
 #define QMCTOOLS_CONFIGURATION_H
 
+#ifndef F77_FUNC
 #define F77_FUNC(name,NAME) name ## _
+#endif
 
-#define F77_FUNC_(name,NAME) name ## __
+//#ifndef F77_FUNC_
+//#define F77_FUNC_(name,NAME) name ## __
+//#endif
+
 /* define PRINT_DEBUG */
 #cmakedefine PRINT_DEBUG @PRINT_DEBUG@
 

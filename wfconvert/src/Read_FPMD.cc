@@ -268,7 +268,7 @@ OrbitalSetClass::Read_FPMD (string fname)
     fprintf (stderr, "  [ %9.6f %9.6f %9.6f ]\n", 
 	     Asuper(i,0), Asuper(i,1), Asuper(i,2));
   
-  NumElectrons[0] = 8.0;
+  NumElectrons[0] = 8;//8.0;
   
   SpinPolarized = false;
 

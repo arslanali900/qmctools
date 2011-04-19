@@ -20,7 +20,7 @@
 #include "VectorOps.h"
 #include "Common/PH/kSpacePH.h"
 #include "FFTBox.h"
-#include "config.h"
+#include "Common/config.h"
 
 #if !HAVE_SINCOS
 #define sincos(p,s,c) *(s)=sin(p); *(c)=cos(p);

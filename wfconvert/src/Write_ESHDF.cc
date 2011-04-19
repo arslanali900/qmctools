@@ -3,7 +3,7 @@
 #include "MuffinTin.h"
 #include <einspline/bspline.h>
 #include <omp.h>
-#include "config.h"
+#include "Common/config.h"
 #include "PlaneWaveSum.h"
 #include <stdio.h>
 #include <stdlib.h>

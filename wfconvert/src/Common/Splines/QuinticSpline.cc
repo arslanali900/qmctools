@@ -15,7 +15,7 @@
 /////////////////////////////////////////////////////////////
 
 #include "QuinticSpline.h"
-#include "config.h"
+#include "Common/config.h"
 
 #define F77_QUINAT F77_FUNC(quinat,QUINAT)
 extern "C" void 

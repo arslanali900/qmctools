@@ -16,7 +16,7 @@
 
 #include "Grid.h"
 #include <cmath>
-#include "../config.h"
+#include "Common/config.h"
 
 #ifdef NOUNDERSCORE 
 #define FORT(name) name

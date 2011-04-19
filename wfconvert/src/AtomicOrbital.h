@@ -1,9 +1,9 @@
 #ifndef ATOMIC_ORBITAL_H
 #define ATOMIC_ORBITAL_H
 
+#include <einspline/bspline.h>
 #include <Common/Blitz.h>
 #include <vector>
-#include <einspline/bspline.h>
 #include "LatticeClass.h"
 #include "ShiftedChebyshev.h"
 #include <Common/IO/IO.h>

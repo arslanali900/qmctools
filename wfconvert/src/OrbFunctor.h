@@ -38,7 +38,7 @@ public:
 };
 
 
-#include "config.h"
+#include "Common/config.h"
 #include "PlaneWaveSum.h"
 
 #ifdef HAVE_CUDA
