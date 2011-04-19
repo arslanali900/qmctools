@@ -7,7 +7,7 @@
 using namespace std;
 #include <Common/Blitz.h>
 #include "ParserClass.h"
-#include "config.h"
+#include "Common/config.h"
 
 #define F77_DGEMM  F77_FUNC(dgemm,DGEMM)
 

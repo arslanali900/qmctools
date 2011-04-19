@@ -7,7 +7,7 @@
 #include "CubicSpline.h"
 #include "XMLWriterClass2.h"
 #ifdef HAVE_CONFIG_H
-#include "config.h"
+#include "Common/config.h"
 #endif
 #ifdef HAVE_COMMON
 #include <Common/PH/PotentialBase.h>

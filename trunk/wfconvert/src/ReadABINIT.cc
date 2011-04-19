@@ -226,7 +226,7 @@ OrbitalSetClass::Read_ABINIT_WFK (string fname)
   for (int i=0; i<header.natom; i++) {
     PrimCell.IonPos(i) = PrimCell.Lattice.u2r(header.xred[i]);
     PrimCell.AtomTypes(i) = (int)round(header.znucltypat[header.typat[i]-1]);
-    PrimCell.Zion(i) = header.PSPinfo[header.typat[i]-1].zionpsp;
+    PrimCell.Zion(i) = static_cast<int>(header.PSPinfo[header.typat[i]-1].zionpsp);
   }
 
   fprintf (stderr,   "Atom Type           Position:\n");

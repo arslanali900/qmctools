@@ -1,9 +1,9 @@
 #ifndef RESPLINE_H
 #define RESPLINE_H
 
-#include "config.h"
 #include <einspline/bspline.h>
 #include <einspline/nubspline.h>
+#include <Common/config.h>
 #include <Common/IO/IO.h>
 #include <Common/Blitz.h>
 #include <Common/MPI/Communication.h>

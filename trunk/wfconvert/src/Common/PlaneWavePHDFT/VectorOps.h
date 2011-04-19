@@ -25,7 +25,7 @@
 // #endif
 // }
 #include "Common/Blitz.h"
-#include "config.h"
+#include "Common/config.h"
 
 typedef TinyVector<int,3> Int3;
 typedef Array<complex<double>,1> zVec;

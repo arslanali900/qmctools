@@ -17,7 +17,7 @@
 #ifndef MULTI_TRICUBIC_SPLINE_H
 #define MULTI_TRICUBIC_SPLINE_H
 
-#include "config.h"
+#include "Common/config.h"
 
 #ifndef NOUNDERSCORE
 #define FORT(name) name ## _
