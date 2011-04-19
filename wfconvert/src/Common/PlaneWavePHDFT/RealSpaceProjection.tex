@@ -1,0 +1,147 @@
+\documentclass{article}
+\usepackage{amsmath}
+\title{Notes on real-space projection for nonlocal pseudopotentials}
+\author{Ken Esler}
+
+\newcommand{\vG}{\mathbf{G}}
+\newcommand{\vk}{\mathbf{k}}
+\newcommand{\vl}{\mathbf{l}}
+\newcommand{\vr}{\mathbf{r}}
+
+\begin{document}
+\maketitle
+The nonlocal energy contribute from the $i^\text{th}$ atom from band
+$n$ can be given by
+\begin{equation}
+\epsilon_{\mathbf{k},n}^i = \sum_l \sum_{m=-l}^{+l} E_l Z_{lm}^*
+Z_{lm}, 
+\end{equation}
+where
+\begin{equation}
+Z_{lm} = \sum_\vG \lambda_{lm}(|\vG + \vk|) c_{\vG + \vk},
+\end{equation}
+with
+\begin{equation}
+\lambda_{lm}(\vG + \vk) = \frac{4\pi i^l}{\sqrt{\Omega_\text{cell}}}
+\zeta(|\vG + \vk|) Y_{lm}(\theta_{\vG+\vk},\phi_{\vG+\vk}) e^{i(\vG +
+  \vk)\cdot \mathbf{\tau}_i},
+\end{equation}
+and
+\begin{equation}
+  \zeta(q) = \int_0^\infty r^2\, \zeta(r) j_l(qr) \, dr,
+\end{equation}
+where $\mathbf{\tau}_i$ is the position of atom $i$.
+
+Recall that 
+\begin{equation}
+\int_0^\infty q^2 j_l(qr) j_l(qr') dq = \frac{\pi}{2r^2} \delta(r-r').
+\end{equation}
+Then we may recover $\zeta_l(r)$ by writing
+\begin{eqnarray}
+\int_0^\infty q^2 \zeta_l(q) j_l(qr) dq & = & \int_0^\infty dq\, q^2
+\int_0^\infty dr\, {r'}^2 \zeta_l(r') j_l(qr) j_l(qr') \\
+& =  & \int_0^\infty dr'\, {r'}^2 \zeta_l(r') \int_0^\infty dq\, q^2
+j_l(qr) j_l(qr')\\ 
+& = & \int_0^\infty dr'\, {r'}^2 \zeta_l(r') \frac{\pi}{2r^2}
+\delta(r-r') \\
+& = & \frac{\pi}{2} \zeta_l(r).
+\end{eqnarray}
+Thus
+\begin{equation}
+\zeta_l(r) = \frac{2}{\pi} \int_0^\infty q^2 \zeta_l(q) j_l(qr) \, dr.
+\end{equation}
+
+We can then approximate $Z_{lm}$ in real space by writing
+\begin{equation}
+U_{lm} = \Omega_\text{mesh} \sum_\vl \zeta_l(|\vl - \mathbf{\tau}_i|) 
+Y_{lm}(\dots) \Psi_{\vk,n}(\vl),
+\end{equation}
+where the $\vl$ are the FFT mesh points.  We may write
+\begin{equation}
+\Psi_{\vk,n}(\vl) = \sum_\vG c_{\vG+\vk,n} e^{i(\vG + \vk)\cdot \vl}
+\end{equation}
+and
+
+\section{Filtering fourier components}
+If the real-space projection is to match the reciprocal-space one,
+$\zeta(q)$ must be zero for $q > G_\text{max FFT}$.  Otherwise, we
+will have an FFT aliasing problem.  One approach would be to simply
+transform to $\zeta(q)$, zero out $\zeta(q)$ for $q > G_\text{max
+FFT}$, and then transform back to $\zeta(r)$.  This will indeed solve
+the aliasing problem, but when we transform back to $\zeta(r)$, this
+function will no longer go to zero for $r>r_c$.  The trick of
+King-Smith et al\cite{KingSmith} is to recognize that $U_{lm}$ does
+not depend on $\zeta_l(q)$ for $G_\text{max} < q <
+\Gamma_1-G_\text{max}$, were $\Gamma_1$ is typically $4 G_\text{max}$.
+This is because $\Psi_{\vk,n}(\vr)$ has no Fourier components for $q >
+G_\text{max}$.  Until $q$ is large enough to wrap around into small
+$q$ through FFT aliasing, there is no contribution.  For convience,
+define $\gamma = \Gamma_1 - G_\text{max}$
+
+Because of this ambiguity, we may define
+\begin{equation}
+\chi(q) = 
+\begin{cases}
+\zeta(q) & \text{if } q \le G_\text{max} \\
+0        & \text{if } q \ge \gamma       \\
+\text{arbitary} & \text{if } G_\text{max} < q \gamma.
+\end{cases}
+\end{equation}
+We may choose the arbitary values such that $\xi_l(r)$ decays very
+quickly to zero beyond a cutoff radius, $R_0$.  King-Smith et al. give
+the optimal choice for $\chi_l(q)$ in this range.
+
+To optimize $\chi_l(q)$, we must solve the integral equation,
+\begin{equation}
+\int_0^{G_\text{max}} A(q,q') \chi_l(q')\, dq' = \frac{\pi}{2} q^2
+\chi_l(q) -\int_{G_\text{max}}^\gamma A(q,q')\chi(q')\, dq',
+\end{equation}
+where
+\begin{equation}
+A(q,q') = q^2 {q'}^2 \int_0^{R_0} j_l(q r) r^2 q_l(q'r) \, dr.
+\end{equation}
+We can discretize the integral, writing
+\begin{equation}
+\Delta \!\! \sum_{q'=0}^{G_\text{max}} A_{q,q'}\chi_{q'} - \frac{\pi
+    q^2}{2} \chi_q = -\Delta\!\!\!\!\!\sum_{q'=G_\text{max}}^{\gamma}
+    A_{q,q'} \chi(q'),
+\end{equation}
+where $\Delta$ is the discretization step in $q$.
+Define 
+\begin{equation}
+X_q \equiv -\Delta \sum_{q'=0}^{G_\text{max}} A_{q,q'}\chi_{q'} + \frac{\pi
+    q^2}{2} \chi_q
+\end{equation}
+Define the matrix, $M$, as
+\begin{equation}
+M_{q,q'} = \Delta A(q,q'),
+\end{equation}
+where $q$ and $q'$ are equally spaced points between $G_max$ and
+$\gamma$.  
+
+For $l=0$,
+\begin{equation}
+A(q,q') = -\frac{q q'\left[q \cos(q
+    R_0) \sin(q' R_0) - q' \cos(q' R_0) \sin(q R_0)\right]}{q^2 - q'^2}.
+\end{equation}
+For $l=1$,
+\begin{multline}
+A(q,q') = \frac{q q'}{(q^2 - {q'}^2)} \left[ q \cos(q'
+  R_0)\sin(q R_0) - q' \cos(q R_0)\sin(q' R_0)\rule{0mm}{4mm}\right] \\
+- \frac{\sin(q R_0)\sin(q' R_0)}{R_0}
+\end{multline}
+For $l=2$,
+\begin{multline}
+A(q,q') = \frac{1}{q q'(q^2-q'^2) R_0^3} \left\{ \sin(q R_0) \left[q'
+  R_0 \left(-3 q'^2 + q^2(3+q'^2 R_0^2)\right) - q R_0 \cos(q
+  R_0)\left[3 q'(q^2-q'^2)R_0 \cos(q'R0) + 3q'^2 + q^2(-3 + q'^2
+  R_0^2)\right]\sin(q' R_0)\right] \right\}
+\end{multline}
+
+\begin{thebibliography}{99}
+  \bibitem{KingSmith} PRB {\bf 44}, 13063
+\end{thebibliography}
+
+\end{document}
+
+

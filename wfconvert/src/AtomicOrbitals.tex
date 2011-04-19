@@ -1,0 +1,75 @@
+\documentclass{article}
+\usepackage{amsmath}
+\title{Notes on projecting to atomic orbitals}
+\author{Ken Esler}
+\date{July 19, 2009}
+\begin{document}
+\maketitle
+\newcommand{\vr}{\mathbf{r}}
+\newcommand{\vI}{\mathbf{I}}
+\newcommand{\vk}{\mathbf{k}}
+\newcommand{\vG}{\mathbf{G}}
+\section{Form for orbitals}
+Inside a muffin tin, orbitals are represented as product of spherical
+harmonics and 1D radial functions, primarily represented by splines.
+For a muffin tin centered at $\vI$, 
+\begin{equation}
+\phi_n(\vr) = \sum_{\ell,m} Y_\ell^m(\hat{\vr -\vI})
+u_{lm}\left(\left|\vr - \vI\right|\right) \label{eq:ulm}
+\end{equation}
+Let use consider the case that our original representation for
+$\phi(\vr)$ is of the form
+\begin{equation}
+\phi_{n,\vk}(\vr) = \sum_\vG c_{\vG+\vk}^n e^{i(\vG + \vk)\cdot \vr}
+\end{equation}
+Recall that
+\begin{equation}
+e^{i\vk\cdot\vr} = 4\pi \sum_{\ell,m} i^\ell j_\ell(|\vr||\vk|)
+Y_\ell^m(\hat{\vk}) \left[Y_\ell^m(\hat{\vr})\right]^*.
+\end{equation}
+Conjugating,
+\begin{equation}
+e^{-i\vk\cdot\vr} = 4\pi\sum_{\ell,m} (-i)^\ell j_\ell(|\vr||\vk|)
+\left[Y_\ell^m(\hat{\vk})\right]^* Y_\ell^m(\hat{\vr}).
+\end{equation}
+Setting $\vk \rightarrow -k$,
+\begin{equation}
+e^{i\vk\cdot\vr} = 4\pi\sum_{\ell,m} i^\ell j_\ell(|\vr||\vk|)
+\left[Y_\ell^m(\hat{\vk})\right]^* Y_\ell^m(\hat{\vr}).
+\end{equation}
+
+Then,
+\begin{equation}
+e^{i\vk\cdot(\vr-\vI)} = 4\pi\sum_{\ell,m} i^\ell j_\ell(|\vr-\vI||\vk|)
+\left[Y_\ell^m(\hat{\vk})\right]^* Y_\ell^m(\hat{\vr-\vI}).
+\end{equation}
+
+\begin{equation}
+e^{i\vk\cdot\vr} = 4\pi e^{i\vk\cdot\vI} \-\sum_{\ell,m} i^\ell j_\ell(|\vr-\vI||\vk|)
+\left[Y_\ell^m(\hat{\vk})\right]^* Y_\ell^m(\hat{\vr-\vI}).
+\end{equation}
+
+Then
+\begin{equation}
+\phi_{n,\vk}(\vr) =  \sum_\vG 4\pi c_{\vG+\vk}^n
+e^{i(\vG+\vk)\cdot\vI} \sum_{\ell,m}
+  i^\ell j_\ell(|\vG +\vk||\vr-\vI|)
+  \left[Y_\ell^m(\hat{\vG+\vk})\right]^*
+Y_\ell^m(\hat{\vr - \vI})
+\end{equation}
+Comparing to (\ref{eq:ulm}),
+\begin{equation}
+u_{\ell m}^n(r) = 4\pi i^\ell \sum_G c_{\vG+\vk}^n e^{i(\vG+\vk)\cdot\vI}  j_\ell\left(|\vG + \vk|r|\right)
+\left[Y_\ell^m(\hat{\vG + \vk})\right]^*.
+\end{equation}
+If we had adopted the opposite sign convention for Fourier transforms
+(as is unfortunately the case in wfconv), we woul have
+\begin{equation}
+u_{\ell m}^n(r) = 4\pi (-i)^\ell \sum_G c_{\vG+\vk}^n e^{-i(\vG+\vk)\cdot\vI}  j_\ell\left(|\vG + \vk|r|\right)
+\left[Y_\ell^m(\hat{\vG + \vk})\right]^*.
+\end{equation}
+
+
+
+\end{document}
+

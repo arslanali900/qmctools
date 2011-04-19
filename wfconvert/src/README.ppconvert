@@ -1,0 +1,60 @@
+ppconvert 0.1 
+------------- 
+
+ppconvert is a simple C++ tool to covert nonlocal pseudopotentials in
+CASINOs native format into formats usable by other codes.  At present,
+it can convert into ABINIT's Troullier-Martins format or into the XML
+standard format defined by the FSAtom consortium.  The action of the
+program is entirely specified on the command line.
+
+Input options
+-------------
+  --casino_pot fname
+       This required argument specifies the name of the
+       psuedopotential file in CASINO format
+  --casino_us fname
+       This specifies the name of the file from which to read the
+       s-channel (l=0) radial wave function, which is needed to
+       construct projectors for transformation into the
+       Kleinman-Bylander separable form.  The files should be in the
+       CASINO awfn.data format.
+  --casiso_up fname 
+       Same as above, but for the p-channel (l=1)
+  --casiso_ud fname 
+       Same as above, but for the d-channel (l=2)
+
+Output options
+--------------
+  --xml fname
+       Write the pseudopotential in the standard XML format defined by
+       FSAtom. 
+  --tm fname
+       Write the pseudopotenial in the Troullier-Martins form for 
+       use in ABINIT.
+
+Example usage
+-------------
+The following converts the CASINO Dirac-Fock potential, b_pp.data.DF,
+into XML and ABINIT Troullier-Martin format.  It reads the radial
+functions for the projections from two different files: the s and p
+projectors are taken from awfn.data_s2p1_2P and the d is take from 
+awfn.data_s2d1_2D.  
+
+ppconvert --casino_pot b_pp.data.DF --casino_us "awfn.data_s2p1_2P"      \
+          --casino_up "awfn.data_s2p1_2P" --casino_ud "awfn.data_s2d1_2D"\
+          --xml BoronDF_PP3.xml --tm BoronDF_PP.tm
+
+CAVEAT EMPTOR
+-------------
+This code currently allows the user to pull the radial functions used
+for Kleinman-Bylander projections from different files.  The author is
+not certain whether it is permissable to take these radial wave
+functions from different reference configurations.  Use with care.
+This code has been used by the author, but has not yet been
+extensively tested.  Please report any problems to
+kesler@ciw.edu until Sept. 2008 or kpesler@gmail.com thereafter.
+
+Kenneth P. Esler Jr.
+11/14/2006
+
+

@@ -1,0 +1,153 @@
+\documentclass{article}
+\usepackage{bbm}
+\usepackage{amsmath}
+\title{Plane wave band structure calculations with pseudohamiltonians}
+\author{Kenneth P. Esler Jr.}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+In order to perform use a fixed-phase nodal restriction for our PIMC
+simulation, we need a method to compute reasonable electronic wave
+functions, parameterized by the positions of the ions,
+$\{\mathbf{R_i}\}$ and the ``twist vector'', $\mathbf{k}$.  By
+``reasonable'', we mean to say that we wish the wave functions to have
+the appropriate symmetries and capture the dominant effects of the ion
+positions.  These goals can be achieved by working in a mean-field
+approximation, in which the wave functions can be written as a
+Slater-determinant of single-particle orbitals.
+\begin{equation}
+\Psi_k(\mathbf{R}) = \det \dots
+\end{equation}
+In order to determine the orbitals, $u_\mathbf{k}^n(\mathbf(r))$, we
+expand the functions in a complete basis, which we truncate at an
+appropriate size to retain both accuracy and computational tractability.
+
+\subsection{Plane wave elements of the PH}
+For decades, the plane-wave basis has been the physicist's tool of
+choice for small to medium problems.  This basis fits very naturally
+with the periodic simulation cell, is systematically improvable, and
+can be utilized with great efficiency, thanks to the development of
+the Fast Fourier Transform (FFT).  Plane-wave methods are extremely
+mature and well-understood in the condensed matter community.
+
+Foulkes and Schluter give the plane-wave coefficients for an electron
+interacting with a pseudohamiltonian\cite{FS}:
+\newcommand{\vk}{\mathbf{k}}
+\newcommand{\vG}{\mathbf{G}}
+\newcommand{\vGp}{\mathbf{G'}}
+\newcommand{\vg}{\mathbf{g}}
+\newcommand{\vr}{\mathbf{r}}
+\begin{eqnarray}
+V^\text{PH}_\text{single}(\vk; \vG, \vGp) & = &
+\int e^{-i(\vk+\vG)\cdot \vr} \left[ -\frac{1}{2} \nabla a \nabla +
+  \frac{1}{2r^2} b \hat{L}^2 + V \right] e^{i(\vk+\vGp)\cdot r} \, d^3
+\vr \nonumber \\
+& = & \frac{1}{2} (\vk + \vG)^T \cdot \mathbf{F}(\vG - \vGp)\cdot (\vk
++ \vGp) + V(|\vG - \vGp|),
+\end{eqnarray}
+where $\mathbf{F}$ is a $3\times 3$ tensor given by
+\begin{equation}
+\begin{split}
+\mathbf{F}(\vG - \vGp) = & \left[ \rule{0cm}{0.33cm} a\left(|\vG-\vGp|\right) +
+  b_\perp\left(|\vG-\vGp| \right) \right]\mathbbm{I}_3 \\
+& + \vg \left[b_\parallel\left(|\vG-\vGp|\right) - 
+  b_\perp\left( |\vG -\vGp|\right)   \right]\vg^T.
+\end{split}
+\end{equation}
+\begin{eqnarray}
+V(|\vG - \vGp|) & = & \int_0^\infty V(r) j_0(|\vG - \vGp|r) 4\pi r^2
+\, dr \\
+a(|\vG-\vGp|) & = &\int_0^{r_c} a(r) j_0(|\vG-\vGp|r) 4\pi r^2 \, dr \\
+b_\perp(|\vG-\vGp|) & = &
+\int_0^{r_c} b(r)\left[ {\textstyle \frac{2}{3}}
+  j_0(|\vG-\vGp|r)-{\textstyle\frac{1}{3}}j_2(|\vG - \vGp|r)
+  \right]4\pi r^2 \, dr\\
+b_\parallel(|\vG-\vGp|) & = &
+\int_0^{r_c} b(r)\left[ {\textstyle \frac{2}{3}}
+  j_0(|\vG-\vGp|r)+{\textstyle\frac{2}{3}}j_2(|\vG - \vGp|r) \right]4\pi r^2 \, dr.
+\end{eqnarray}
+Here, $j_0$ and $j_2$ are spherical bessel functions, and $\vg = (\vG
+- \vGp)/ |\vG -\vGp|$.  The integrals can be precomputed numerically
+at the beginning of a run.
+
+The above matrix elements is for an electron interactive with a single
+ion located at the origin.  To account for several ions located as
+positions $\{\mathbf{R}_m \}$, we can simply multiply the matrix
+elements of the single-ion potential, $V^\text{PH}_\text{single}$ by
+the {\em structure factor}, $S(\vG - \vGp)$.
+\begin{equation}
+V^\text{PH}_\text{multiple}(\vk;\vG,\vGp) = S(\vG-\vGp) V^\text{PH}_\text{single}
+(\vk;\vG,\vGp)
+\end{equation}
+where
+\begin{equation}
+S(\vG - \vGp) = \sum_m e^{i(\vG -\vGp)\cdot R_m}.
+\end{equation}
+
+\section{The conjugate gradient method}
+In most band-structure application, the number of bands (eigenvectors)
+required is almost always much smaller than the number of basis
+functions.  For this reason, direct matrix diagonalization is usually
+not the most efficient means of solution.  More efficienct schemes are
+available which find eigenvectors by performing an iterative search to
+minimize the variational energy. In particular, Teter, Payne, and Allan
+introduced a very efficient scheme based on the well-known {\em
+  conjugate gradients} method\cite{TPA}.
+
+A conjugate gradient approach has the additional advantage that the
+Hamiltonian need not be explicitly stored in memory.  As the number of
+plane waves gets large, storing $H$ could be a severe limitation.
+Rather, we need only to be able to apply $H$ to a vector $c$.  As it
+turns out, this operation can be done extremely efficiently using fast
+Fourier transforms (FFTs).  While applying $H$ to $c$ would take
+$\mathcal{O}(N^2)$ operators to do with convenction matrix-vector
+multiplication, the operation can be done in $\mathcal{O}(N \ln N)$
+operations using FFTs.
+\subsection{Using FFTs}
+We will begin with the potential part of the Hamiltonian.  The main
+power of the method comes from the fact that while $\hat{V}$ is a
+dense operator in reciporical space, it is diagonal in real space.
+Hence, we may FFT our vector into real space, apply $V(r)$ by simple
+multiplication, and then FFT the resultant vector back into
+reciporical space.  If done properly, this give the numerically
+identical result as doing the entire operation in reciporical space.
+
+For local potentials, the kinentic energy operator is diagonal is
+reciporical space, so that it's application requires only
+$\mathcal{O}(N)$ operations.  Because PHs have position-dependent
+masses, however, the pseudo-kinetic energy operator is not diagonal in
+reciporical space.  With the appropriate use of FFTs, however, its
+application can be done in $\mathcal{O}(N \ln N)$ operators, just as
+the potential, but with a significantly larger prefactor.  Applying
+the pseudo-kinetic operator, $\hat{K}^\text{PH} \equiv \frac{1}{2}
+(\vk + \vG) \cdot F(\vG-\vG')\cdot (\vk+\vGp)$ to a vector
+$\mathbf{c}$ can be accomplished through the following steps:
+\begin{enumerate}
+\item Compute the $F(\vG-\vGp)$ tensor in reciporical space. \label{computeF}
+\item FFT the tensor into real space. \label{FFTF}
+\item Multiply each element, $c_\mathbf{G}$ by $(\vk + \vGp)$, yielding
+  a $3\times N$ component vector.
+\item FFT to real space.  Call this $(\nabla c)(\vr)$.
+\item Apply the $3\times 3$ tensor $F(\vr)$ to $(\nabla c)(\vr)$.
+\item Inverse FFT back into reciporical space.  Call this
+  $(\mathbf{F}c)_\vG$.
+\item Finally dot with $\frac{1}{2}(\vk + \vG)$ to yield
+  $(\hat{K}^\text{PH} \mathbf{c})_\vG$. 
+\end{enumerate}
+Note that steps \ref{computeF} and \ref{FFTF} need only done each time
+the ion positions or $\vk$-point are changed.
+
+
+\subsection{Parallelization}
+
+
+\section{Results}
+
+\begin{thebibliography}{9}
+\bibitem{FS}  Foulkes, Schluter. {\em Phys. Rev. B.} {\bf 40}, 11505 (1990)
+\bibitem{TPA} Teter, Payne, Allan. Phys. Rev. B {\bf 40}, 12255 (1989)
+
+\end{thebibliography}
+\end{document}
