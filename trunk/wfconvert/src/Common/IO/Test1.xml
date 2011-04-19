@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<CIAO>
+  <Agrid>
+    <Type type="string">   "Linear" </Type>
+    <Start type="double">    0.0    </Start>
+    <End   type="double">   10.0    </End>
+    <NumPoints type="int"> 101      </NumPoints>
+  </Agrid>
+  <Particle>
+    <Type type="string"> "Fermion" </Type>
+    <Position type="double" dim="3"> 1.1, 2.2, 3.3 </Position>
+  </Particle>
+</CIAO>

@@ -1,0 +1,67 @@
+SET(SRCS 
+  Atom/DFTAtom.cc
+  Atom/RadialWF.cc 
+  DFT/Functionals.cc
+  DFT/ExCorr.f
+  Ewald/OptimizedBreakup2.cc
+  FFT/FFT.cc
+  Fitting/Fitting.cc
+  Integration/GKIntegration.cc
+  Integration/HermiteQuad.cc
+  Integration/Integrate.cc
+  IO/IO.cc
+  IO/IOASCII.cc
+  IO/IOHDF5.cc
+  IO/IOVarHDF5.cc
+  MatrixOps/MatrixOps.cc
+  MPI/Communication.cc
+  PH/CoreTransform.cc 
+  PH/CoulombPot.cc    
+  PH/GeneralPot.cc    
+  PH/HeAzizPot.cc     
+  PH/NLPP.cc          
+  PH/Potential.cc     
+  PH/PotentialBase.cc 
+  PH/QuinticPH.cc
+  PH/ScreenedPot.cc   
+  PH/SplinePot.cc     
+  PH/ToppHopfield.cc  
+  PH/kSpacePH.cc      
+  PlaneWavePHDFT/ChargeMixer.cc     
+  PlaneWavePHDFT/ConjGrad2.cc       
+  PlaneWavePHDFT/Coulomb.cc         
+  PlaneWavePHDFT/CoulombFFT.cc      
+  PlaneWavePHDFT/FermiSmear.cc      
+  PlaneWavePHDFT/FFTBox.cc          
+  PlaneWavePHDFT/GVecs.cc           
+  PlaneWavePHDFT/HamiltonianBase.cc 
+  PlaneWavePHDFT/Hamiltonians.cc    
+  PlaneWavePHDFT/LDA.cc             
+  PlaneWavePHDFT/LocalPotFFT.cc     
+  PlaneWavePHDFT/NLPP_FFT.cc        
+  PlaneWavePHDFT/PHPot.cc           
+  PlaneWavePHDFT/PHPotFFT.cc        
+  PlaneWavePHDFT/PlaneWaves.cc      
+  Splines/BicubicSpline.cc               
+  Splines/CubicBspline.cc                
+  Splines/CubicSpline.cc                 
+  Splines/FastCubicSpline.cc             
+  Splines/FastMultiCubicSpline.cc        
+  Splines/Grid.cc                        
+  Splines/ComplexMultiTricubicSpline.cc  
+  Splines/MultiTricubicSpline.cc         
+  Splines/MyTricubicSpline.cc            
+  Splines/PeriodicSpline.cc              
+  Splines/QuinticSpline.cc               
+  Splines/TricubicBspline.cc             
+  Splines/QuinticSplines.f
+  )
+
+IF(HAVE_MPI)
+  SET(SRCS ${SRCS}
+    PlaneWavePHDFT/ConjGradMPI.cc     
+    PlaneWavePHDFT/PlaneWavesMPI.cc   
+    )
+ENDIF(HAVE_MPI)
+
+ADD_LIBRARY(common ${SRCS})

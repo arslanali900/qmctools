@@ -1,0 +1,1128 @@
+\documentclass{article}
+\usepackage{amsmath,algorithmic,algorithm,epsfig,amssymb}
+\title{Ewald Breakup for Long-Range Potentials in PIMC}
+\author{Kenneth P. Esler Jr.}
+\date{\today}
+\begin{document}
+\maketitle
+Consider a group of particles interacting with long-ranged central
+potentials, $v^{\alpha \beta}(|r^{\alpha}_i - r^{\beta}_j|)$, where the Greek superscripts
+represent the particle species (eg. $\alpha=\text{electron}$,
+$\beta=\text{proton}$), and Roman subscripts refer to particle number
+within a species.  We can then write the total interaction energy for
+the system as,
+\newcommand{\vr}{\mathbf{r}}
+\newcommand{\vR}{\mathbf{R}}
+\newcommand{\vk}{\mathbf{k}}
+\newcommand{\vq}{\mathbf{q}}
+\begin{equation}
+V = \sum_\alpha \left\{\sum_{i<j} v^{\alpha\alpha}(|\vr^\alpha_i - \vr^\alpha_j|) +
+\sum_{\beta<\alpha} 
+\sum_{i,j} v^{\alpha \beta}(|\vr^{\alpha}_i - \vr^{\beta}_j|) \right\}
+\label{eq:Vperiodic}
+\end{equation}
+\newcommand{\va}{\mathbf{a}}
+\newcommand{\vb}{\mathbf{b}}
+\newcommand{\vL}{\mathbf{L}}
+\subsection{The Long-Range Problem}
+Consider such a system in periodic boundary conditions in a cell
+defined by primitive lattice vectors $\va_1$, $\va_2$, and $\va_3$.
+Let $\vL \equiv n_1 \va_1 + n_2 \va_2 + n_3\va_3$ be a direct lattice
+vector.  Then the interaction energy per cell for the periodic system
+is given by
+\begin{equation}
+\begin{split}
+V = & \sum_\vL \sum_\alpha \left\{ 
+\overbrace{\sum_{i<j} v^{\alpha\alpha}(|\vr^\alpha_i - \vr^\alpha_j + \vL|)}^{\text{homologous}} +
+\overbrace{\sum_{\beta<\alpha} 
+\sum_{i,j} v^{\alpha \beta}(|\vr^{\alpha}_i - \vr^{\beta}_j+\vL|)}^{\text{heterologous}}
+\right\}  \\
+& + \underbrace{\sum_{\vL \neq \mathbf{0}} \sum_\alpha N^\alpha v^{\alpha \alpha} (|\vL|)}_\text{Madelung}
+\end{split}
+\label{eq:direct},
+\end{equation}
+where $N^\alpha$ is the number particles of species $\alpha$.
+If the potentials $v^{\alpha\beta}(r)$ are indeed long-range, the
+summation over direct lattice vectors will not converge in this naive
+form.  A solution to the problem was positted by Ewald.  We break the
+central potentials into two pieces -- a short range and a long range
+part define by
+\begin{equation}
+v^{\alpha \beta}(r) = v_s^{\alpha\beta}(r) + v_l^{\alpha \beta}(r).
+\end{equation}
+We will perform the summation over images for the short-range part in
+real space, while performing the sum for the long-range part in
+reciprocal space.  For simplicity, we choose $v^{\alpha \beta}_s(r)$
+so that it is identically zero at the half the box length.  This
+eliminates the need to sum over images in real space. In this letter,
+we develop the details of the calculation and provide a way for
+integrating this into a Path Integral Monte Carlo simulation.
+
+\section{Reciprocal-Space Sums}
+\subsection{Heterologous terms}
+We begin with (\ref{eq:direct}), starting with the heterologous terms,
+i.e. the terms involving particles of different species.  The
+short-range terms are trivial, so we neglect them here.
+\begin{equation}
+\text{heterologous} = \frac{1}{2} \sum_{\alpha \neq \beta} \sum_{i,j} \sum_\vL
+v^{\alpha\beta}_l(\vr_i^\alpha - \vr_j^\beta + \vL)
+\end{equation}
+We insert the resolution of unity in real space twice,
+\begin{eqnarray}
+\text{heterologous} & = & \frac{1}{2}\sum_{\alpha \neq \beta} \int_\text{cell} d\vr \, d\vr' \, \sum_{i,j}
+\delta(\vr_i^\alpha - \vr) \delta(\vr_j^\beta-\vr') \sum_\vL
+v^{\alpha\beta}_l(|\vr - \vr' + \vL|) \\
+& = & \frac{1}{2\Omega^2}\sum_{\alpha \neq \beta} \int_\text{cell} d\vr \, d\vr' \, \sum_{\vk, \vk', i, j} e^{i\vk\cdot(\vr_i^\alpha
+  - \vr)} e^{i\vk'\cdot(\vr_j^\beta - \vr')} \sum_\vL
+v^{\alpha\beta}_l(|\vr - \vr' + \vL|) \nonumber \\
+& = & \frac{1}{2\Omega^2} \sum_{\alpha \neq \beta} \int_\text{cell} d\vr \, d\vr'\,
+\sum_{\vk, \vk', \vk'', i, j} e^{i\vk\cdot(\vr_i^\alpha - \vr)}
+e^{i\vk'\cdot(\vr_j^\beta-\vr')} e^{i\vk''\cdot(\vr -\vr')}
+v^{\alpha\beta}_{\vk''}, \nonumber.
+\end{eqnarray}
+Here, the $\vk$ summations are over reciprocal lattice vectors given
+by $\vk = m_1 \vb_1 + m_2\vb_2 + m_3\vb_3$, where
+\begin{eqnarray}
+\vb_1 & = & 2\pi \frac{\va_2 \times \va_3}{\va_1 \cdot (\va_2 \times
+  \va_3)} \nonumber \\
+\vb_2 & = & 2\pi \frac{\va_3 \times \va_1}{\va_1 \cdot (\va_2 \times
+  \va_3)} \\
+\vb_3 & = & 2\pi \frac{\va_1 \times \va_2}{\va_1 \cdot (\va_2 \times
+  \va_3)} \nonumber.
+\end{eqnarray}
+We note that $\vk \cdot \vL = 2\pi(n_1 m_1 + n_2 m_2 + n_3 m_3)$. 
+
+\begin{eqnarray}
+v_{k''}^{\alpha \beta} & = & 
+\frac{1}{\Omega} \int_{\text{cell}} d\vr'' \sum_\vL
+e^{-i\vk''\cdot(|\vr''+\vL|)} v^{\alpha\beta}(|\vr''+\vL|), \\
+& = & \frac{1}{\Omega} \int_\text{all space} d\tilde{\vr} \, 
+    e^{-i\vk'' \cdot \tilde{\vr}} v^{\alpha\beta}(\tilde{r}), \label{eq:vk}
+\end{eqnarray}
+where $\Omega$ is the volume of the cell. Here we have used the fact
+that summing over all cells of the integral over the cell is
+equivalent to integrating over all space.
+\begin{equation}
+\text{hetero} = \frac{1}{2\Omega^2} \sum_{\alpha \neq \beta}
+\int_\text{cell} d\vr \, d\vr' \, \sum_{\vk, \vk', \vk'', i, j}
+e^{i(\vk \cdot \vr_i^\alpha + \vk' \cdot\vr_j^\beta)} e^{i(\vk''-\vk)\cdot \vr}
+e^{-i(\vk'' + \vk')\cdot \vr'} v^{\alpha \beta}_{\vk''}.
+\end{equation}
+We have
+\begin{equation}
+\frac{1}{\Omega} \int d\vr \  e^{i(\vk -\vk')\cdot \vr} =
+\delta_{\vk,\vk'},
+\end{equation}
+Then, performing the integrations we have
+\begin{eqnarray}
+\text{hetero} = \frac{1}{2} \sum_{\alpha \neq \beta}
+\sum_{\vk, \vk', \vk'', i, j}
+e^{i(\vk \cdot \vr_i^\alpha + \vk' \cdot\vr_j^\beta)} \delta_{\vk,\vk''}
+\delta_{-\vk', \vk''} v^{\alpha \beta}_{\vk''}.
+\end{eqnarray}
+We now separate the summations, yielding
+\begin{equation}
+\text{hetero} = \frac{1}{2} \sum_{\alpha \neq \beta} \sum_{\vk, \vk'}
+\underbrace{\left[\sum_i e^{i\vk  \cdot \vr_i^\alpha} \rule{0cm}{0.705cm}
+    \right]}_{\rho_\vk^\alpha}
+\underbrace{\left[\sum_j e^{i\vk' \cdot \vr_j^\beta} \right]}_{\rho_{\vk'}^\beta}
+ \delta_{\vk,\vk''} \delta_{-\vk', \vk''} v^{\alpha
+  \beta}_{\vk''}.
+\end{equation}
+Summing over $\vk$ and $\vk'$, we have
+\begin{equation}
+\text{hetero} = \frac{1}{2} \sum_{\alpha \neq \beta} \sum_{\vk''}
+\rho_{\vk''}^\alpha \, \rho_{-\vk''}^\beta v_{k''}^{\alpha \beta}.
+\end{equation}
+We can simplify the calculation a bit further by rearranging the
+sums over species,
+\begin{eqnarray}
+\text{hetero} & = & \frac{1}{2} \sum_{\alpha > \beta} \sum_{\vk}
+\left(\rho^\alpha_\vk \rho^\beta_{-\vk} + \rho^\alpha_{-\vk}
+\rho^\beta_\vk\right) v_{k}^{\alpha\beta} \\
+& = & \sum_{\alpha > \beta} \sum_\vk \mathcal{R}e\left(\rho_\vk^\alpha
+\rho_{-\vk}^\beta\right)v_k^{\alpha\beta} .
+\end{eqnarray}
+
+
+\subsection{Homologous Terms}
+We now consider the terms involving particles of the same species
+interacting with each other.  The algebra is very similar to that
+above, with the slight difficulty of avoiding the self-interaction term.
+\begin{eqnarray}
+\text{homologous} & = & \sum_\alpha \sum_L \sum_{i<j} v_l^{\alpha
+  \alpha}(|\vr_i^\alpha - \vr_j^\alpha + \vL|) \\
+ & = & \frac{1}{2} \sum_\alpha \sum_L \sum_{i\neq j} v_l^{\alpha
+  \alpha}(|\vr_i^\alpha - \vr_j^\alpha + \vL|) 
+\end{eqnarray}
+\begin{eqnarray}
+\text{homologous} & = & \frac{1}{2} \sum_\alpha \sum_L 
+\left[
+-N^\alpha v_l^{\alpha \alpha}(|\vL|)  + \sum_{i,j} v^{\alpha \alpha}_l(|\vr_i^\alpha - \vr_j^\alpha + \vL|)
+  \right] \\
+& = & \frac{1}{2} \sum_\alpha \sum_\vk \left(|\rho_k^\alpha|^2 - N
+\right) v_k^{\alpha \alpha}
+\end{eqnarray}
+
+\subsection{Madelung Terms}
+Let us now consider the Madelung term for a single particle of species
+$\alpha$.  This term corresponds to the interaction of a particle with
+all of its periodic images.  
+\begin{eqnarray}
+v_M^{\alpha} & = & \frac{1}{2} \sum_{\vL \neq \mathbf{0}} v^{\alpha
+  \alpha}(|\vL|) \\
+& = & \frac{1}{2} \left[ -v_l^{\alpha \alpha}(0) + \sum_\vL v^{\alpha
+  \alpha}(|\vL|) \right] \\
+& = & \frac{1}{2} \left[ -v_l^{\alpha \alpha}(0) + \sum_\vk v^{\alpha
+  \alpha}_\vk \right]  
+\end{eqnarray}
+
+\subsection{$\vk=\mathbf{0}$ terms}
+Thusfar, we have neglected what happens at the special point $\vk =
+\mathbf{0}$.  For many long-range potentials, such as the coulomb
+potential, $v_k^{\alpha \alpha}$ diverges for $k=0$.  However, we
+recognize that for a charge-neutral system, the divergent part of the
+terms cancel each other.  If all the potential in the system were
+precisely coulomb, the $\vk=\mathbf{0}$ terms would cancel precisely,
+yielding zero.  For systems involving pseudopotentials, however, it
+may be the case the resulting term is finite, but nonzero.  Consider
+the terms from $\vk=\mathbf{0}$,
+\begin{eqnarray}
+V_{k=0} & = & \sum_{\alpha>\beta} N^\alpha N^\beta v^{\alpha \beta}_{k=0}
++ \frac{1}{2} \sum_\alpha \left(N^{\alpha}\right)^2 v^{\alpha\alpha}_{k=0} \\
+& = & \frac{1}{2} \sum_{\alpha,\beta} N^\alpha N^\beta v^{\alpha
+  \beta}_{k=0}.
+\label{eq:kzero}
+\end{eqnarray}
+Next, we must compute $v^{\alpha \beta}_{k=0}$.  
+\begin{equation}
+v^{\alpha \beta}_{k=0} = \frac{4 \pi}{\Omega} \int_0^\infty dr\ r^2
+v_l^{\alpha \beta}(r)
+\end{equation}
+We recognize that this integral will not converge because of the
+large-$r$ behavior.  However, we recognize that when we do the sum in
+(\ref{eq:kzero}), the large-$r$ parts of the integrals will cancel
+precisely.  Therefore, we define
+\begin{equation}
+\tilde{v}^{\alpha \beta}_{k=0} = \frac{4 \pi}{\Omega} 
+\int_0^{r_\text{end}} dr\ r^2 v_l^{\alpha \beta}(r),
+\end{equation}
+where $r_\text{end}$ is some cutoff value after which the potential
+tails precisely cancel.
+
+\subsection{Neutralizing Background Terms}
+For systems with a net charge, such as the one-component plasma
+(jellium), we add a uniform background charge which makes the system
+neutral.  When we do this, we must add a term which comes from the
+interaction of the particle with the neutral background.  It is a
+constant term, indendent of the particle positions.  In general, we
+have a compensating background for each species, which largely cancels
+out for neutral systems.
+\begin{equation}
+V_\text{background} = -\frac{1}{2} \sum_\alpha \left(N^\alpha\right)^2 
+v^{\alpha \alpha}_{s\mathbf{0}}
+-\sum_{\alpha > \beta} N_\alpha N_\beta
+v^{\alpha\beta}_{s\mathbf{0}},
+\end{equation}
+where $v^{\alpha \beta}_{s\mathbf{0}}$ is given by
+\begin{eqnarray}
+v^{\alpha \beta}_{s\mathbf{0}} & = & \frac{1}{\Omega} \int_0^{r_c} d^3 r\ 
+v^{\alpha \beta}_s(r) \\
+& = & \frac{4 \pi}{\Omega} \int_0^{r_c} r^2 v_s(r) \ dr \nonumber
+\end{eqnarray}
+
+
+\section{Combining Terms}
+Here, we sum all of the terms we computed in the sections above,
+\begin{eqnarray}
+V & = & \sum_{\alpha > \beta} \left[\sum_{i,j} v_s(|\vr_i^\alpha
+  -\vr_j^\beta|) + \sum_\vk \mathcal{R}e\left(\rho_\vk^\alpha
+  \rho_{-\vk}^\beta\right)v^{\alpha\beta}_k  -N^\alpha N^\beta
+  v^{\alpha \beta}_{s\mathbf{0}}  \right] \nonumber \\
+& + & \sum_\alpha \left[ N^\alpha v_M^\alpha + \sum_{i>j} v_s(|\vr_i^\alpha -
+  \vr_j^\alpha|) + \frac{1}{2} \sum_\vk \left( |\rho_\vk^\alpha|^2 -
+  N\right) v^{\alpha\alpha}_\vk -\frac{1}{2}\left(N_\alpha\right)^2 v_{s\mathbf{0}}^{\alpha\alpha}\right] \nonumber \\
+& = & \sum_{\alpha > \beta} \left[\sum_{i,j} v_s(|\vr_i^\alpha
+  -\vr_j^\beta|) + \sum_\vk \mathcal{R}e\left(\rho_\vk^\alpha
+  \rho_{-\vk}^\beta\right) v^{\alpha \beta}_k   -N^\alpha N^\beta
+  v^{\alpha \beta}_{s\mathbf{0}}  +\tilde{V}_{k=0} \right] \\
+& + & \sum_\alpha \left[ -\frac{N^\alpha v_l^{\alpha \alpha}(0)}{2}  + \sum_{i>j} v_s(|\vr_i^\alpha -
+  \vr_j^\alpha|) + \frac{1}{2} \sum_\vk |\rho_\vk^\alpha|^2 v^{\alpha\alpha}_\vk - \frac{1}{2}\left(N_\alpha\right)^2
+  v_{s\mathbf{0}}^{\alpha\alpha} +\tilde{V}_{k=0}\right]  \nonumber
+\end{eqnarray}
+
+\section {Computing the Reciprocal Potential}
+Now we return to (\ref{eq:vk}).  Without loss of generality, we define
+for convenience $\vk = k\hat{\mathbf{z}}$.
+\begin{equation}
+v^{\alpha \beta}_k = \frac{2\pi}{\Omega} \int_0^\infty dr \int_{-1}^1
+  d\cos(\theta) \ r^2 e^{-i k r \cos(\theta)} v_l^{\alpha \beta}(r)
+\end{equation}
+We do the angular integral first.  By inversion symmetry, the
+imaginary part of the integral vanishes, yielding
+\begin{equation}
+v^{\alpha \beta}_k = \frac{4\pi}{\Omega k}\int _0^\infty dr\ r \sin(kr)
+v^{\alpha \beta}_l(r).
+\label{eq:vkint}
+\end{equation}
+
+\section{The Coulomb Potential}
+For the case of the Coulomb potential, the above integral is not
+formally convergent if we do the integral naively. We may remedy the
+situation by including a convergence factor, $e^{-k_0 r}$.  For a
+potential of the form $v^\text{coul}(r) = q_1 q_2/r$, this yields
+\begin{eqnarray}
+v^{\text{screened coul}}_k & = & \frac{4\pi q_1 q_2}{\Omega k} \int_0^\infty dr\ \sin(kr)
+e^{-k_0r} \\ 
+& = & \frac{4\pi q_1 q_2}{\Omega (k^2 + k_0^2)}
+\end{eqnarray}
+Allowing the convergence factor to tend to zero, we have
+\begin{equation}
+v_k^\text{coul} = \frac{4 \pi q_1 q_2}{\Omega k^2}
+\end{equation}
+
+For more generalized potentials with a coulomb tail, we cannot
+evaluate (\ref{eq:vkint}) numerically but must handle the coulomb part
+analytically.  In this case, we have
+\begin{equation}
+v_k^{\alpha \beta} = \frac{4\pi}{\Omega} 
+\left\{ \frac{q_1 q_2}{k^2} + \int_0^\infty dr \ r \sin(kr) \left[ v_l^{\alpha \beta}(r) -
+  \frac{q_1 q_2}{r} \right] \right\}
+\end{equation}
+
+\section{Efficient calculation methods}
+\subsection{Fast computation of $\rho_\vk$}
+We wish to quickly calculate the quantity
+\begin{equation}
+\rho_\vk^\alpha \equiv \sum_i e^{i\vk \cdot r_i^\alpha}
+\end{equation}
+First, we write 
+\begin{eqnarray}
+\vk & = & m_1 \vb_1 + m_2 \vb_2 + m_3 \vb_3 \\
+\vk \cdot \vr_i^\alpha & = &  m_1 \vb_1 \cdot \vr_i^\alpha + 
+m_2 \vb_2 \cdot \vr_i^\alpha + m_3 \vb_3 \cdot \vr_i^\alpha \\
+e^{i\vk \cdot r_i^\alpha} & = & 
+{\underbrace{\left[e^{i \vb_1 \cdot\vr_i^\alpha}\right]}_{C^{i\alpha}_1}}^{m_1}
+{\underbrace{\left[e^{i \vb_2 \cdot\vr_i^\alpha}\right]}_{C^{i\alpha}_2}}^{m_2}
+{\underbrace{\left[e^{i \vb_3 \cdot\vr_i^\alpha}\right]}_{C^{i\alpha}_3}}^{m_3}
+\end{eqnarray}
+Now, we note that
+\begin{equation}
+[C^{i\alpha}_1]^{m_1} = C^{i\alpha}_1 [C^{i\alpha}]^{(m_1-1)}.
+\end{equation}
+This allows us to recursively build up an array of the $C^{i\alpha}$s,
+and then compute $\rho_\vk$ for all $\vk$-vectors by looping over all
+k-vectors, requiring only two complex multiplies per particle per
+$\vk$.
+\begin{algorithm}
+\caption{Algorithm to quickly calculate $\rho_\vk^\alpha$.}
+\begin{algorithmic}
+\STATE Create list of $\vk$-vectors and corresponding $(m_1, m_2,
+m_3)$ indices.
+\FORALL{$\alpha \in $ species}
+  \STATE Zero out $\rho_\vk^\alpha$
+  \FORALL{$i \in $ particles}
+    \FOR{$j \in [1\cdots3]$}
+      \STATE Compute $C^{i \alpha}_j \equiv e^{i \vb_j \cdot
+        \vr^{\alpha}_i}$
+       \FOR{$m \in [-m_{\text{max}}\dots m_\text{max}]$}
+         \STATE Compute $[C^{i \alpha}_j]^m$ and store in array
+       \ENDFOR
+    \ENDFOR
+     \FORALL{$(m_1, m_2, m_3) \in $ index list}
+       \STATE Compute $e^{i \vk \cdot r^\alpha_i} =
+         [C^{i\alpha}_1]^{m_1} [C^{i\alpha}_2]^{m_2}
+         [C^{i\alpha}_3]^{m_3}$ from array
+    \ENDFOR
+  \ENDFOR
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+\section{Gaussian Charge Screening Breakup}
+This original approach to the short and long-ranged breakup adds an
+opposite screening charge of gaussian shape around each point charge.
+It then removes the charge in the long-ranged part of the potential.
+In this potential,
+\begin{equation}
+v_{\text{long}}(r) = \frac{q_1 q_2}{r} \text{erf}(\alpha r),
+\end{equation}
+where $\alpha$ is an adjustable parameter used to control how
+short-ranged the potential should be.  If the box size is $L$, a
+typical value for $\alpha$ might be $7/(Lq_1 q_2)$. We should note
+that this form for the long-ranged potential should also work for any
+general potential with a coulomb tail, e.g. pseudo-Hamiltonian
+potentials.  For this form of the long-ranged potential, we have in $k$-space
+\begin{equation}
+v_k = \frac{4\pi q_1 q_2 \exp\left[\frac{-k^2}{4\alpha^2}\right]}{\Omega k^2}.
+\end{equation}
+
+\section{Optimized Breakup Method}
+In this section, we undertake the task of choosing a
+long-range/short-range partioning of the potential which is optimimum
+in that it minimizes the error for given real and $k$-space cutoffs
+$r_c$ and $k_c$.  Here, we modify slightly the method introduced
+Natoli and Ceperley\cite{Natoli}. We choose $r_c =
+\frac{1}{2}\min\{L_i\}$, so that we require the nearest image in
+real space summation.  $k_c$ is then chosen so as to satisfy our
+accuracy requirements.
+
+Here we modify our notation slightly to accomodate details not
+required above.  We restrict our discussion to the interaction of two
+paricles species (which may be the same), and drop our species
+indices.  Thus we are looking for short and long-range potentials
+defined by,
+\newcommand{\vs}{v^s}
+\newcommand{\vl}{v^\ell}
+\begin{equation}
+v(r) = \vs(r) + \vl(r)
+\end{equation}
+Define $\vs_k$ and $\vl_k$ to be the respective fourier transforms of
+the above.  The goal is to choose $v_s(r)$ such that its value and
+first two derivatives vanish at $r_c$, while making $\vl(r)$ as smooth as
+possible so that $k$-space components, $\vl_k$, are very small for
+$k>k_c$.  Here, we describe how to do this is an optimal way.
+
+Define the periodic potential, $V_p$, as 
+\begin{equation}
+V_p(\vr) = \sum_l v(|\vr + \mathbf{l}|),
+\end{equation}
+where $\vr$ is the displacement between the two particles and
+$\mathbf{l}$ is a lattice vector.  Let us then define our
+approximation to this potential, $V_a$, as
+\begin{equation}
+V_a(\vr) = \vs(r) + \sum_{|\vk| < k_c} \vl_k e^{i\mathbf \vk \cdot \vr}
+\end{equation}
+Now, we seek to minimize the RMS error over the cell,
+\begin{equation}
+\chi^2 = \frac{1}{\Omega}\int_\Omega d^3 \mathbf{r} \ 
+\left| V_p(\vr) - V_a(\vr)\right|^2 
+\end{equation}
+We may write
+\begin{equation}
+V_p(\vr) = \sum_{\vk} v_k e^{i \vk \cdot \vr},
+\end{equation}
+where 
+\begin{equation}
+v_k = \frac{1}{\Omega} \int d^3\vr \ e^{-i\vk\cdot\vr}v(r).
+\end{equation}
+We now need a basis in which to represent the broken up potential.  We
+may choose to represent either $\vs(r)$ or $\vl(r)$ in a real-space
+basis.  Natoli and Ceperley chose the prior in their paper.  We choose
+the latter for a number of reasons.  First, singular potentials are
+difficult to represent in a linear basis unless the singularity is
+explicitly included.  This requires a separate basis for each type of
+singularity.  The short-range potential may have an arbitrary number
+of features for $r<r_c$ and still be a valid potential.  By
+construction, however, we desire that $\vl(r)$ be smooth in real-space
+so that its Fourier transform falls off quickly with increasing $k$.
+We therefore expect that, in general, $\vl(r)$ should be
+well-represented by fewer basis functions than $\vs(r)$.  Therefore,
+we define,
+\begin{equation}
+\vl(r) \equiv
+\begin{cases}
+ \sum_{n=0}^{J-1} t_n h_n(r) & \text{for } r \le r_c \\
+ v(r) & \text{for } r > r_c.
+\end{cases}
+\end{equation}
+where the $h_n(r)$ are a set of $J$ basis functions.  We require that
+the two cases agree on the value and first two derivatves at $r_c$.
+We may then define
+\begin{equation}
+c_{nk} \equiv \frac{1}{\Omega} \int_0^{r_c} d^3 \vr \ e^{-i\vk\cdot\vr} h_n(r).
+\end{equation}
+Similarly, we define
+\begin{equation}
+x_k \equiv -\frac{1}{\Omega} \int_{r_c}^\infty d^3\vr \ e^{-i\vk\cdot\vr} v(r)
+\end{equation}
+Therefore,
+\begin{equation}
+\vl_k = -x_k + \sum_{n=0}^{J-1} t_n c_{nk} 
+\end{equation}
+Because $\vs(r)$ goes identically to zero at the box edge, inside the
+cell we may write
+\begin{equation}
+\vs(\vr) = \sum_\vk \vs_k e^{i\vk \cdot \vr}
+\end{equation}
+We then write
+\begin{equation}
+\chi^2 = \frac{1}{\Omega} \int_\Omega d^3 \vr \ 
+\left| \sum_\vk e^{i\vk \cdot \vr} \left(v_k - \vs_k \right)
+-\sum_{|\vk| \le k_c} \vl_k \right|^2
+\end{equation}
+We see that if we define
+\begin{equation}
+\vs(r) \equiv v(r) - \vl(r)
+\end{equation}
+Then
+\begin{equation}
+\vl_k + \vs_k = v_k,
+\end{equation}
+which then cancels out all terms for $|\vk| < k_c$.  Then we have
+\begin{eqnarray}
+\chi^2 & = & \frac{1}{\Omega} \int_\Omega d^3 \vr \ 
+\left|\sum_{|\vk|>k_c} e^{i\vk\cdot\vr} 
+\left(v_k -\vs_k \right)\right|^2 \\
+& = & \frac{1}{\Omega} \int_\Omega d^3 \vr \ 
+\left|\sum_{|\vk|>k_c} e^{i\vk\cdot\vr} \vl_k \right|^2 \\ 
+& = & 
+\frac{1}{\Omega} \int_\Omega d^3 \vr
+\left|\sum_{|\vk|>k_c} e^{i\vk\cdot\vr}\left( -x_k + \sum_{n=0}^{J-1} t_n
+c_{nk}\right) \right|^2
+\end{eqnarray}
+We expand the summation,
+\newcommand{\ns}{\negthickspace}
+\begin{equation}
+\chi^2 = \frac{1}{\Omega} \int_\Omega d^3 \vr \ns \ns \ns
+\sum_{\{|\vk|,|\vk'|\}>k_c} \ns\ns\ns\ns\ns
+ e^{i(\vk-\vk')\cdot \vr}
+\left(x_k -\sum_{n=0}^{J-1} t_n c_{nk} \right)
+\left(x_k -\sum_{m=0}^{J-1} t_{m} c_{mk'} \right)
+\end{equation}
+We take the derivative w.r.t. $t_{m}$,
+\begin{equation}
+\frac{\partial (\chi^2)}{\partial t_{m}} =
+\frac{2}{\Omega}\int_\Omega d^3 \vr \ns \ns \ns
+\sum_{\{|\vk|,|\vk'|\}>k_c} \ns\ns\ns\ns\ns
+ e^{i(\vk-\vk')\cdot \vr}
+\left(x_k -\sum_{n=0}^{J-1} t_n c_{nk} \right) c_{mk'}
+\end{equation}
+We integrate w.r.t. $\vr$, yielding a kroneker $\delta$.
+\begin{equation}
+\frac{\partial (\chi^2)}{\partial t_{m}} =
+2 \ns\ns\ns\ns\ns\ns\ns 
+\sum_{\ \ \ \ \{|\vk|,|\vk'|\}>k_c} \ns\ns\ns\ns\ns\ns\ns \delta_{\vk, \vk'} 
+\left(x_k -\sum_{n=0}^{J-1} t_n c_{nk} \right) c_{mk'}
+\end{equation}
+Summing over $\vk'$ and equating the derivative to zero, we find the
+minimum of our error function is given by
+\begin{equation}
+\sum_{n=0}^{J-1} \sum_{|\vk|>k_c} c_{mk}c_{nk} t_n = 
+\sum_{|\vk|>k_c} x_k c_{mk},
+\end{equation}
+which is equivalent in form to equation (19) in \cite{Natoli}, where
+we have $x_k$, instead of $V_k$.  Thus, we see that we may optimize
+the short-range or long-range potential in simply by choosing to use
+$V_k$ or $x_k$ in the above equation.  We now define
+\begin{eqnarray}
+A_{mn} & \equiv & \sum_{|\vk|>k_c} c_{mk} c_{nk} \\
+b_{m} & \equiv & \sum_{|\vk|>k_c} x_k c_{mk}
+\end{eqnarray}
+Thus, it becomes clear that our minimization equations can be cast in
+the canonical linear form,
+\newcommand{\bA}{\mathbf{A}}
+\newcommand{\bU}{\mathbf{U}}
+\newcommand{\bV}{\mathbf{V}}
+\newcommand{\bb}{\mathbf{b}}
+\newcommand{\bS}{\mathbf{S}}
+\begin{equation}
+\bA\mathbf{t} = \mathbf{b}.
+\end{equation}
+\subsection{Solution by SVD}
+In practice, we note that the matrix $\bA$ frequently becomes singular
+in practice.  For this reason, we use the singular value decomposition
+to solve for $t_n$.  This factorization decomposes $A$ as
+\begin{equation}
+\bA = \bU \bS \bV^T,
+\end{equation}
+where $\bU^T\bU = \bV^T\bV = 1$ and $\bS$ is diagonal.  In this form, we have
+\begin{equation}
+\mathbf{t} = \sum_{i=0}^{J-1} \left( \frac{\bU_{(i)} \cdot
+  \bb}{\bS_{ii}} \right) \bV_{(i)},
+\end{equation}
+where the parethesized subscripts refer to columns.  The advantage of
+this form is that if $\bS_{ii}$ is zero or very near zero, the
+contribution of the $i^{\text{th}}$ of $\bV$, may be neglected, since
+it represents a numerical instability and has little physical
+meaning.  It represents the fact that the system cannot distinguish
+between two linear combinations of the basis functions.  Using the SVD
+in this manner is guaranteed to be stable.  This decomposition is
+available in LAPACK in the DGESVD subroutine.
+\subsection{Constraining Values}
+Often, we wish to constrain the value of $t_n$ to have a fixed value
+to enforce a boundary condition, for example.  To do this, we define
+\begin{equation}
+\bb' \equiv \vb - t_n \bA_{(n)}.
+\end{equation}
+We then define $\bA^*$ as $\bA$ with the $n^\text{th}$ row and column
+removed, and $\bb^*$ as $\vb'$ with the $n^\text{th}$ element removed.  Then
+we solve the reduced equation $\bA^* \mathbf{t}^* = \bb^*$, and
+finally insert $t_n$ back into the appropriate place in $\mathbf{t}^*$
+to recover the complete, constrained vector $\mathbf{t}$.  This may be
+trivially generalized to an arbitray number of constraints.
+\label{sec:contraints}
+\subsection{The LPQHI basis}
+The above discussion was general and independent of the basis used to
+represent $\vl(r)$.  In this section, we introduce a convenient basis
+of localized interpolant functions, similar to those used for
+splines, which have a number of properties which are convenient for
+our purposes.  
+
+First, we divide the region from 0 to $r_c$ into $M-1$ subregions,
+bounded above and below by points we term {\em knots}, defined by $r_j
+\equiv j\Delta$, where $\Delta \equiv r_c/(M-1)$.  We then define
+compact basis elements, $h_{j\alpha}$ which span the region
+$[r_{j-1},r_{j+1}]$, except for $j=0$ and $j=M$.  For $j=0$, only the
+region $[r_0,r_1]$, while for $j=M$, only $[r_{M-1}, r_M]$.  Thus the
+index $j$ identify the knot the element is centered on, while $\alpha$
+is an integer from 0 to 2 indicating one of three function shapes.
+The dual index can be mapped to the single index above by the
+relation, $n = 3j + \alpha$.  The basis functions are then defined as
+\begin{equation}
+h_{j\alpha}(r) = 
+\begin{cases}
+\ \ \ \, \Delta^\alpha \, \, \sum_{n=0}^5 S_{\alpha n} 
+\left( \frac{r-r_j}{\Delta}\right)^n,    & r_j < r \le r_{j+1} \\
+(-\Delta)^\alpha \sum_{n=0}^5 S_{\alpha n} 
+\left( \frac{r_j-r}{\Delta}\right)^n,    & r_{j-1} < r \le r_j \\
+\quad\quad\quad\quad\quad 0, & \text{otherwise},
+\end{cases}
+\end{equation}
+where the matrix $S_{\alpha n}$ is given by
+\begin{equation}
+S = 
+\left[\begin{matrix}
+1 & 0 & 0 & -10 & 15 & -6 \\
+0 & 1 & 0 & -6  &  8 & -3 \\
+0 & 0 & \frac{1}{2} & -\frac{3}{2} & \frac{3}{2} & -\frac{1}{2}
+\end{matrix}\right].
+\end{equation}
+\begin{figure}
+\begin{center}
+\epsfig{figure=LPQHI.eps,width=3.5in}
+\caption{Basis functions $h_{j0}$, $h_{j1}$, and $h_{j2}$ are shown.
+We note at the left and right extremes, the values and first two
+derivatives of the functions are zero, while at the center, $h_{j0}$
+has a value of 1, $h_{j1}$ has a first derivative of 1, and $h_{j2}$
+has a second derivative of 1.}
+\end{center}
+\label{fig:LPQHI}
+\end{figure}
+Figure~\ref{fig:LPQHI} shows plots of these function shapes.
+
+The basis functions have the property that at the left and right
+extremes, i.e. $r_{j-1}$ and $r_{j+1}$, their values and first two
+derivatives are zero.  At the center, $r_j$, we have the properties,
+\begin{eqnarray}
+h_{j0}(r_j)=1, & h'_{j0}(r_j)=0, & h''_{j0}(r_j)= 0 \\
+h_{j1}(r_j)=0, & h'_{j1}(r_j)=1, & h''_{j1}(r_j)= 0 \\
+h_{j2}(r_j)=0, & h'_{j2}(r_j)=0, & h''_{j2}(r_j)= 1 
+\end{eqnarray}
+These properties allow the control of the value and first two derivatives
+of the represented function at any knot value simply by setting the
+coefficients of the basis functions centered around that knot.  Used
+in combination with the method discribed in
+section~\ref{sec:contraints} above, boundary conditions can easily be
+enforced.  In our case, we wish require that
+\begin{equation}
+h_{M0} = v(r_c), \ \ h_{M1} = v'(r_c), \ \ \text{and} \ \  h_{M2} = v''(r_c).
+\end{equation}
+This ensures that $\vs$ and its first two derivatives vanish at $r_c$.
+\subsubsection{Fourier coefficients}
+We wish now to calculate the Fourier transforms of the basis
+functions, defined as
+\begin{equation}
+c_{j\alpha k} \equiv \frac{1}{\Omega} \int_0^{r_c} d^3 \vr 
+e^{-i \vk \cdot \vr} h_{j\alpha}(r)
+\end{equation}
+We then may write,
+\begin{equation}
+c_{j\alpha k} = 
+\begin{cases}
+\Delta^\alpha \sum_{n=0}^5 S_{\alpha n} D^+_{0 k n}, & j = 0 \\
+\Delta^\alpha \sum_{n=0}^5 S_{\alpha n} (-1)^{\alpha+n} D^-_{M k n}, &
+j = M \\
+\Delta^\alpha \sum_{n=0}^5 S_{\alpha n} 
+\left[ D^+_{j k n} + (-1)^{\alpha+n}D^-_{j k n} \right] & \text{otherwise},
+\end{cases}
+\end{equation}
+where
+\begin{equation}
+D^{\pm}_{jkn} \equiv \frac{1}{\Omega} \int_{r_j}^{r_{j\pm1}} d^3\!\vr \ 
+e^{-i\vk \cdot \vr} \left( \frac{r-r_j}{\Delta}\right)^n.
+\end{equation}
+We then further make the definition that
+\renewcommand{\Im}{\text{Im}}
+\begin{equation}
+D^{\pm}_{jkn} = \pm \frac{4\pi}{k \Omega} 
+\left[ \Delta \Im \left(E^{\pm}_{jk(n+1)}\right) + 
+r_j \Im \left(E^{\pm}_{jkn}\right)\right]
+\end{equation}
+It can then be shown that 
+\begin{equation}
+E^{\pm}_{jkn} =
+\begin{cases}
+-\frac{i}{k} e^{ikr_j} \left( e^{\pm i k \Delta} - 1 \right) &
+\text{if } n=0, \\
+-\frac{i}{k} 
+\left[ \left(\pm1\right)^n e^{i k (r_j \pm \Delta)} - \frac{n}{\Delta}
+E^\pm_{jk(n-1)}  \right] & \text{otherwise}.
+\end{cases}
+\end{equation}
+Note that these equations correct typographical errors present in \cite{Natoli}.
+\subsection{Enumerating $k$-points}
+We note that the summations over $k$ which have been ubiquitous in
+this paper requires enumeration of the $k$-vectors.  In particular, we
+should sum over all $|\vk| > k_c$.  In practice, we must limit our
+summation to some finite cutoff value $k_c < |\vk| < k_\text{max}$,
+where $k_\text{max}$ should be of order $3000/L$, where $L$ is the
+minimum box dimension.  Enumerating these vectors in a naive fashion
+even for this finite cutoff would prove quite prohibitive, as it
+requires $\sim 10^9$ vectors.
+
+Our first optimization come in realizing that all quantities in this
+calculation require only $|\vk|$, and not $\vk$ itself.  Thus, we may
+take advantage of the great degeneracy of $|\vk|$.  We create a list
+of $(k,N)$ pairs, where $N$ is the number of vectors with magnitude $k$.
+We make nested loops over
+$n_1$, $n_2$, and $n_3$, yielding $\vk = n_1 \vb_1 + n_2 \vb_2 + n_3
+\vb_3$. If $|\vk|$ is in the required range, we check to see if there
+is already an entry with that magnitude on our list, incrementing the
+corresponding $N$ if there is, or creating a new entry if not.  Doing
+so typically saves a factor of $\sim 200$ in storage and computation.
+
+This reduction is still not sufficent for large $k_max$, since it
+requires that we still look over $10^9$ entries.  To further reduce
+cost, we may pick an intermediate cutoff, $k_\text{cont}$, above which
+we will approximate the degeneracy assuming a continuum of
+$k$-points.  We stop our exact enumeration at $k_\text{cont}$, and
+then add $\sim 1000$ points, $k_i$, uniformly spaced between $k_\text{cont}$
+and $k_\text{max}$. We then approximate the degeneracy by
+\begin{equation}
+N_i = \frac{4 \pi}{3} \frac{\left( k_b^3 -k_a^3\right)}{(2\pi)^3/\Omega},
+\end{equation}
+where $k_b = (k_i + k_{i+1})/2$ and $k_a = (k_i + k_{i-1})$.  In doing
+so, we typically reduce our total number of k-points to sum over $\sim
+2500$ from the $10^9$ we had to start.
+
+\subsection{Calculating $x_k$'s}
+\subsubsection{The coulomb potential}
+For $v(r) = \frac{1}{r}$, $x_k$ is given by
+\begin{equation}
+x_k^{\text{coulomb}} = -\frac{4 \pi}{\Omega k^2} \cos(k r_c)
+\end{equation}
+
+\subsection{The $1/r^2$ potential}
+For $v(r) = \frac{1}{r^2}$, $x_k$ is given by
+\begin{equation}
+x_k^{1/r^2} = \frac{4 \pi}{\omega k} 
+\left[ \text{Si}(k r_c) -\frac{\pi}{2}\right],
+\end{equation}
+where the {\em sin integral}, $\text{Si}(z)$, is given by
+\begin{equation}
+\text{Si}(z) \equiv \int_0^z \frac{\sin \ t}{t} dt.
+\end{equation}
+
+\subsection{The $1/r^3$ potential}
+For $v(r) = \frac{1}{r^3}$, $x_k$ is given by
+\begin{equation}
+x_k^{1/r^3} = \frac{4\pi}{\Omega k} 
+\left[k\text{Ci}(k r_c) - \frac{\sin(k r_c)}{r_c} \right],
+\end{equation}
+where the {\em cosine integral}, $\text{Ci}(z)$, is given by
+\begin{equation}
+\text{Ci}(z) \equiv -\int_z^\infty \frac{\cos t}{t} dt.
+\end{equation}
+
+\subsection{The $1/r^4$ potential}
+For $v(r) = \frac{1}{r^4}$, $x_k$ is given by
+\begin{equation}
+x_k^{1/r^4} = -\frac{4 \pi}{\Omega k} 
+\left\{
+\frac{k \cos(k r_c)}{2 r_c} + \frac{\sin(k r_c)}{2r_c^2} + \frac{k^2}{2} \left[ \text{Si}(k r_c) - \frac{\pi}{2}\right]\right\}
+\end{equation}
+
+
+\section{Adapting to PIMC}
+\subsection{Pair actions}
+Let us begin by summarizing what we have done so far.  We began with the many-body Hamiltonian given by 
+\begin{equation}
+\mathcal{H} = \sum_i -\lambda_i \nabla_i^2 + V,
+\end{equation}
+where $V$ is the periodic potential given by (\ref{eq:Vperiodic}), and $\lambda \equiv \frac{\hbar^2}{2m_i}$. 
+
+We approximately solved the action of this Hamiltonian by considering
+the particles pairwise, and solving for the density matrix for the
+density matrix of each pair exactly using the matrix squaring method.
+This yields the the {\em pair action}, defined by
+\begin{equation}
+\rho^{\alpha \beta}(\vr, \vr';\tau) \equiv \rho_0(\vr, \vr';\tau)
+e^{-u^{\alpha \beta}(\vr, \vr';\tau)},
+\end{equation}
+where $\rho_0$ is the {\em free particle} density matrix for species
+$\alpha$ interacting with species $\beta$.  $\rho^{\alpha \beta}$ is
+the density matrix for the pair Hamiltonian
+\begin{equation}
+H^{\alpha\beta} = -\lambda^{\alpha\beta} \nabla^2 + v^{\alpha\beta}(|\vr|),
+\end{equation}
+where $\vr \equiv \vr_i - \vr_j$ and particles $i$ and $j$ are members
+of species $\alpha$ and $\beta$, respecively, and
+$\lambda^{\alpha\beta}$ is given by
+\begin{equation}
+\lambda^{\alpha \beta} = \frac{\hbar^2}{2m_{\alpha}} +
+\frac{\hbar^2}{2m_\beta}.
+\end{equation}
+If the potential $v^{\alpha \beta}(r)$ is long range, then the action,
+$u^{\alpha \beta}(\vr, \vr';\beta)$, will also be long range.  We
+note, however, that the action is not a simple function of the scalar
+$r$, as the potential is.  Experience shows, however, that at large
+distances, the action is well-approximated by
+\begin{eqnarray}
+u^{\alpha\beta}(\vr, \vr';\tau) & \approx & 
+\frac{1}{2} \left[ u^{\alpha\beta}(\vr,\vr;\tau) +
+  u^{\alpha\beta}(\vr',\vr';\tau)\right] \\
+& = & \frac{1}{2} \left[ u^{\alpha\beta}_\text{diag}(r,\tau)+
+u^{\alpha\beta}_\text{diag}(r',\tau)\right]
+\end{eqnarray}
+This is known as the {\em diagonal approximation}.  Thus, as long as
+this approximation is valid at half the minimum box dimension, we may
+break up the diagonal action as we did the potential.  This
+effectively neglects the off-diagonal parts of the action for
+particles more than a half-box length apart, but experience has shown
+that these contributions are usually quite small.  The same
+analysis follows for the $\tau$-derivative the the action, which is
+required to compute the total energy.  Note that PIMC simulation
+requires the pair action at several values of $\tau$, so that in
+practice, we need to do several optimized breakups for each
+$u_\text{diag}^{\alpha\beta}$ and $\dot{u}_\text{diag}^{\alpha\beta}$ and a single breakup for
+each $v^{\alpha\beta}$.
+
+\subsection{Beyond the pair approximation: RPA improvements}
+Consider the limit of a dense gas of charged particles.  We know from
+solid state theory that collective density fluctuations, known as
+plasmons, contribute significantly to the energy spectrum of such a system.
+An approximation to the density matrix determined by considering only
+pairs of particles will neglect these contributions at finite $\tau$.
+As $\tau$ approaches zero, Trotter still guarantees we will approach
+the right limit.
+
+Nonetheless, it is possible to significantly reduce the finite-$\tau$
+timestep error by utilizing a different approximation for the long
+range part of the action.  We begin by defining our effective,
+long-range potential.  As noted above, we may perform an optimized
+breakup on the diagonal action, $u_\text{diag}^{\alpha\beta}(r)$.
+\begin{equation}
+u_\text{diag}^{\alpha\beta}(r) = \hat{u}^{\alpha\beta}_\text{diag}(r) +
+\bar{u}^{\alpha\beta}_\text{diag}(r),
+\end{equation}
+where the $\hat{u}$ and $\bar{u}$ refer to the short and long range
+diagonal actions, respectively, borrowing the notation for short and
+long vowels.
+We subtract the long range part form the total pair action in a
+quasi-primitive appoximation by defining
+\begin{equation}
+\bar{u}^{\alpha\beta}_\text{diag}(r) \equiv \tau \bar{v}^{\alpha \beta}(r).
+\end{equation}
+Let $\bar{v}^{\alpha \beta}_k$ represent the Fourier transform the the
+effective potential, $\bar{v}^{\alpha\beta}(r)$.  Finally, let its
+short-range counterpart be defined by 
+\begin{equation}
+\hat{v}^{\alpha \beta}_k \equiv v^{\alpha\beta}_k - \bar{v}^{\alpha\beta}_k
+\end{equation}
+
+Now, we wish to reintroduce a new long range action, which we will
+calculate in $k$-space within the {\em Random Phase Approximation
+  (RPA)}.   We begin with the Bloch equation,
+\begin{equation}
+\dot{\rho} = -\mathcal{H} \rho,
+\end{equation}
+where the dot refers to differentiation w.r.t. $\tau$.  The
+Hamiltonian is given by
+\begin{equation}
+\mathcal{H} = \left[\sum_\alpha \sum_{i\in \alpha} -\lambda_\alpha
+\nabla_i^2\right] + \hat{V} + \bar{V},
+\end{equation}
+where $\hat{V}$ and $\bar{V}$ are the total short and long range
+periodic potentials, respectively.
+Let us now make the partitioning that
+\begin{equation}
+\rho(\vR, \vR';\tau) = \rho_0(\vR, \vR';\tau) e^{-\hat{U}(\vR,
+  \vR';\tau)} e^{-\bar{U}(\vR, \vR';\tau)},
+\end{equation}
+We assume that $\rho_s \equiv \rho_0 e^{-\hat{U}}$ satisfies the Bloch
+equation for the short-range Hamiltonian,
+\begin{equation}
+\mathcal{H}_s = \left[\sum_\alpha \sum_{i\in \alpha} -\lambda_\alpha
+\nabla_i^2\right] + \hat{V}.
+\end{equation}
+In fact, this is only strictly true in the limit that $\tau=0$, but
+this relation will suffice for our present analysis.
+
+
+Recall that $\nabla^2(ab) = a\nabla^2 b + b\nabla^2a +2(\nabla a)
+\cdot (\nabla b)$.  Thus, we have for our Bloch equation,
+\begin{eqnarray}
+-\left [\dot{\rho_s} -\rho_s\dot{\bar{U}}\right] e^{-\bar{U}} & = &
+\sum_{\alpha,\  i\in\alpha} -\lambda_\alpha
+\left[\rho_s \nabla^2_i e^{-\bar{U}} + e^{-\bar{U}} \nabla^2_i \rho_s
+  + 2(\nabla_i \rho_s)\cdot (\nabla_i e^{-\bar{U}}) 
+\right] \nonumber \\ & & + (\hat{V} + \bar{V}) \rho_s e^{-\bar{U}}.
+\end{eqnarray} 
+Subtracting the Bloch equation for the short range part,
+we are left with
+\begin{equation}
+\left[\dot{\bar{U}}-\bar{V}\right] \rho_s e^{-\bar{U}}  = 
+\sum_{\alpha,\  i\in\alpha} -\lambda_\alpha
+\left[\rho_s \nabla^2_i e^{-\bar{U}}
+  + 2(\nabla_i \rho_s)\cdot (\nabla_i e^{-\bar{U}}) 
+\right].
+\end{equation} 
+Recall that
+\begin{eqnarray}
+\nabla e^{-\bar{U}} & = & -\nabla\bar{U}e^{-\bar{U}} \\
+\nabla \rho_0 & = & 0 \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \
+\ \ \ \ \ \ \ \ \ 
+\text{ (for $\vR = \vR'$)} \\
+\nabla \rho_s & = & -\rho_s \nabla \hat{U} \\
+\nabla^2 e^{-\bar{U}} & = & 
+\left[(\nabla \bar{U})^2 - \nabla^2 \bar{U}\right] e^{-\bar{U}} 
+\end{eqnarray} 
+We now attempt to solve the Bloch equation under the restriction that
+$\vR = \vR'$, i.e. along the diagonal of the density matrix.  Hence
+let us define
+\begin{eqnarray} 
+\bar{U}(\vR, \vR';\tau) & \equiv &
+  \frac{1}{2}\left[\bar{\mathcal{U}}(\vR;\tau) +
+  \bar{\mathcal{U}}(\vR';\tau) \right] \\ 
+ \hat{U}(\vR,\vR';\tau) & \equiv & 
+  \frac{1}{2} \left[\hat{\mathcal{U}}(\vR;\tau) +
+  \hat{\mathcal{U}}(\vR';\tau) \right] 
+\end{eqnarray}
+as the long and short range diagonal actions written as
+functions of only one spatial argument.  Then we have, along the
+diagonal,
+\begin{eqnarray}
+\nabla U   & = & \frac{1}{2} \nabla\mathcal{U} \\
+\nabla^2 U & = & \frac{1}{2} \nabla^2\mathcal{U}.
+\end{eqnarray}
+Substituting back into out Bloch equation,
+\begin{equation}
+\dot{\bar{\mathcal{U}}} = \sum_{\alpha, \ i\in \alpha} -\lambda_\alpha
+\left\{ \frac{1}{4} (\nabla_i \bar{\mathcal{U}})^2 - 
+\frac{1}{2}\nabla_i^2 \bar{\mathcal{U}} + \frac{1}{2} (\nabla_i\hat{\mathcal{U}})
+  \cdot (\nabla_i \bar{\mathcal{U}}) \right\} +\bar{V}
+\end{equation}
+
+We recall that the long range potential, $\bar{V}$, may be written as
+\begin{equation}
+\bar{V} = \sum_\vk \sum_{\alpha} \left[ 
+\frac{1}{2} \left| \rho^\alpha_\vk\right|^2 \bar{v}^{\alpha
+  \alpha}_k + 
+\sum_{\beta < \alpha} \mathcal{R}e \left( \rho^{\alpha}_\vk
+  \rho^\beta_{-\vk} \bar{v}^{\alpha\beta}_k \right)
+\right] 
+\end{equation}
+When we wrote this expression above, we did so to optimize the speed
+of computation.  For the following analysis, we will find it more
+convenient to write
+\begin{equation}
+\bar{V} = \frac{1}{2} \sum_\vk \sum_{\alpha, \beta} \rho_\vk^\alpha
+\rho_{-\vk}^\beta v^{\alpha \beta}_k.
+\end{equation}
+The sum is guaranteed to be real since for every $\vk$, we have a
+corresponding $-\vk$ in the sum.  Hence we need not be concerned by
+taking the real part. We may similarly write $\bar{\mathcal{U}}$ and $\hat{\mathcal{U}}$ in
+terms of $\bar{u}_k^{\alpha\beta}$ and $\hat{u}_k^{\alpha\beta}$.
+
+
+We now proceed to calculate gradients and laplacians.
+Recall that 
+\begin{equation}
+\rho_\vk^\alpha = \sum_{i\in\alpha} e^{i\vk \cdot \vr_i}
+\end{equation}
+\begin{eqnarray}
+\nabla_i \mathcal{U} & = & \frac{1}{2}\sum_\vk \left[ i\vk e^{i\vk \cdot \vr_i} \sum_\alpha
+\rho_{-\vk}^\alpha u^{\alpha \beta}_k + \text{c.c.} \right] \\
+& = & \frac{1}{2} \sum_\vk 2\mathcal{R}e \left[i\vk e^{i\vk \cdot \vr_i} \sum_\alpha
+\rho_{-\vk}^\alpha u^{\alpha \beta}_k\right] \\ 
+& = & \mathcal{R}e \left[ \sum_\vk i\vk e^{i\vk \cdot \vr_i} \sum_\alpha
+\rho_{-\vk}^\alpha u^{\alpha \beta}_k \right] \\
+& = & \sum_\vk i\vk e^{i\vk \cdot \vr_i} \sum_\alpha
+\rho_{-\vk}^\alpha u^{\alpha \beta}_k.
+\end{eqnarray}
+In the last line, we have again recognized that for every $\vk$
+there is a corresponding $-\vk$, so that the sum is purely real.
+
+Next, we compute the Laplacian w.r.t. the $i^{\text{th}}$ particle.
+\begin{eqnarray}
+\nabla^2_i \mathcal{U} & = & \nabla_i \cdot \nabla_i \mathcal{U} \\
+& = & \nabla_i \cdot \sum_\vk i\vk e^{i\vk \cdot \vr_i} \sum_\alpha
+\rho_{-\vk}^\alpha u^{\alpha \sigma_i}_k \\
+& = & \sum_\vk i\vk \cdot \nabla_i \left[ e^{i\vk \cdot \vr_i}
+  \sum_\alpha \rho_{-\vk}^\alpha u^{\alpha\sigma_i}_k \right] \\
+& = & \sum_{\vk} k^2 \left[ u^{\sigma_i \sigma_i}_k - e^{i\vk\cdot\vr_i}\sum_\alpha \rho_{-\vk}
+u_k^{\alpha \sigma_i}\right],
+\end{eqnarray}
+where $\sigma_i$ is the species of the $i^{\text{th}}$ particle.  Now,
+let us sum over all particles,
+\begin{eqnarray}
+\sum_i \lambda_i \nabla^2_i \mathcal{U} & = & \sum_\vk k^2 \left[\sum_\beta N_\beta u_k^{\beta
+  \beta} - \rho_{\vk}^\beta \sum_\alpha \rho_{-\vk} u_k^{\alpha \beta}
+  \right] \\
+& = & \sum_{\vk} k^2 \sum_{\alpha, \beta}
+  \lambda_\beta \left[N^{\alpha}\delta_{\alpha,\beta} -
+  \rho_{-\vk}^{\alpha}\rho_\vk^\beta \right]u_k^{\alpha \beta} 
+%\\
+%& = & \sum_{\vk} k^2 \sum_{\alpha, \beta}
+%  \left(\frac{\lambda_\alpha +\lambda_\beta}{2} \right) \left[N^{\alpha}\delta_{\alpha,\beta} -
+%  \rho_{-\vk}^{\alpha}\rho_\vk^\beta \right]u_k^{\alpha \beta}.
+\end{eqnarray}
+%In the last step, we have added half the sum with $\alpha$ and $\beta$
+%swapped so as to symmetrize the summation.
+Now, let us consider the cross term,
+\begin{eqnarray}
+(\nabla_i \hat{\mathcal{U}}) \cdot ( \nabla_i \bar{\mathcal{U}} ) 
+& = & \left[\sum_\vk i\vk e^{i\vk\cdot \vr_i} \sum_\alpha
+  \rho_{-\vk}^\alpha \hat{u}^{\sigma_i \alpha}_k \right] \cdot
+\left[\sum_\vq i\vq e^{i\vq\cdot \vr_i} \sum_\beta
+  \rho_{-\vk}^\beta \bar{u}^{\sigma_i \beta}_k \right] \nonumber \\
+& = & -\sum_{\vk,\vq} \vk \cdot \vq e^{i(\vk + \vq)\cdot \vr_i}
+\sum_{\alpha, \beta} \rho_{-\vk}^\alpha \rho_{-\vq}^\beta 
+\hat{u}^{\alpha \sigma_i}_k \bar{u}^{\beta \sigma_i}_k
+\end{eqnarray}
+Again, summing over all particles,
+\begin{equation}
+\sum_i (\nabla_i \hat{\mathcal{U}}) \cdot ( \nabla_i \bar{\mathcal{U}} ) =
+-\sum_{\vk, \vq} \vk \cdot \vq \sum_{\alpha, \beta, \gamma}
+\rho_{\vk + \vq}^\gamma \rho_{-\vk}^{\alpha} \rho_{-\vq}^\beta
+\hat{u}^{\alpha \gamma}_k \bar{u}^{\beta \gamma}_k
+\end{equation}
+Similarly,
+\begin{equation}
+\sum_i (\nabla_i \bar{\mathcal{U}})^2 = -\sum_{\vk, \vq} \vk \cdot \vq 
+\sum_{\alpha, \beta, \gamma} \rho^\gamma_{\vk+\vq} \rho^\alpha_{-\vk}
+\rho^\gamma_{-\vq} \bar{u}^{\alpha \gamma}_k \bar{u}^{\beta \gamma}_k
+\end{equation}
+
+The {\em Random Phase Approximation} (RPA) amounts to the assumption
+that $\rho^\gamma_{\vk + \vq} \approx N_\gamma \delta_{\vk + \vq}$. 
+Then we have,
+\begin{eqnarray}
+\sum_i (\nabla_i \hat{\mathcal{U}}) \cdot ( \nabla_i \bar{\mathcal{U}}
+) & \overset{\text{RPA}}{=} &
+\sum_\vk k^2 \sum_{\alpha, \beta, \gamma} N_\gamma \rho^\alpha_{-\vk}
+\rho^\beta_\vk \hat{u}^{\alpha \gamma}_k \bar{u}^{\beta \gamma}_k \\
+\sum_i (\nabla_i \bar{\mathcal{U}})^2 & \overset{\text{RPA}}{=} &
+\sum_\vk k^2 \sum_{\alpha, \beta, \gamma} N_\gamma
+\rho^{\alpha}_{-\vk} \rho^\beta_\vk \bar{u}_k^{\alpha \gamma}
+\bar{u}_k^{\beta \gamma}
+\end{eqnarray}
+We now return to the Bloch equation
+\begin{equation}
+\begin{split}
+\sum_\vk \sum_{\alpha,\beta} & \left\{ 
+\frac{1}{2} \rho_\vk^\alpha
+\rho_{-\vk}^\beta \left(\dot{\bar{u}}_k - \bar{v}_k^{\alpha \beta} \right)
++\frac{1}{2} \lambda_\alpha k^2 \bar{u}_k^{\alpha \beta}
+\left(\rho_{-\vk}^\alpha 
+  \rho_\vk^\beta - N_\beta \delta_{\alpha,\beta} \right) 
+\right. \\
+& \left. -\sum_\gamma k^2 N_\gamma \lambda_\gamma \rho_{-\vk}^\alpha
+  \rho_\vk^\beta \left[ 
+\frac{1}{4} \hat{u}^{\alpha \gamma}_k \bar{u}^{\beta\gamma}_k +
+\frac{1}{2} \bar{u}^{\alpha \gamma}_k \bar{u}^{\beta \gamma}
+\right]\right\} = 0
+\end{split}
+\end{equation}
+Next, we symmetrize this equation w.r.t $\alpha$ and $\beta$.
+\begin{equation}
+\begin{split}
+\sum_{\vk, \alpha, \beta} & \left\{ \left( \rho^\alpha_{\vk} \rho^\beta_{-\vk} 
++ \rho^\alpha_{-\vk} \rho^\beta_{\vk} \right) \left[
+\dot{\bar{u}}_k^{\alpha \beta} - \bar{v}_k^{\alpha \beta}
+ +k^2 \left(\frac{\lambda_\alpha+\lambda_\beta}{2}\right) 
+\bar{u}_k^{\alpha \beta} \rule{0cm}{0.6cm} \right.\right. \\
+& \ \ \left.\left.+\sum_\gamma \frac{k^2}{2} N^\gamma \left(
+\bar{u}_k^{\alpha \gamma} \bar{u}_k^{\beta \gamma} +
+\hat{u}_k^{\alpha \gamma} \bar{u}_k^{\beta \gamma} +
+\bar{u}_k^{\alpha \gamma} \hat{u}_k^{\beta \gamma}  \right)
+\right]
+- k^2 N^\alpha \delta_{\alpha \beta}
+\right\} = 0
+\end{split}
+\end{equation}
+We require that this expression hold independent of the positions of
+the particles, i.e. independent of the values of $\rho^\alpha_{\vk}$ and
+$\rho^\beta_{\vk}$.  Thus, the equations separate for each value of
+$\vk$, $\alpha$, and $\beta$.  For $\vk \neq 0$,
+\begin{equation}
+\dot{\bar{u}}_k^{\alpha \beta} = \bar{v}_k^{\alpha \beta} 
+- k^2 \left(\frac{\lambda_\alpha+\lambda_\beta}{2}\right)
+\bar{u}_k^{\alpha\beta} -\frac{k^2}{2} \sum_\gamma N_\gamma
+\left(
+\bar{u}_k^{\alpha \gamma} \bar{u}_k^{\beta \gamma} +
+\hat{u}_k^{\alpha \gamma} \bar{u}_k^{\beta \gamma} +
+\bar{u}_k^{\alpha \gamma} \hat{u}_k^{\beta \gamma}
+\right)
+\end{equation}
+Next, we need an equation for the time propogation of
+$\hat{u}_k^{\alpha \beta}$.  Above, we assumed that $\hat{U}$ was the
+solution to the short-range problem.  Our Bloch equation for
+$\hat{mathcal{U}}$ is then given by
+\begin{equation}
+\dot{\hat{\mathcal{U}}} = \sum_i -\lambda_i
+\left\{ \frac{1}{4} (\nabla_i \hat{\mathcal{U}} 
+-\frac{1}{2} \nabla_i^2 \hat{\mathcal{U}} \right\} + \hat{V}
+\end{equation}
+Following the RPA procedure above, we arrive at the following
+equations for $\hat{u}_k^{\alpha\beta}$.
+\begin{equation}
+\dot{\hat{u}}^{\alpha \beta}_k = \hat{v}^{\alpha \beta}_k
+-k^2 \left( \frac{\lambda_\alpha + \lambda_\beta}{2} \right)
+\hat{u}^{\alpha \beta}_k - \frac{k^2}{2} \sum_\gamma N_\gamma
+\hat{u}^{\alpha \gamma}_k \hat{u}^{\beta \gamma}_k.
+\end{equation}
+Hence, for each value of $k$, we have a coupled set of differential
+equations we must solve.  We note that while the equations for
+$\bar{u}$ couple to $\hat{u}$, those for $\hat{u}$ do not couple to
+$\bar{u}$.
+%% \begin{equation}
+%% \begin{split}
+%% \sum_\vk \sum_{\alpha,\beta} 
+%%  & \left\{
+%% \rho_{-\vk}^\alpha \rho_\vk^\beta 
+%% \left[
+%% \dot{\bar{u}}^{\alpha \beta}_k + k^2 \sum_\gamma \lambda_\gamma
+%% N_\gamma 
+%% \left(\frac{\bar{u}^{\alpha \gamma}_k \bar{u}^{\beta \gamma}_k}{4} -
+%% \frac{\hat{u}^{\alpha \gamma}_k \bar{u}^{\beta \gamma}_k}{2}
+%% \right) 
+%% \frac{k^2}{2} \lambda_\beta \bar{u}_k^{\alpha \beta} +
+%% \bar{v}_k^{\alpha \beta}
+%% \right] \right.\\
+%%  & \left. \rule{0pt}{0.6cm}
+%% + \frac{k^2}{2}\lambda_\beta N_\beta \delta_{\alpha,\beta}
+%% \bar{u}_k^{\alpha \beta}
+%% \right\} = 0
+%% \end{split}
+%% \end{equation}
+
+
+%% While this
+%% is correct in the limit that the timestep, $\tau$, goes to zero, it
+%% may incur a substantial error for finite $\tau$.  In this section, we
+%% describe a method to reduce the timestep error of the long range part
+%% of the action by using the Bloch equation combined with the Random
+%% Phase Approximation (RPA).  
+
+%% The Bloch equation may be written,
+%% \begin{equation}
+%% \dot{\rho} = -\mathcal{H} \rho,
+%% \end{equation}
+%% where the dot indicates differentiation with respect to $\tau$.  Now,
+%% we define
+%% \begin{equation}
+%% \rho = \rho_0 e^{-U_s}e^{-U_l}.
+%% \end{equation}
+%% \begin{equation}
+%% \mathcal{H} = \left[ -\lambda \sum_i \nabla_i^2 \right] + V_s + V_l
+%% \end{equation}
+%% The Bloch equation gives us 
+
+\begin{thebibliography}{9}
+  \bibitem{Natoli} V. Natoli and D.M. Ceperley, J. Chem. Phys. {\bf
+  117}, 171-178 (1995)
+\end{thebibliography}
+
+\end{document}

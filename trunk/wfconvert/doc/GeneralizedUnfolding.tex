@@ -1,0 +1,181 @@
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage{array}
+\author{Kenneth P .Esler Jr.}
+\title{Generalized band unfolding for quantum Monte Carlo simulation
+  of solids}
+\begin{document}
+\maketitle
+In continuum quantum Monte Carlo simulations, it is necessary to
+evaluate the electronic orbitals of a system at real-space positions
+hundreds of millions of times.  It has been found that if
+these orbitals are represented in a localized, B-spline basis, each
+evaluation takes a small, constant time which is independent of system
+size.
+
+Unfortunately, the memory required for storing the B-spline grows with
+the second power of the system size.  If we are studying perfect
+crystals, however, this can be reduced to linear scaling if we {\em
+  tile} the primitive cell.  In this approach, implemented in the
+CASINO QMC simulation suite, a supercell is constructed by tiling the
+primitive cell $N_1 \times N_2 \times N_3$ in the three lattice
+directions.  The orbitals are then represented in real space only in
+the primitive cell, and an $N_1 \times N_2 \times N_3$ k-point mesh.
+To evaluate an orbital at any point in the supercell, it is only
+necessary to wrap that point back into the primitive cell, evaluate
+the spline, and then multiply the phase factor,
+$e^{-i\mathbf{k}\cdot\mathbf{r}}$.  
+
+Here, we show that this approach can be generalized to a tiling
+constructed with a $3\times 3$ nonsingular matrix of integers, of which
+the above approach is a special case.  This generalization brings with
+it a number of advantages.  The primary reason for performing
+supercell calculations in QMC is to reduce finite-size errors.  These
+errors result from three sources:  1) the quantization of the crystal
+momentum;  2) the unphysical periodicity of the exchange-correlation
+hole of the electron; and 3) the kinetic-energy contribution from the
+periodicty of the long-range jastrow correlation functions.  The first
+source of error can be largely eliminated by twist averaging.  If the
+simulation cell is large enough that XC hole does not ``leak'' out of
+the simulation cell, the second source can be eliminated either
+through use of the MPC interaction or the {\em a postiori} correction
+of Chiesa et. al.  
+
+The satisfaction of the leakage requirement is controlled by whether
+the minimum distance, $L_\text{min}$ from one supercell image to the
+next is greater than the width of the XC hole.  Therefore, given a
+choice, it is best to use a cell which is as nearly cubic as possible,
+since this choice maximizes $L_\text{min}$ for a given number of
+atoms.  Most often, however, the primitive cell is not cubic.  In
+these cases, if we wish to choose the optimal supercell to reduce
+finite size effects, we cannnot utilize the simple primitive tiling
+scheme.  In the generalized scheme we present, it is possible to
+choose far better supercells (from the standpoint of finite-size
+errors), while retaining the storage efficiency of the original tiling
+scheme.
+
+\section{The mathematics}
+\newcommand{\vp}{\mathbf{a}^\text{p}}
+\newcommand{\vs}{\mathbf{a}^\text{s}} 
+\newcommand{\Smat}{\mathbf{S}}
+Consider the set of primitive lattice vectors, $\{\vp_1, \vp_2,
+\vp_3\}$.  We may write these vectors in a matrix, $\mathbf{L}_p$, whose
+rows are the primitive lattice vectors.  Consider a non-singular
+matrix of integers, $\Smat$.  A corresponding set of supercell lattice
+vectors, $\{\vs_1, \vs_2, \vs_3\}$, can be constructed by the matrix
+product 
+\begin{equation}
+\vs_i = S_{ij} \vp_j
+\end{equation}
+If the primitive cell contains $N_p$ atoms, the supercell will then
+contain $N_s = |\det(\Smat)| N_p$ atoms.
+
+\section{Example: FeO}
+As an example, consider the primitive cell for antiferromagnetic FeO
+(wustite) in the rocksalt structure.  The primitive vectors, given in
+units of the lattice constant, are given by
+\newcommand{\xv}{\hat{\mathbf{x}}} 
+\newcommand{\yv}{\hat{\mathbf{y}}}
+\newcommand{\zv}{\hat{\mathbf{z}}}
+\begin{eqnarray}
+\vs_1 & = & \frac{1}{2}\xv + \frac{1}{2}\yv +      \ \   \zv \\
+\vs_2 & = & \frac{1}{2}\xv +      \ \   \yv + \frac{1}{2}\zv \\
+\vs_3 & = &   \ \      \xv + \frac{1}{2}\yv + \frac{1}{2}\zv 
+\end{eqnarray}
+This primitive cell contains two iron atoms and two oxygen atoms. It
+is a very elongated cell with accute angles, and thus has a short
+minimum distance between adjacent images.
+
+The smallest cubic cell consistent with the AFM ordering can be
+constructed with the matrix
+\begin{equation}
+\Smat = \left[\begin{array}{rrr}
+  -1 & -1 &  3 \\
+  -1 &  3 & -1 \\
+   3 & -1 & -1 
+  \end{array}\right]
+\end{equation}
+This cell has $2\det(\Smat) = 32$ iron atoms and 32 oxygen atoms.  In
+this example, we may perform the simulation in the 32-iron supercell,
+while storing the orbitals only in the 2-iron primitive cell, for a
+savings of a factor of 16.  On current multicore supercomputers, with
+1-2GB RAM per core, this is literally the difference between be able
+to perform the simulation or not.
+
+\subsection{The k-point mesh}
+In order to be able to use the generalized tiling scheme, we need to
+have the appropriate number of bands to occuppy in the supercell.
+This may be achieved by appropriately choosing the k-point mesh.  In
+this section, we explain how these points are chosen.  
+
+For simplicity, let us assume that the supercell calculation will be
+performed at the $\Gamma$-point.  We may lift this restriction very
+easily later.  The fact that supercell calculation is performed at
+$\Gamma$ implies that the k-points used in the primitive-cell
+calculation must be $\mathbf{G}$-vectors of the superlattice.  This
+still leaves us with an infinite set of vectors.  We may reduce this
+set to a finite number by considering that the orbitals must form an
+linearly independent set.  Orbitals with k-vectors $\mathbf{k}^p_1$
+and $\mathbf{k}^p_2$ will differ by at most a constant factor if
+$\mathbf{k}^p_1 - \mathbf{k}^p_2 = \mathbf{G}^p$, where $\mathbf{G}^p$
+is a reciprocal lattice vector of the primitive cell.  
+
+Combining these two considerations gives us a prescription for
+generating our k-point mesh.  The mesh may be taken to be the set of
+k-point which are G-vectors of the superlattice, reside within the
+first Brillouin zone (FBZ) of the primitive lattice, whose members do
+not differ a G-vector of the primitive lattice.  Upon constructing
+such a set, we find that the number of included k-points is equal to
+$|\det(\Smat)|$, precisely the number we need.  This can by considering
+the fact that the supercell has a volume $|\det(\Smat)|$ times that of
+the primitive cell.  This implies that the volume of the supercell's
+FBZ is $|\det(\Smat)|^{-1}$ times that of the primitive cell.  Hence,
+$|\det(\Smat)|$ G-vectors of the supercell will fit in the FBZ of the
+primitive cell.  Removing duplicate k-vectors, which differ from
+another by a reciprocal lattice vector, avoids double-counting vectors
+which lie on zone faces.
+
+\subsection{Formulae}
+\newcommand{\Amat}{\mathbf{A}} 
+\newcommand{\Bmat}{\mathbf{B}} 
+\newcommand{\vk}{\mathbf{k}}
+\newcommand{\vt}{\mathbf{t}}
+
+Let $\Amat$ be the matrix whose rows are the direct lattice vectors,
+$\{\mathbf{a}_i\}$.  The, let the matrix $\Bmat$ be defined as
+$2\pi(\Amat^{-1})^\dagger$.  Its rows are the primitive reciprocal
+lattice vectors.  Let $\Amat_p$ and $\Amat_s$ represent the primitive
+and superlattice matrices, respectively, and similarly for their
+reciprocals.  Then we have
+\begin{eqnarray}
+\Amat_s & = & \Smat \Amat_p \\
+\Bmat_s & = & 2\pi\left[(\Smat \Amat_p)^{-1}\right]^\dagger \\
+        & = & 2\pi\left[\Amat_p^{-1} \Smat{-1}\right]^\dagger \\
+        & = & 2\pi(\Smat^{-1})^\dagger (\Amat_p^{-1})^\dagger \\
+        & = & (\Smat^{-1})^\dagger \Bmat_p
+\end{eqnarray}  
+Consider a k-vector, $\vk$.  It may be alternatively be written in
+basis of reciprocal lattice vectors as $\vt$.  
+\begin{eqnarray}
+\vk & = & (\vt^\dagger \Bmat)^\dagger \\
+    & = & \Bmat^\dagger \vt           \\
+\vt & = & (\Bmat^\dagger)^{-1} \vk    \\
+    & = & (\Bmat^{-1})^\dagger \vk    \\
+    & = & \frac{\Amat \vk}{2\pi}
+\end{eqnarray}
+We may then express a twist vector of the primitive lattice, $\vt_p$ in terms
+of the superlattice.
+\begin{eqnarray}
+\vt_s & = & \frac{\Amat_s \vk}{2\pi}                           \\
+      & = & \frac{\Amat_s \Bmat_p^\dagger \vt_p}{2\pi}         \\
+      & = & \frac{\Smat \Amat_p \Bmat_p^\dagger \vt_p}{2\pi}   \\
+      & = & \frac{2\pi \Smat \Amat_p \Amat_p^{-1} \vt_p}{2\pi} \\
+      & = & \Smat \vt_p
+\end{eqnarray}
+This gives the simple result that twist-vectors transform in precisely
+the same way as direct lattice vectors.
+
+
+
+\end{document}
+

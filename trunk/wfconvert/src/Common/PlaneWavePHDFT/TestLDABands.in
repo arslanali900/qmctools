@@ -1,0 +1,26 @@
+//Section (Potential, "Na_HF_NLPP.h5");
+Section (Potential, "NaUnscreenedJuly18_2006.h5");
+//Section (Potential, "NaUnscreenedPH_Feb18_05.h5");
+
+bool UseLDA = true;
+Array<double,2> kMesh(1,3) = [ 0.19628,  0.19628,  0.19628 ];
+
+Array<double,1> Box(3) = [ 8.11, 8.11, 8.11 ];
+Array<double,2> Positions(2,3) = [ 0.0   , 0.0   ,  0.0,
+                                   4.055, 4.055, 4.055 ];
+int NumBands = 8;
+int NumElecs = 2;
+
+Array<double,2> kPoints(8,3) = [ 0.0,     0.0,     0.0,
+                                 0.0,     0.39255, 0.0,
+                                 0.19628, 0.19628, 0.0,
+                                 0.0,     0.0,     0.0,
+                                 0.19628, 0.19628, 0.19628,
+			         0.19628, 0.19628, 0.0,
+                                 0.19628, 0.19628, 0.19628,
+                                 0.0,     0.39255, 0.0 ];
+
+int InterpPoints = 10;
+//double kCut = 7.7460;
+double kCut = 7.0;
+string OutFilename = "TestLDABands8k.dat";

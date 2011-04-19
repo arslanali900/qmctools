@@ -1,0 +1,20 @@
+Section (Potential, "NaPH_US_May9_05.h5");
+
+Array<double,1> Box(3) = [ 8.11, 8.11, 8.11 ];
+Array<double,2> Positions(2,3) = [ 0.0   , 0.0   ,  0.0,
+                                   4.055, 4.055, 4.055 ];
+int NumBands = 8;
+
+Array<double,2> kPoints(8,3) = [ 0.0,     0.0,     0.0,
+                                 0.0,     0.39255, 0.0,
+                                 0.19628, 0.19628, 0.0,
+                                 0.0,     0.0,     0.0,
+                                 0.19628, 0.19628, 0.19628,
+			         0.19628, 0.19628, 0.0,
+                                 0.19628, 0.19628, 0.19628,
+                                 0.0,     0.39255, 0.0 ];
+
+int InterpPoints = 4;
+//double kCut = 7.7460;
+double kCut = 4.0;
+string OutFilename = "TestBands.dat";
