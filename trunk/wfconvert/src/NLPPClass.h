@@ -6,6 +6,7 @@
 #include <vector>
 #include "CubicSpline.h"
 #include "XMLWriterClass2.h"
+#include "config.h"
 #ifdef HAVE_CONFIG_H
 #include "Common/config.h"
 #endif
