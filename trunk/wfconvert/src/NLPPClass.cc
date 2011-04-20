@@ -1284,6 +1284,7 @@ PseudoClass::ReadUPF_PP (string fileName)
 
   int llocal=0;
   while (lmap.find(llocal) != lmap.end()) llocal++;
+  LocalChannel = llocal;
   //  fprintf (stderr, "First channel without a projector=%d\n", llocal);
   ChannelPotentials[llocal].Vl.Init(PotentialGrid, Vlocal);
   vector<double> Vlocal_r(numPoints);
