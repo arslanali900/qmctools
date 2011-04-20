@@ -4,12 +4,9 @@
 #include <map>
 #include <string>
 #include <vector>
+#include "Common/config.h"
 #include "CubicSpline.h"
 #include "XMLWriterClass2.h"
-#include "config.h"
-#ifdef HAVE_CONFIG_H
-#include "Common/config.h"
-#endif
 #ifdef HAVE_COMMON
 #include <Common/PH/PotentialBase.h>
 #endif
