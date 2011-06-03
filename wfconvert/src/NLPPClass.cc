@@ -1250,8 +1250,10 @@ PseudoClass::ReadUPF_PP (string fileName)
 	 
   assert(parser.FindToken("<PP_LOCAL>"));
   vector<double> Vlocal(numPoints);
-  for (int i=0; i<numPoints; i++) 
+  for (int i=0; i<numPoints; i++) {
     assert(parser.ReadDouble(Vlocal[i]));
+    Vlocal[i] *= 0.5;
+  }
   assert(parser.FindToken("</PP_LOCAL>"));
   
   assert(parser.FindToken("<PP_NONLOCAL>"));
@@ -1313,7 +1315,9 @@ PseudoClass::ReadUPF_PP (string fileName)
 	KBprojector &proj = projectors[lmap[l]];
 	vector<double> Vl(numPoints), Vlr(numPoints);
 	for (int ir=0; ir<numPoints; ir++) {
-	  Vl[ir]  = Vlocal[ir] + proj.beta[ir]/(2.0*wf[ir]);
+	  Vl[ir]  = Vlocal[ir];
+	  if (wf[ir] != 0.0) 
+	    Vl[ir] += proj.beta[ir]/(2.0*wf[ir]);
 	  Vlr[ir] = r[ir]*Vl[ir];
 	}
 	Vl[0] = 2.0*Vl[1] - Vl[2];

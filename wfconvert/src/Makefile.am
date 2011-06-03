@@ -80,7 +80,6 @@ wfconv_SOURCES =       \
     ParseCommand.cc    \
     ReadABINIT.h       \
     ReadABINIT.cc      \
-    Read_ESHDF.h       \
     Read_ESHDF.cc      \
     Read_FPMD.cc       \
     ReadLAPW.cc        \
