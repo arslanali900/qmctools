@@ -1,6 +1,7 @@
 #ifndef PSEUDO_CLASS_H
 #define PSEUDO_CLASS_H
 
+#include "config.h"
 #include <map>
 #include <string>
 #include <vector>
