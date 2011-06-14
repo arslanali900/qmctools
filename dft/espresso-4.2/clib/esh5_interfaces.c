@@ -52,6 +52,10 @@ static int num_spins=1;
 static int num_bands=0;
 /* number of gvectors */
 static int num_gvectors=0;
+/* number of gvectors */
+static int num_gvectors_max=0;
+/* igmapped */
+static int *igmapped=0;
 /* current k-point */
 static int kpoint_now=-1;
 /* is complex orbital */
@@ -122,6 +126,9 @@ void F77_FUNC_(esh5_close_file,ESH5_CLOSE_FILE)()
   if(h_file>=0) H5Fclose(h_file);
   h_file=-1;
   H5Eset_auto (err_func, client_data);
+
+  //clear the gmap
+  if(num_gvectors_max) free(igmapped);
 }
 
 /** create electrons and create sub groups
@@ -159,7 +166,8 @@ void F77_FUNC_(esh5_open_electrons,ESH5_OPEN_ELECTRONS)
     herr_t ret=H5LTmake_dataset(h_ptcls,"number_of_electrons",1,&dim2,H5T_NATIVE_INT,num_els);
     ret=H5LTmake_dataset(h_ptcls,"number_of_spins",1,&dim1,H5T_NATIVE_INT,nspins);
     ret=H5LTmake_dataset(h_ptcls,"number_of_kpoints",1,&dim1,H5T_NATIVE_INT,nkpts);
-    ret=H5LTmake_dataset(h_ptcls,"psi_r_mesh",1,&dim3,H5T_NATIVE_INT,ngr);
+    //20110515 psi_r_mesh is used specially
+    //ret=H5LTmake_dataset(h_ptcls,"psi_r_mesh",1,&dim3,H5T_NATIVE_INT,ngr);
     //ret=H5LTmake_dataset(h_ptcls,"psi_r_is_complex",1,&dim1,H5T_NATIVE_INT,is_complex);
 
     //create kpoint/spin/state groups
@@ -188,7 +196,17 @@ void F77_FUNC_(esh5_open_electrons,ESH5_OPEN_ELECTRONS)
   }
 }
 
+/** create psi_r_mesh
+ * @param ngr 3D mesh for psi_r
+ */
+void F77_FUNC_(esh5_write_psi_r_mesh,ESH5_WRITE_PSI_R_MESH)(const int* ngr)
+{
+  const hsize_t dim3=3;
+  herr_t ret=H5LTmake_dataset(h_ptcls,"psi_r_mesh",1,&dim3,H5T_NATIVE_INT,ngr);
+}
 
+/** close electrons group
+ */
 void F77_FUNC_(esh5_close_electrons,ESH5_CLOSE_ELECTRONS) ()
 {
   H5Gclose(h_ptcls);
@@ -232,8 +250,9 @@ void F77_FUNC_(esh5_write_kpoint_data,ESH5_WRITE_KPOINT_DATA)
   {
     herr_t ret=H5LTmake_dataset(h_kpoint,"reduced_k",1,&dim3,H5T_NATIVE_DOUBLE,xk);
     ret=H5LTmake_dataset(h_kpoint,"weight",1,&dim1,H5T_NATIVE_DOUBLE,wgt);
-    ret=H5LTmake_dataset(h_kpoint,"number_of_gvectors",1,&dim1,H5T_NATIVE_INT,ngk_g);
-//     ret=H5LTmake_dataset(h_kpoint,"gvectors",2,dim_g,H5T_NATIVE_INT, gints);
+//DO NOT WRITE THESE YET: 20110515
+//20110515    ret=H5LTmake_dataset(h_kpoint,"number_of_gvectors",1,&dim1,H5T_NATIVE_INT,ngk_g);
+//20110515    ret=H5LTmake_dataset(h_kpoint,"gvectors",2,dim_g,H5T_NATIVE_INT, gints);
   }
 }
 
@@ -287,7 +306,7 @@ void F77_FUNC_(esh5_write_psi_g,ESH5_WRITE_PSI_G)(const int* ibnd
   //  fprintf(stderr, "aname = %s  ", aname);
   //  fprintf (stderr, "  ngtot = %d\n", *ngtot);
   herr_t ret=H5LTmake_dataset(h_spin,aname,2,dims,H5T_NATIVE_DOUBLE,eigv);
-  assert (ret >= 0);
+  //assert (ret >= 0);
 }
 
 /* write eigen value and eigen vector for (ibnd, ispin) */
@@ -320,12 +339,13 @@ void F77_FUNC_(esh5_write_psi_r,ESH5_WRITE_PSI_R)(const int* ibnd
 
 
 /** open density group and write its grid properties
- * @param g_qmc G in reduced coordinates
- * @param igtog index map
- * @param ngtot number of g vectors
+ * @param gint G in reduced coordinates
+ * @param ngm number of g vectors
  * @param nr1s grid of the first direction
  * @param nr2s grid of the second direction
  * @param nr3s grid of the third direction
+ *
+ * The ordering of gvectors is handled by pwscf.
  */
 void F77_FUNC_(esh5_open_density,ESH5_OPEN_DENSITY)(const int* gint
     , const int* ngm, int *nr1s, int *nr2s, int *nr3s)
@@ -419,14 +439,21 @@ void F77_FUNC_(esh5_write_density_g,ESH5_WRITE_DENSITY_G)
 
 /** write basisset: number of plane waves, plane wave coefficients
  */
-void F77_FUNC_(esh5_write_gvectors,ESH5_WRITE_GVECTORS)
-(const int* itmp, const int* igwk, const int* ngk_g)
+  void F77_FUNC_(esh5_write_gvectors,ESH5_WRITE_GVECTORS)
+(const int* restrict itmp, const int* restrict igwk, int* ngk_g)
 {
-  if (iteration<2)
-  {
+
   int ngtot=*ngk_g;
-  //int ng=*ngtot;
-  int *igmapped=(int*)malloc(3*ngtot*sizeof(int));
+
+  //printf("esh5_write_gvectors number_of_gvectors %d\n",ngtot);
+
+  if(ngtot>num_gvectors_max)
+  {
+    //free the space
+    if(num_gvectors_max) free(igmapped);
+    num_gvectors_max=ngtot;
+    igmapped=(int*)malloc(3*ngtot*sizeof(int));
+  }
 
   for(int ig=0,i3=0; ig<ngtot; ++ig)
   {
@@ -435,19 +462,69 @@ void F77_FUNC_(esh5_write_gvectors,ESH5_WRITE_GVECTORS)
     igmapped[i3++]=itmp[j3++];
     igmapped[i3++]=itmp[j3++];
   }
-  //hid_t h1 = H5Gcreate(h_file,"basis",0);
-  //hsize_t dim=1;
-  //herr_t ret=H5LTmake_dataset(h1,"num_planewaves",1,&dim,H5T_NATIVE_INT,ngtot);
-  hsize_t dims[2];
+
+  hsize_t dims[2],dim1=1;
   dims[0] = ngtot;
   dims[1] = 3;
-  //herr_t ret=H5LTmake_dataset(h_kpoint,"gvectors",2,dims,H5T_NATIVE_INT,itmp);
-  herr_t ret=H5LTmake_dataset(h_kpoint,"gvectors",2,dims,H5T_NATIVE_INT,igmapped);
-  //ret=H5LTmake_dataset(h1,"planewaves",2,dims,H5T_NATIVE_DOUBLE,gcart);
 
-  free(igmapped);
-  //H5Gclose(h1);
+  //20110515: add number_of_gvectors here
+  herr_t ret=H5LTmake_dataset(h_kpoint,"number_of_gvectors",1,&dim1,H5T_NATIVE_INT,ngk_g);
+
+  //herr_t ret=H5LTmake_dataset(h_kpoint,"gvectors",2,dims,H5T_NATIVE_INT,itmp);
+  ret=H5LTmake_dataset(h_kpoint,"gvectors",2,dims,H5T_NATIVE_INT,igmapped);
+
+  /*
+  if (iteration<2)
+  {
+    int ngtot=*ngk_g;
+    //int ng=*ngtot;
+    int *igmapped=(int*)malloc(3*ngtot*sizeof(int));
+
+    for(int ig=0,i3=0; ig<ngtot; ++ig)
+    {
+      int j3=(igwk[ig]-1)*3;
+      igmapped[i3++]=itmp[j3++];
+      igmapped[i3++]=itmp[j3++];
+      igmapped[i3++]=itmp[j3++];
+    }
+    //hid_t h1 = H5Gcreate(h_file,"basis",0);
+    //hsize_t dim=1;
+    //herr_t ret=H5LTmake_dataset(h1,"num_planewaves",1,&dim,H5T_NATIVE_INT,ngtot);
+    //
+    //
+
+    hsize_t dims[2],dim1=1;
+    dims[0] = ngtot;
+    dims[1] = 3;
+
+    //20110515: add number_of_gvectors here
+    ret=H5LTmake_dataset(h_kpoint,"number_of_gvectors",1,&dim1,H5T_NATIVE_INT,ngk_g);
+
+    //herr_t ret=H5LTmake_dataset(h_kpoint,"gvectors",2,dims,H5T_NATIVE_INT,itmp);
+    herr_t ret=H5LTmake_dataset(h_kpoint,"gvectors",2,dims,H5T_NATIVE_INT,igmapped);
+    //ret=H5LTmake_dataset(h1,"planewaves",2,dims,H5T_NATIVE_DOUBLE,gcart);
+
+    free(igmapped);
+    //H5Gclose(h1);
   }
+  */
+}
+
+void F77_FUNC_(esh5_write_gvectors_k,ESH5_WRITE_GVECTORS_K)
+(const int* restrict g_red, int* ngk_g)
+{
+  int ngtot=*ngk_g;
+
+  printf("esh5_write_gvectors number_of_gvectors %d\n",ngtot);
+  hsize_t dims[2],dim1=1;
+  dims[0] = ngtot;
+  dims[1] = 3;
+
+  //20110515: add number_of_gvectors here
+  herr_t ret=H5LTmake_dataset(h_kpoint,"number_of_gvectors",1,&dim1,H5T_NATIVE_INT,ngk_g);
+
+  //herr_t ret=H5LTmake_dataset(h_kpoint,"gvectors",2,dims,H5T_NATIVE_INT,itmp);
+  ret=H5LTmake_dataset(h_kpoint,"gvectors",2,dims,H5T_NATIVE_INT,g_red);
 }
 
 void F77_FUNC_(esh5_write_supercell,ESH5_WRITE_SUPERCELL)(const double* lattice)

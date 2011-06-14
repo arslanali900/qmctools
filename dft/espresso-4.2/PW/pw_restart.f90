@@ -323,7 +323,7 @@ MODULE pw_restart
 
         !!! ESHDF BEGIN
         oldh5=0 
-        CALL esh5_open_file(h5name,h5len,oldh5)
+        !<<< CALL esh5_open_file(h5name,h5len,oldh5)
         n_rgrid(1)=nr1s
         n_rgrid(2)=nr2s
         n_rgrid(3)=nr3s
@@ -331,7 +331,7 @@ MODULE pw_restart
         nup=NINT(nelup)
         ndown=NINT(neldw)
         !!!need to send num_k_points not nks
-        CALL esh5_open_electrons(nup, ndown,nspin,num_k_points,nbnd,n_rgrid)
+        !<<< CALL esh5_open_electrons(nup, ndown,nspin,num_k_points,nbnd,n_rgrid)
         
           !!! ESHDF END
 
@@ -662,13 +662,13 @@ MODULE pw_restart
          IF ( ionode ) THEN
             !!! ESHDF BEGIN kpoint desc
 !             print *,"esh5_open_kpoint"
-            CALL esh5_open_kpoint(ik)
+            !<<< CALL esh5_open_kpoint(ik)
             g_red(1)=at(1,1)*xk(1,ik)+at(2,1)*xk(2,ik)+at(3,1)*xk(3,ik)
             g_red(2)=at(1,2)*xk(1,ik)+at(2,2)*xk(2,ik)+at(3,2)*xk(3,ik)
             g_red(3)=at(1,3)*xk(1,ik)+at(2,3)*xk(2,ik)+at(3,3)*xk(3,ik)
 !             print *,"esh5_open_kpoint",
 !             tmpint=ngk_g(ik)
-            CALL esh5_write_kpoint_data(g_red(1),wk(ik),ngk_g(ik))
+            !<<< CALL esh5_write_kpoint_data(g_red(1),wk(ik),ngk_g(ik))
 
             !!! ESHDF END kpoint desc
             !
@@ -730,10 +730,10 @@ MODULE pw_restart
       ! ... also writes rho%ns if lda+U and rho%bec if PAW
       !
       IF ( lscf ) CALL write_rho( rho, nspin )
-      IF(ionode) THEN
-        CALL esh5_close_electrons()
-        CALL esh5_close_file()
-      END IF
+      !<<< IF(ionode) THEN
+      !<<<   CALL esh5_close_electrons()
+      !<<<   CALL esh5_close_file()
+      !<<< END IF
 !-------------------------------------------------------------------------------
 ! ... END RESTART SECTIONS
 !-------------------------------------------------------------------------------
@@ -813,7 +813,8 @@ MODULE pw_restart
                                   COLUMNS = 3 )
              !
              CALL iotk_close_write( iun )
-             CALL esh5_write_gvectors(itmp,igwk(:,ik),ngk_g(ik))
+             !!DO NOT WRITE gvectors
+             !CALL esh5_write_gvectors(itmp,igwk(:,ik),ngk_g(ik))
              !
           END IF
           !
@@ -928,7 +929,7 @@ MODULE pw_restart
                 ispin = 1
                 !
                 IF ( ionode ) THEN
-                   CALL esh5_open_spin(ispin)
+                   !<<< CALL esh5_open_spin(ispin)
                    !
                    filename = wfc_filename( ".", 'evc', ik, DIR=lkpoint_dir )
                    !
@@ -945,7 +946,7 @@ MODULE pw_restart
                                 igk_l2g_kdip(:,ik-iks+1),                &
                                 ngk(ik-iks+1), filename, 1.D0 )
                IF ( ionode ) THEN
-                 CALL esh5_close_spin()
+                 !<<< CALL esh5_close_spin()
                END IF
                 !
              END IF

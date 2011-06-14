@@ -28,6 +28,7 @@ PROGRAM pw2qmcpack
 #ifdef __PARA
   CALL mp_startup ( )
 #endif
+
 CALL environment_start ( 'pw2qmcpack' )
   IF ( npool > 1 .or. nimage > 1) THEN
      CALL errore('pw2qmcpack', 'pool or image parallelization not (yet) implemented',1)
@@ -37,7 +38,7 @@ CALL environment_start ( 'pw2qmcpack' )
   !   set default values for variables in namelist 
   ! 
   prefix = 'pwscf'
-  write_psir = .true.
+  write_psir = .false.
   CALL get_env( 'ESPRESSO_TMPDIR', outdir )
   IF ( TRIM( outdir ) == ' ' ) outdir = './'
   ios = 0
@@ -78,7 +79,7 @@ SUBROUTINE compute_qmcpack(write_psir)
   USE ener, ONLY: ewld, ehart, etxc, vtxc, etot, etxcc
   USE gvect, ONLY: ngm, gstart, nr1, nr2, nr3, nrx1, nrx2, nrx3, &
        nrxx, g, gg, ecutwfc, gcutm, nl, igtongl
-  USE klist , ONLY: nks, nelec, nelup, neldw, xk
+  USE klist , ONLY: nks, nelec, nelup, neldw, wk, xk
   USE lsda_mod, ONLY: lsda, nspin
   !!V3.0
   !!USE scf, ONLY: rho, rho_core, rhog, rhog_core
@@ -110,7 +111,7 @@ SUBROUTINE compute_qmcpack(write_psir)
        nelec_tot, nelec_up, nelec_down, ii, igx, igy, igz, n_rgrid(3)
   INTEGER, ALLOCATABLE :: INDEX(:), igtog(:), igtomin(:)
   LOGICAL :: exst, found
-  REAL(DP) :: ek, eloc, enl, charge, etotefield
+  REAL(DP) :: ek, eloc, enl, charge, etotefield, kweight
   REAL(DP) :: bg_qmc(3,3), g_red(3), lattice_real(3,3)
   COMPLEX(DP), ALLOCATABLE :: phase(:),aux(:), hpsi(:,:), eigpacked(:)
   COMPLEX(DP), ALLOCATABLE :: psitr(:)
@@ -121,7 +122,7 @@ SUBROUTINE compute_qmcpack(write_psir)
   INTEGER, ALLOCATABLE :: gint_den(:,:), gint_qmc(:,:)
   REAL (DP), EXTERNAL :: ewald
 
-  CHARACTER(256)          :: tmp,h5name,eigname
+  CHARACTER(256)          :: tmp,h5name,eigname,tmp_combo
   CHARACTER(iotk_attlenx) :: attr
 
   CALL init_us_1
@@ -200,6 +201,7 @@ SUBROUTINE compute_qmcpack(write_psir)
         ENDDO
      ENDDO
   ENDDO
+  kweight=1/nk
 
 !#ifdef __PARA
 !  CALL reduce(1,eloc)
@@ -360,6 +362,7 @@ call mp_sum( enl,   inter_pool_comm )
   ! <particleset name="e">
   CALL iotk_write_attr (attr,"name","e",first=.true.)
   CALL iotk_write_attr (attr,"random","yes")
+  CALL iotk_write_attr (attr,"random_source","ion0")
   CALL iotk_write_begin(iun, "particleset",ATTR=attr)
 
   ! <group name="u" size="" >
@@ -385,13 +388,15 @@ call mp_sum( enl,   inter_pool_comm )
   CALL iotk_close_write(iun)
 
   !! close the file
-  DO ik = 0, nk-1
-  ! create a xml input file for each k-point
-     IF(nk .gt. 1) THEN
-       tmp = TRIM( tmp_dir ) // TRIM( prefix ) //TRIM(iotk_index(ik))// '.wfs.xml'
-     ELSE
-       tmp = TRIM( tmp_dir ) // TRIM( prefix )// '.wfs.xml'
-     ENDIF
+  !!DO ik = 0, nk-1
+  ik=0
+   ! NOT create a xml input file for each k-point
+   !  IF(nk .gt. 1) THEN
+   !    tmp = TRIM( tmp_dir ) // TRIM( prefix ) //TRIM(iotk_index(ik))// '.wfs.xml'
+   !  ELSE
+   !    tmp = TRIM( tmp_dir ) // TRIM( prefix )// '.wfs.xml'
+   !  ENDIF
+   tmp = TRIM( tmp_dir ) // TRIM( prefix )// '.wfs.xml'
      CALL iotk_open_write(iun, FILE=TRIM(tmp), ROOT="qmcsystem", IERR=ierr )
      ! <wavefunction name="psi0">
      CALL iotk_write_attr (attr,"name","psi0",first=.true.)
@@ -407,44 +412,47 @@ call mp_sum( enl,   inter_pool_comm )
        CALL iotk_write_attr (attr,"href",TRIM(h5name))
        CALL iotk_write_attr (attr,"sort","1")
        CALL iotk_write_attr (attr,"tilematrix","1 0 0 0 1 0 0 0 1")
+       CALL iotk_write_attr (attr,"twistnum","0")
        CALL iotk_write_attr (attr,"source","ion0")
        CALL iotk_write_attr (attr,"version","0.10")
        CALL iotk_write_begin(iun, "determinantset",ATTR=attr)
           CALL iotk_write_attr (attr,"ecut",ecutwfc/2,first=.true.)
           ! basisset to overwrite cutoff to a smaller value
-          CALL iotk_write_begin(iun, "basisset",ATTR=attr)
-             ! add grid to use spline on FFT grid
-             CALL iotk_write_attr (attr,"dir","0",first=.true.)
-             CALL iotk_write_attr (attr,"npts",nr1s)
-             CALL iotk_write_attr (attr,"closed","no")
-             CALL iotk_write_empty(iun, "grid",ATTR=attr)
-             CALL iotk_write_attr (attr,"dir","1",first=.true.)
-             CALL iotk_write_attr (attr,"npts",nr2s)
-             CALL iotk_write_attr (attr,"closed","no")
-             CALL iotk_write_empty(iun, "grid",ATTR=attr)
-             CALL iotk_write_attr (attr,"dir","2",first=.true.)
-             CALL iotk_write_attr (attr,"npts",nr3s)
-             CALL iotk_write_attr (attr,"closed","no")
-             CALL iotk_write_empty(iun, "grid",ATTR=attr)
-          CALL iotk_write_end(iun, "basisset")
+          !CALL iotk_write_begin(iun, "basisset",ATTR=attr)
+          !   ! add grid to use spline on FFT grid
+          !   CALL iotk_write_attr (attr,"dir","0",first=.true.)
+          !   CALL iotk_write_attr (attr,"npts",nr1s)
+          !   CALL iotk_write_attr (attr,"closed","no")
+          !   CALL iotk_write_empty(iun, "grid",ATTR=attr)
+          !   CALL iotk_write_attr (attr,"dir","1",first=.true.)
+          !   CALL iotk_write_attr (attr,"npts",nr2s)
+          !   CALL iotk_write_attr (attr,"closed","no")
+          !   CALL iotk_write_empty(iun, "grid",ATTR=attr)
+          !   CALL iotk_write_attr (attr,"dir","2",first=.true.)
+          !   CALL iotk_write_attr (attr,"npts",nr3s)
+          !   CALL iotk_write_attr (attr,"closed","no")
+          !   CALL iotk_write_empty(iun, "grid",ATTR=attr)
+          !CALL iotk_write_end(iun, "basisset")
           
           !CALL iotk_write_attr (attr,"href",TRIM(h5name),first=.true.)
           !CALL iotk_write_empty(iun, "coefficients",ATTR=attr)
   
           ! write the index of the twist angle
-          CALL iotk_write_attr (attr,"name","twistIndex",first=.true.)
-          CALL iotk_write_begin(iun, "h5tag",ATTR=attr)
-          write(iun,*) ik
-          CALL iotk_write_end(iun, "h5tag")
+          !!!! remove twistIndex and twistAngle
+          !using determinantset@twistnum
+          !CALL iotk_write_attr (attr,"name","twistIndex",first=.true.)
+          !CALL iotk_write_begin(iun, "h5tag",ATTR=attr)
+          !write(iun,*) ik
+          !CALL iotk_write_end(iun, "h5tag")
 
-          CALL iotk_write_attr (attr,"name","twistAngle",first=.true.)
-          CALL iotk_write_begin(iun, "h5tag",ATTR=attr)
-          g_red(1)=at(1,1)*xk(1,ik+1)+at(2,1)*xk(2,ik+1)+at(3,1)*xk(3,ik+1)
-          g_red(2)=at(1,2)*xk(1,ik+1)+at(2,2)*xk(2,ik+1)+at(3,2)*xk(3,ik+1)
-          g_red(3)=at(1,3)*xk(1,ik+1)+at(2,3)*xk(2,ik+1)+at(3,3)*xk(3,ik+1)
-          !write(iun,100) xk(1,ik+1),xk(2,ik+1),xk(3,ik+1)
-          write(iun,100) g_red(1),g_red(2),g_red(3)
-          CALL iotk_write_end(iun, "h5tag")
+          !CALL iotk_write_attr (attr,"name","twistAngle",first=.true.)
+          !CALL iotk_write_begin(iun, "h5tag",ATTR=attr)
+          !g_red(1)=at(1,1)*xk(1,ik+1)+at(2,1)*xk(2,ik+1)+at(3,1)*xk(3,ik+1)
+          !g_red(2)=at(1,2)*xk(1,ik+1)+at(2,2)*xk(2,ik+1)+at(3,2)*xk(3,ik+1)
+          !g_red(3)=at(1,3)*xk(1,ik+1)+at(2,3)*xk(2,ik+1)+at(3,3)*xk(3,ik+1)
+          !!write(iun,100) xk(1,ik+1),xk(2,ik+1),xk(3,ik+1)
+          !write(iun,100) g_red(1),g_red(2),g_red(3)
+          !CALL iotk_write_end(iun, "h5tag")
           !write(iun,'(a)') '<!-- Uncomment this out for bspline wavefunctions '
           !!CALL iotk_write_attr (attr,"name","eigenstates",first=.true.)
           !!CALL iotk_write_begin(iun, "h5tag",ATTR=attr)
@@ -481,10 +489,77 @@ call mp_sum( enl,   inter_pool_comm )
           CALL iotk_write_end(iun, "slaterdeterminant")
   
        CALL iotk_write_end(iun, "determinantset")
+
+       !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+       ! two-body jastro
+       !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+       CALL iotk_write_attr (attr,"name","J2",first=.true.)
+       CALL iotk_write_attr (attr,"type","Two-Body");
+       CALL iotk_write_attr (attr,"function","Bspline");
+       CALL iotk_write_attr (attr,"print","yes");
+       CALL iotk_write_begin(iun, "jastrow",ATTR=attr)
+
+         ! for uu
+         CALL iotk_write_attr (attr,"speciesA","u",first=.true.)
+         CALL iotk_write_attr (attr,"speciesB","u")
+         !CALL iotk_write_attr (attr,"rcut","10")
+         CALL iotk_write_attr (attr,"size","8")
+         CALL iotk_write_begin(iun, "correlation",ATTR=attr)
+           CALL iotk_write_attr (attr,"id","uu",first=.true.)
+           CALL iotk_write_attr (attr,"type","Array")
+           CALL iotk_write_begin(iun, "coefficients",ATTR=attr)
+           write(iun,*) "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"
+           CALL iotk_write_end(iun, "coefficients")
+         CALL iotk_write_end(iun, "correlation")
+
+         ! for ud
+         CALL iotk_write_attr (attr,"speciesA","u",first=.true.)
+         CALL iotk_write_attr (attr,"speciesB","d")
+         !CALL iotk_write_attr (attr,"rcut","10")
+         CALL iotk_write_attr (attr,"size","8")
+         CALL iotk_write_begin(iun, "correlation",ATTR=attr)
+           CALL iotk_write_attr (attr,"id","ud",first=.true.)
+           CALL iotk_write_attr (attr,"type","Array")
+           CALL iotk_write_begin(iun, "coefficients",ATTR=attr)
+           write(iun,*) "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"
+           CALL iotk_write_end(iun, "coefficients")
+         CALL iotk_write_end(iun, "correlation")
+
+       CALL iotk_write_end(iun, "jastrow")
+
+       !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+       ! one-body jastro
+       !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+       CALL iotk_write_attr (attr,"name","J1",first=.true.)
+       CALL iotk_write_attr (attr,"type","One-Body");
+       CALL iotk_write_attr (attr,"function","Bspline");
+       CALL iotk_write_attr (attr,"source","ion0");
+       CALL iotk_write_attr (attr,"print","yes");
+       CALL iotk_write_begin(iun, "jastrow",ATTR=attr)
+
+       DO na=1,ntyp
+         tmp=TRIM(atm(na))
+         tmp_combo='e'//TRIM(atm(na))
+
+         !h5len=LEN_TRIM(tmp)
+         CALL iotk_write_attr (attr,"elementType",TRIM(tmp),first=.true.)
+         !CALL iotk_write_attr (attr,"rcut","10")
+         CALL iotk_write_attr (attr,"size","8")
+         CALL iotk_write_begin(iun, "correlation",ATTR=attr)
+
+         CALL iotk_write_attr (attr,"id",TRIM(tmp_combo),first=.true.)
+         CALL iotk_write_attr (attr,"type","Array")
+         CALL iotk_write_begin(iun, "coefficients",ATTR=attr)
+         write(iun,*) "0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0"
+         CALL iotk_write_end(iun, "coefficients")
+         CALL iotk_write_end(iun, "correlation")
+       ENDDO
+       CALL iotk_write_end(iun, "jastrow")
+     
      CALL iotk_write_end(iun, "wavefunction")
   
      CALL iotk_close_write(iun)
-  ENDDO
+  !ENDDO
 
   DO ig=1, ngtot
     ig_c =igtog(ig)
@@ -497,7 +572,9 @@ call mp_sum( enl,   inter_pool_comm )
     gint_qmc(1,ig)=NINT(at(1,1)*g(1,ig_c)+at(2,1)*g(2,ig_c)+at(3,1)*g(3,ig_c))
     gint_qmc(2,ig)=NINT(at(1,2)*g(1,ig_c)+at(2,2)*g(2,ig_c)+at(3,2)*g(3,ig_c))
     gint_qmc(3,ig)=NINT(at(1,3)*g(1,ig_c)+at(2,3)*g(2,ig_c)+at(3,3)*g(3,ig_c))
+    !WRITE(io,'(3(1x,f20.15))') g_cart(1,ig),g_cart(2,ig),g_cart(3,ig)
   ENDDO
+
   DO ig=1,ngm
      gint_den(1,ig)=NINT(at(1,1)*g(1,ig)+at(2,1)*g(2,ig)+at(3,1)*g(3,ig))
      gint_den(2,ig)=NINT(at(1,2)*g(1,ig)+at(2,2)*g(2,ig)+at(3,2)*g(3,ig))
@@ -524,7 +601,10 @@ call mp_sum( enl,   inter_pool_comm )
      END IF
   END DO
 
-  CALL esh5_open_electrons(nup, ndown,nspin,nk,nbnd,n_rgrid, save_complex)
+  CALL esh5_open_electrons(nup, ndown,nspin,nk,nbnd,n_rgrid)!, save_complex)
+  IF (write_psir) THEN
+    CALL esh5_write_psi_r_mesh(n_rgrid)
+  ENDIF
 
   !!NOT YET DECIDED
   !!CALL esh5_write_basis(g_qmc,g_cart,ngtot)
@@ -535,16 +615,18 @@ call mp_sum( enl,   inter_pool_comm )
   ALLOCATE (eigpacked(ngtot))
   ALLOCATE (eigval(nbnd))
 
-  ! start a main section to save eigen values and vector
+  ! populate k-point data
   DO ik = 1, nk
      g_red(1)=at(1,1)*xk(1,ik)+at(2,1)*xk(2,ik)+at(3,1)*xk(3,ik)
      g_red(2)=at(1,2)*xk(1,ik)+at(2,2)*xk(2,ik)+at(3,2)*xk(3,ik)
      g_red(3)=at(1,3)*xk(1,ik)+at(2,3)*xk(2,ik)+at(3,3)*xk(3,ik)
 
+     WRITE(io,'(i6,3(1x,f20.15))') ik, g_red(1),g_red(2),g_red(3)
+
      !! open kpoint 
      CALL esh5_open_kpoint(ik)
-     CALL esh5_write_kpoint_data(g_red(1), 1.0d0, ngtot, gint_qmc)
-
+     CALL esh5_write_kpoint_data(g_red,wk(ik),ngtot);
+     CALL esh5_write_gvectors_k(gint_qmc,ngtot)
      DO ispin = 1, nspin 
 
         CALL esh5_open_spin(ispin)
@@ -555,20 +637,6 @@ call mp_sum( enl,   inter_pool_comm )
         !!   CALL davcio(evc,nwordwfc,iunwfc,ikk,-1)
         !!ENDIF
         DO ibnd = 1, nbnd
-!!           DO ig=1, ngtot
-!!              ! now for all G vectors find the PW coefficient for this k-point
-!!              found = .FALSE.
-!!              DO ig7 = 1, npw
-!!                 IF( igk(ig7) == igtog(ig) )THEN
-!!                    eigpacked(ig)=evc(ig7,ibnd)
-!!                    found = .TRUE.
-!!                    GOTO 17
-!!                 ENDIF
-!!              ENDDO
-!!              ! if can't find the coefficient this is zero
-!!17            IF( .NOT. found ) eigpacked(ig)=(0.d0,0.d0) 
-!!           ENDDO
-!!           CALL esh5_write_psi_g(ibnd,eigpacked,ngtot)
            eigval(ibnd)=0.5*et(ibnd,ikk)
         ENDDO
         CALL esh5_write_eigvalues(eigval)
@@ -577,33 +645,56 @@ call mp_sum( enl,   inter_pool_comm )
      CALL esh5_close_kpoint()
   ENDDO
 
-  !!CALL esh5_close_eigg
-
   !ALLOCATE (phase(nrxxs))
 
   ALLOCATE(psireal(nrx1s*nrx2s*nrx3s))
   ALLOCATE(psitr(nrx1s*nrx2s*nrx3s))
 
+  print *,'PW2QMCPACK npw=',npw,'ngtot=',ngtot
   ! open real-space wavefunction on FFT grid
   !!CALL esh5_open_eigr(nr1s,nr2s,nr3s)
   DO ik = 1, nk
      CALL esh5_open_kpoint(ik)
+
+     print *,'PW2QMCPACK ik=',ik
+
      DO ispin = 1, nspin 
         ikk = ik + nk*(ispin-1)
         IF( nks > 1 ) THEN
            CALL gk_sort (xk (1, ikk), ngm, g, ecutwfc / tpiba2, npw, igk, g2kin)
            CALL davcio(evc,nwordwfc,iunwfc,ikk,-1)
         ENDIF
+
         CALL esh5_open_spin(ispin)
+
         DO ibnd = 1, nbnd !!transform G to R
-           eigpacked(:)=(0.d0,0.d0)
-           eigpacked(igtomin(igk(1:npw)))=evc(1:npw,ibnd)
+           !psic(:)=(0.d0,0.d0)
+           !psic(nls(igk(1:npw)))=evc(1:npw,ibnd)
+           !CALL esh5_write_psi_g(ibnd,psic,ngtot)
+
+           !eigpacked(:)=(0.d0,0.d0)
+           !eigpacked(igtomin(igk(1:npw)))=evc(1:npw,ibnd)
+
+           DO ig=1, ngtot
+              ! now for all G vectors find the PW coefficient for this k-point
+              found = .FALSE.
+              DO ig7 = 1, npw
+                 IF( igk(ig7) == igtog(ig) )THEN
+                    eigpacked(ig)=evc(ig7,ibnd)
+                    found = .TRUE.
+                    GOTO 17
+                 ENDIF
+              ENDDO
+              ! if can't find the coefficient this is zero
+17            IF( .NOT. found ) eigpacked(ig)=(0.d0,0.d0)
+           ENDDO
+
            CALL esh5_write_psi_g(ibnd,eigpacked,ngtot)
+
            IF (write_psir) THEN
               psic(:)=(0.d0,0.d0)
               psic(nls(igk(1:npw)))=evc(1:npw,ibnd)
               call cft3s (psic, nr1s, nr2s, nr3s, nrx1s, nrx2s, nrx3s, 2)
-              
 
               IF(save_complex .eq. 1) THEN
                  !psic(:)=psic(:)/omega
@@ -646,23 +737,10 @@ call mp_sum( enl,   inter_pool_comm )
   !CALL esh5_write_rho(rho,rhog(1,1),ngm)
 
   CALL esh5_open_density(gint_den,ngm,nr1s,nr2,nr3s)
-  ! CALL esh5_open_density(g_qmc,igtog,ngtot,nr1s,nr2,nr3s)
-    DO ispin = 1, nspin
-       !! ii=1
-       !! DO igx=1,nr1s
-       !! DO igy=0,nr2s-1
-       !! DO igz=0,nr3s-1
-       !! !psireal(ii)=rho(igx+nr1s*(igy+igz*nr2s),1)
-       !! psireal(ii)=rho%of_r(igx+nr1s*(igy+igz*nr2s),ispin)
-       !! ii=ii+1
-       !! ENDDO
-       !! ENDDO
-       !! ENDDO
-       !! CALL esh5_write_rho(psireal,rhog(1,1),ngm)
-       !! what are the G????
-       CALL esh5_write_density_g(ispin,rho%of_g(1,ispin))
-       !! CALL esh5_write_density_r(ispin,psireal)
-    ENDDO
+  DO ispin = 1, nspin
+     CALL esh5_write_density_g(ispin,rho%of_g(1,ispin))
+  ENDDO
+
   CALL esh5_close_density()
   CALL esh5_close_electrons()
   CALL esh5_close_file()
