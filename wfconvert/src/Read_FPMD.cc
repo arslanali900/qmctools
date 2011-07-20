@@ -254,7 +254,8 @@ OrbitalSetClass::Read_FPMD (string fname)
       PrimOrbitals[0](ik,iband) = new OrbitalClass;
       PrimOrbitals[0](ik,iband)->SetCell(PrimCell);
       PrimOrbitals[0](ik,iband)->SetCoefs(coefs);
-      Vec3 twist = -1.0*PrimCell.Lattice.k2Twist(kPoints[ik]);
+      //Vec3 twist = -1.0*PrimCell.Lattice.k2Twist(kPoints[ik]);
+      Vec3 twist = -1.0*kPoints[ik];
       PrimOrbitals[0](ik,iband)->SetTwist(twist);
       PrimOrbitals[0](ik,iband)->SetLabels (0, ik, iband);
     }
