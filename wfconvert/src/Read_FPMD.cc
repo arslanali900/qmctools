@@ -222,20 +222,33 @@ OrbitalSetClass::Read_FPMD (string fname)
   for (int ik=0; ik<grid_functions.size(); ik++) {
     for (int iband=0; iband<grid_functions[ik].size(); iband++) {
       xmlNodePtr func = grid_functions[ik][iband];
+      
       string wfstring = (const char *) xmlNodeListGetString
 	(doc, func->xmlChildrenNode, 1);
+      std::string data_type = (const char*) xmlGetProp(func, (const xmlChar*)"type");
+      bool is_complex = data_type == "complex";
       vector<double> data;
       decoder.Decode(wfstring, data);
       // int N = data.size();
       // fprintf (stderr, "data[N-1] = %1.8e data[N-2] = %1.8e\n");
       int index=0;
       double nrm = 0.0;
-      for (int iz=0; iz<FFTgrid[2]; iz++)
-	for (int iy=0; iy<FFTgrid[1]; iy++)
-	  for (int ix=0; ix<FFTgrid[0]; ix++) {
-	    tempCell.FFT.rBox(ix,iy,iz) = data[index++];
-	    nrm += norm (tempCell.FFT.rBox(ix,iy,iz));
-	  }
+      if (is_complex) 
+	for (int iz=0; iz<FFTgrid[2]; iz++)
+	  for (int iy=0; iy<FFTgrid[1]; iy++)
+	    for (int ix=0; ix<FFTgrid[0]; ix++) {
+	      double re = data[index++];
+	      double im = data[index++];
+	      tempCell.FFT.rBox(ix,iy,iz) = complex<double>(re,im);
+	      nrm += norm (tempCell.FFT.rBox(ix,iy,iz));
+	    }
+      else
+	for (int iz=0; iz<FFTgrid[2]; iz++)
+	  for (int iy=0; iy<FFTgrid[1]; iy++)
+	    for (int ix=0; ix<FFTgrid[0]; ix++) {
+	      tempCell.FFT.rBox(ix,iy,iz) = data[index++];
+	      nrm += norm (tempCell.FFT.rBox(ix,iy,iz));
+	    }
       fprintf (stderr, "Real-space norm = %1.14f\n", 
 	       nrm/(double)(FFTgrid[0]*FFTgrid[1]*FFTgrid[2]));
       tempCell.FFT.r2k();
