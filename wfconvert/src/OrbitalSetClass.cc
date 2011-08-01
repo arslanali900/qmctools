@@ -450,9 +450,9 @@ OrbitalSetClass::TileIonPos()
 	  r += (double)i1*PrimCell.Lattice.a(1);
 	  r += (double)i2*PrimCell.Lattice.a(2);
 	  Vec3 uSuper = SuperCell.Lattice.r2u(r);
-	  if ((uSuper[0] >= -1.0e-6) && (uSuper[0] < 0.9999) &&
-	      (uSuper[1] >= -1.0e-6) && (uSuper[1] < 0.9999) &&
-	      (uSuper[2] >= -1.0e-6) && (uSuper[2] < 0.9999)) {
+	  if ((uSuper[0] >= -1.0e-6) && (uSuper[0] < 0.999999) &&
+	      (uSuper[1] >= -1.0e-6) && (uSuper[1] < 0.999999) &&
+	      (uSuper[2] >= -1.0e-6) && (uSuper[2] < 0.999999)) {
 	    superPos.push_back(r);
 	    superTypes.push_back(PrimCell.AtomTypes(iat));
 	    if (PrimCell.Zion.size() > iat)
