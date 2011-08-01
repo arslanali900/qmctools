@@ -84,6 +84,7 @@ OrbitalSetClass::Read_ESHDF(string fname)
   assert (in.OpenSection("electrons"));
   int num_spins;
   assert (in.ReadVar ("number_of_spins", num_spins));
+  SpinPolarized = (num_spins > 1);
 
   //////////////////
   // Read Density //
