@@ -61,6 +61,15 @@
 
 /* Define if sincos function exists */
 #cmakedefine HAVE_SINCOS @HAVE_SINCOS@
+#if !defined(HAVE_SINCOS)
+#include <cmath>
+template<typename T> 
+inline void sincos(T a, T* restrict s, T*  restrict c)
+{
+  *s=std::sin(a);
+  *c=std::cos(a);
+}
+#endif
 
 /* Define if std::round function exists */
 #cmakedefine HAVE_STD_ROUND @HAVE_STD_ROUND@

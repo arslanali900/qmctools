@@ -1,3 +1,4 @@
+#include "Common/config.h"
 #include "MuffinTin.h"
 #include "Ylm.h"
 #include <einspline/multi_bspline.h>
