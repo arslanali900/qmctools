@@ -972,35 +972,38 @@ OrbitalSetClass::Write_ESHDF (string fname, int lappwr)
 	  WriteESHDFSpline (out, spin, ik, ist, !Real);
    out.CloseSection();// "state"
    
-   std::vector<double> powers(lappwr);
-   powers[0]=-1.0;
-   powers[1]=-0.5;
-   for(int iL=2; iL<lappwr; iL++) powers[iL]=0.5*(iL-1);
-   
-   for (int iL=0; iL<lappwr; iL++) 
+   if(lappwr)
    {
-     out.NewSection("state");
-     eigvals(ist*(1+lappwr)+iL+1) = eigvals(ist*(1+lappwr))+ (iL+1)*1000;
-     occ(ist*(1+lappwr)+iL+1) = occ(ist*(1+lappwr));
-     for (int iG=0; iG<numG; iG++) 
+     std::vector<double> powers(lappwr);
+     powers[0]=-1.0;
+     powers[1]=-0.5;
+     for(int iL=2; iL<lappwr; iL++) powers[iL]=0.5*(iL-1);
+
+     for (int iL=0; iL<lappwr; iL++) 
      {
-        double pf(0);
-        for (int j=0; j<3; j++) pf += (reduced_k[j]+gints(iG)[j])*(reduced_k[j]+gints(iG)[j]);
-        if (powers[iL]>0) 
-          pf=pow(pf,powers[iL]);
-        else
-          pf=pow(pf+0.1,powers[iL]);
-        cG(iG,0) = pf*orbs[spin](ik,ist)->GetCoefs()(iG).real();
-        cG(iG,1) = pf*orbs[spin](ik,ist)->GetCoefs()(iG).imag();
-      }
-      out.WriteVar ("psi_g", cG);
-      if (UseMultiRep)
-        WriteESHDFMultiRep (out, spin, ik, ist, !Real);
-      else if (Spline)
-        WriteESHDFSpline (out, spin, ik, ist, !Real);
-      out.CloseSection();// "state"
+       out.NewSection("state");
+       eigvals(ist*(1+lappwr)+iL+1) = eigvals(ist*(1+lappwr))+ (iL+1)*1000;
+       occ(ist*(1+lappwr)+iL+1) = occ(ist*(1+lappwr));
+       for (int iG=0; iG<numG; iG++) 
+       {
+         double pf(0);
+         for (int j=0; j<3; j++) pf += (reduced_k[j]+gints(iG)[j])*(reduced_k[j]+gints(iG)[j]);
+         if (powers[iL]>0) 
+           pf=pow(pf,powers[iL]);
+         else
+           pf=pow(pf+0.1,powers[iL]);
+         cG(iG,0) = pf*orbs[spin](ik,ist)->GetCoefs()(iG).real();
+         cG(iG,1) = pf*orbs[spin](ik,ist)->GetCoefs()(iG).imag();
+       }
+       out.WriteVar ("psi_g", cG);
+       if (UseMultiRep)
+         WriteESHDFMultiRep (out, spin, ik, ist, !Real);
+       else if (Spline)
+         WriteESHDFSpline (out, spin, ik, ist, !Real);
+       out.CloseSection();// "state"
+     }
    }
-   
+
       }
       out.WriteVar("eigenvalues", eigvals);
       out.WriteVar("occupations", occ);
