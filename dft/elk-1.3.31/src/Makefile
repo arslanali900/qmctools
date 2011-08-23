@@ -9,7 +9,7 @@ F90_OPTS =
 F77 = f90
 F77_OPTS =
 LIB_SYS =
-LIB_LPK = lapack.a blas.a
+LIB_LPK = -L/usr/local/intel/11.1.069/mkl/lib/em64t  -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lmkl_solver_lp64_sequential
 LIB_FFT = fftlib.a
 LIB_XC =
 
@@ -151,16 +151,17 @@ elk:	$(OBJ)
 	$(F90) $(F90_OPTS) -o $(EXE) $(OBJ) $(LIB_LPK) $(LIB_FFT) $(LIB_XC) \
          $(LIB_SYS)
 
-blas:
-	cd BLAS; $(MAKE); cp blas.a ..
-
-lapack:
-	cd LAPACK; $(MAKE); cp lapack.a ..
-
+#blas:
+#	cd BLAS; $(MAKE); cp blas.a ..
+#
+#lapack:
+#	cd LAPACK; $(MAKE); cp lapack.a ..
+#
 fft:
 	cd fftlib; $(MAKE); cp fftlib.a ..
-
-all:	blas lapack fft elk
+#
+#all:	blas lapack fft elk
+all:	fft elk
 
 clean:
 	rm -f *.o *.mod *~ fort.* ifc* *.gcno gmon.out *.aux *.dvi *.log \
