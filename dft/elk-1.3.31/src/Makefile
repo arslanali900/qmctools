@@ -73,7 +73,7 @@ SRC_routines = \
  ggair_sp_2a.f90 ggamt_sp_2b.f90 ggair_sp_2b.f90 writeqpts.f90 potefield.f90 \
  findswidth.f90 wfcrplot.f90 zftrf.f90 genhvec.f90 sfacrho.f90 sfacmag.f90 \
  sfacinit.f90 findqpt.f90 seceqnfvz.f90 seceqnfvr.f90 genpmat.f90 \
- writepmat.f90 getpmat.f90 geomopt.f90 geomstep.f90
+ writepmat.f90 getpmat.f90 geomopt.f90 geomstep.f90 writehdf5.f90
 
 SRC_phonon = \
  phonon.f90 dyntask.f90 genphsc.f90 phdisp.f90 readdyn.f90 dynqtor.f90 \
