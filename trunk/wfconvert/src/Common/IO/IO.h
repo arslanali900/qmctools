@@ -64,7 +64,7 @@ namespace IO {
     Array<T,1> aVal(LEN);
     for (int i=0; i<LEN; i++)
       aVal(i) = val[i];
-    WriteVar (name, aVal);
+    return WriteVar (name, aVal);
   }
 
     
