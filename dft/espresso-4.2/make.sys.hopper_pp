@@ -142,7 +142,7 @@ RANLIB         = ranlib
 FLIB_TARGETS   = all
 H5_LIBS =  /opt/cray/hdf5/1.8.5.0/hdf5-gnu/lib/libhdf5_hl.a /opt/cray/hdf5/1.8.5.0/hdf5-gnu/lib/libhdf5.a  -lz
 LIBOBJS        = ../flib/ptools.a ../flib/flib.a ../clib/clib.a ../iotk/src/libiotk.a ../Multigrid/mglib.a
-LIBS           = $(SCALAPACK_LIBS) $(LAPACK_LIBS) $(FFT_LIBS) $(BLAS_LIBS) $(MPI_LIBS) $(MASS_LIBS) $(PGPLOT_LIBS) $(LD_LIBS) 
+LIBS           = $(SCALAPACK_LIBS) $(LAPACK_LIBS) $(FFT_LIBS) $(BLAS_LIBS) $(MPI_LIBS) $(MASS_LIBS) $(PGPLOT_LIBS) $(LD_LIBS) $(H5_LIBS)
 
 # topdir for linking espresso libs with plugins
 TOPDIR = /global/homes/m/mcminis2/src/espresso-4.2
