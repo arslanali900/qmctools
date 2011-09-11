@@ -176,23 +176,23 @@ SUBROUTINE compute_qmcpack(write_psir)
      !      bring rho to G-space
      !
      !aux(:) = CMPLX ( rho(:,ispin), 0.d0)
-     aux(:) = CMPLX ( rho%of_r(:,ispin), 0.d0)
-     CALL cft3(aux,nr1,nr2,nr3,nrx1,nrx2,nrx3,-1)
+     !aux(:) = CMPLX ( rho%of_r(:,ispin), 0.d0)
+     !CALL cft3(aux,nr1,nr2,nr3,nrx1,nrx2,nrx3,-1)
      !
-     DO nt=1,ntyp
-        DO ig = 1, ngm
-           eloc = eloc + vloc(igtongl(ig),nt) * strf(ig,nt) &
-                * CONJG(aux(nl(ig)))
-        ENDDO
-     ENDDO
+     !DO nt=1,ntyp
+     !   DO ig = 1, ngm
+     !      eloc = eloc + vloc(igtongl(ig),nt) * strf(ig,nt) &
+     !           * CONJG(aux(nl(ig)))
+     !   ENDDO
+     !ENDDO
 
      DO ik = 1, nk
         ikk = ik + nk*(ispin-1)
         CALL gk_sort (xk (1, ikk), ngm, g, ecutwfc / tpiba2, npw, igk, g2kin)
         CALL davcio (evc, nwordwfc, iunwfc, ikk, - 1)
-        CALL init_us_2 (npw, igk, xk (1, ikk), vkb)
-        !CALL ccalbec (nkb, npwx, npw, nbnd, becp, vkb, evc)
-        CALL calbec ( npw, vkb, evc, becp )
+        !CALL init_us_2 (npw, igk, xk (1, ikk), vkb)
+        !!CALL ccalbec (nkb, npwx, npw, nbnd, becp, vkb, evc)
+        !CALL calbec ( npw, vkb, evc, becp )
 
         DO ig =1, npw
            IF( igk(ig) > 4*npwx ) & 
