@@ -672,22 +672,23 @@ call mp_sum( enl,   inter_pool_comm )
            !psic(nls(igk(1:npw)))=evc(1:npw,ibnd)
            !CALL esh5_write_psi_g(ibnd,psic,ngtot)
 
-           !eigpacked(:)=(0.d0,0.d0)
-           !eigpacked(igtomin(igk(1:npw)))=evc(1:npw,ibnd)
+           eigpacked(:)=(0.d0,0.d0)
+           eigpacked(igtomin(igk(1:npw)))=evc(1:npw,ibnd)
 
-           DO ig=1, ngtot
-              ! now for all G vectors find the PW coefficient for this k-point
-              found = .FALSE.
-              DO ig7 = 1, npw
-                 IF( igk(ig7) == igtog(ig) )THEN
-                    eigpacked(ig)=evc(ig7,ibnd)
-                    found = .TRUE.
-                    GOTO 17
-                 ENDIF
-              ENDDO
-              ! if can't find the coefficient this is zero
-17            IF( .NOT. found ) eigpacked(ig)=(0.d0,0.d0)
-           ENDDO
+!!!TOO SLOW
+!!           DO ig=1, ngtot
+!!              ! now for all G vectors find the PW coefficient for this k-point
+!!              found = .FALSE.
+!!              DO ig7 = 1, npw
+!!                 IF( igk(ig7) == igtog(ig) )THEN
+!!                    eigpacked(ig)=evc(ig7,ibnd)
+!!                    found = .TRUE.
+!!                    GOTO 17
+!!                 ENDIF
+!!              ENDDO
+!!              ! if can't find the coefficient this is zero
+!!17            IF( .NOT. found ) eigpacked(ig)=(0.d0,0.d0)
+!!           ENDDO
 
            CALL esh5_write_psi_g(ibnd,eigpacked,ngtot)
 
