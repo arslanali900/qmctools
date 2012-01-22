@@ -7,7 +7,7 @@
 
 __global__ static void
 eval_multi_multi_UBspline_3d_z_kernel 
-(double *pos, double3 drInv, double *coefs, double *vals[], 
+(double *pos, double3 drInv, const double *coefs, double *vals[], 
  uint3 dim, uint3 strides, int N)
 {
   int block = blockIdx.x;
@@ -87,7 +87,7 @@ eval_multi_multi_UBspline_3d_z_kernel
 
 __global__ static void
 eval_multi_multi_UBspline_3d_z_vgh_kernel 
-(double *pos, double3 drInv,  double *coefs, 
+(double *pos, double3 drInv, const double *coefs, 
  double *vals[], double *grads[], double *hess[], 
  uint3 dim, uint3 strides, int N)
 {
@@ -230,7 +230,7 @@ eval_multi_multi_UBspline_3d_z_vgh_kernel
 
 
 extern "C" void
-eval_multi_multi_UBspline_3d_z_cuda (multi_UBspline_3d_z_cuda *spline,
+eval_multi_multi_UBspline_3d_z_cuda (const multi_UBspline_3d_z_cuda *spline,
 				     double *pos_d, double *vals_d[], int num)
 {
   dim3 dimBlock(SPLINE_BLOCK_SIZE);
@@ -256,7 +256,7 @@ eval_multi_multi_UBspline_3d_z_cuda (multi_UBspline_3d_z_cuda *spline,
 }
 
 extern "C" void
-eval_multi_multi_UBspline_3d_z_vgh_cuda (multi_UBspline_3d_z_cuda *spline,
+eval_multi_multi_UBspline_3d_z_vgh_cuda (const multi_UBspline_3d_z_cuda *spline,
 					 double *pos_d, complex_double *vals_d[], complex_double *grads_d[],
 					 complex_double *hess_d[], int num)
 {
@@ -283,7 +283,7 @@ eval_multi_multi_UBspline_3d_z_vgh_cuda (multi_UBspline_3d_z_cuda *spline,
 
 __global__ static void
 eval_multi_multi_UBspline_3d_z_vgl_kernel 
-(double *pos, double3 drInv,  double *coefs,  double Linv[],
+(double *pos, double3 drInv,  const double *coefs,  double Linv[],
  double *vals[], double *grad_lapl[], uint3 dim, uint3 strides,
  int N, int row_stride)
 {
@@ -430,7 +430,7 @@ eval_multi_multi_UBspline_3d_z_vgl_kernel
 
 extern "C" void
 eval_multi_multi_UBspline_3d_z_vgl_cuda 
-(multi_UBspline_3d_z_cuda *spline, double *pos_d, double *Linv_d, 
+(const multi_UBspline_3d_z_cuda *spline, double *pos_d, double *Linv_d, 
  double *vals_d[], double *grad_lapl_d[], int num, int row_stride)
 {
   dim3 dimBlock(SPLINE_BLOCK_SIZE);

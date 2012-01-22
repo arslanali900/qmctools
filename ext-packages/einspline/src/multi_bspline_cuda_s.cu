@@ -80,7 +80,7 @@ create_multi_UBspline_3d_s_cuda (multi_UBspline_3d_s* spline)
 
 __global__ static void
 eval_multi_multi_UBspline_3d_s_kernel 
-(float *pos, float3 drInv, float *coefs, float *vals[], uint3 strides)
+(float *pos, float3 drInv, const float *coefs, float *vals[], uint3 strides)
 {
   int block = blockIdx.x;
   int thr   = threadIdx.x;
@@ -155,7 +155,7 @@ eval_multi_multi_UBspline_3d_s_kernel
 
 __global__ static void
 eval_multi_multi_UBspline_3d_s_vgh_kernel 
-(float *pos, float3 drInv,  float *coefs, 
+(float *pos, float3 drInv, const  float *coefs, 
  float *vals[], float *grads[], float *hess[], uint3 strides)
 {
   int block = blockIdx.x;
@@ -288,7 +288,7 @@ eval_multi_multi_UBspline_3d_s_vgh_kernel
 
 
 extern "C" void
-eval_multi_multi_UBspline_3d_s_cuda (multi_UBspline_3d_s_cuda *spline,
+eval_multi_multi_UBspline_3d_s_cuda (const multi_UBspline_3d_s_cuda *spline,
 				     float *pos_d, float *vals_d[], int num)
 {
   dim3 dimBlock(SPLINE_BLOCK_SIZE);

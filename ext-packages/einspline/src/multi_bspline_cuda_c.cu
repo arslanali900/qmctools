@@ -90,7 +90,7 @@ create_multi_UBspline_3d_c_cuda (multi_UBspline_3d_c* spline)
 
 __global__ static void
 eval_multi_multi_UBspline_3d_c_cuda (float *pos, float3 drInv, 
-				     float *coefs_real, float *coefs_imag,
+				     const float *coefs_real, const float *coefs_imag,
 				     float *vals[], uint3 strides)
 {
   int block = blockIdx.x;
@@ -203,7 +203,7 @@ eval_multi_multi_UBspline_3d_c_cuda (float *pos, float3 drInv,
 
 __global__ static void
 eval_multi_multi_UBspline_3d_c_vgh_cuda (float *pos, float3 drInv, 
-					 float *coefs_real, float *coefs_imag,
+					 const float *coefs_real, const float *coefs_imag,
 					 float *vals[], float *grads[], float *hess[],
 					 uint3 strides)
 {

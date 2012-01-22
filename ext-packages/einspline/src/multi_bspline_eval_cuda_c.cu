@@ -7,7 +7,7 @@
 #include <multithreading.h>
 
 __global__ void 
-eval_multi_UBspline_3d_cuda_c (float *coefs, float *abc, float *vals,
+eval_multi_UBspline_3d_cuda_c (const float *coefs, float *abc, float *vals,
 			       int ix, int iy, int iz,
 			       int xs, int ys, int zs, int N)
 {
@@ -38,7 +38,7 @@ __constant__ float A[16], dA[16], d2A[16];
 
 __global__ static void
 eval_multi_multi_UBspline_3d_cuda_c (float *pos, float3 drInv, 
-				     float *coefs_real, float *coefs_imag,
+				     const float *coefs_real,const  float *coefs_imag,
 				     float *vals_real, float *vals_imag, 
 				     int3 strides)
 {

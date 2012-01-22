@@ -6,7 +6,7 @@
 
 __global__ static void
 eval_multi_multi_UBspline_3d_d_kernel 
-(double *pos, double3 drInv, double *coefs, double *vals[], 
+(double *pos, double3 drInv, const double *coefs, double *vals[], 
  uint3 dim, uint3 strides, int N)
 {
   int block = blockIdx.x;
@@ -83,7 +83,7 @@ eval_multi_multi_UBspline_3d_d_kernel
 
 __global__ static void
 eval_multi_multi_UBspline_3d_d_vgh_kernel 
-(double *pos, double3 drInv,  double *coefs, 
+(double *pos, double3 drInv,  const double *coefs, 
  double *vals[], double *grads[], double *hess[], 
  uint3 dim, uint3 strides, int N)
 {
@@ -226,7 +226,7 @@ eval_multi_multi_UBspline_3d_d_vgh_kernel
 
 
 extern "C" void
-eval_multi_multi_UBspline_3d_d_cuda (multi_UBspline_3d_d_cuda *spline,
+eval_multi_multi_UBspline_3d_d_cuda (const multi_UBspline_3d_d_cuda *spline,
 				     double *pos_d, double *vals_d[], int num)
 {
   dim3 dimBlock(SPLINE_BLOCK_SIZE);
@@ -251,7 +251,7 @@ eval_multi_multi_UBspline_3d_d_cuda (multi_UBspline_3d_d_cuda *spline,
 }
 
 extern "C" void
-eval_multi_multi_UBspline_3d_d_vgh_cuda (multi_UBspline_3d_d_cuda *spline,
+eval_multi_multi_UBspline_3d_d_vgh_cuda (const multi_UBspline_3d_d_cuda *spline,
 					 double *pos_d, double *vals_d[], double *grads_d[],
 					 double *hess_d[], int num)
 {
@@ -426,7 +426,7 @@ eval_multi_multi_UBspline_3d_d_vgl_kernel
 
 extern "C" void
 eval_multi_multi_UBspline_3d_d_vgl_cuda 
-(multi_UBspline_3d_d_cuda *spline, double *pos_d, double *Linv_d, 
+(const multi_UBspline_3d_d_cuda *spline, double *pos_d, double *Linv_d, 
  double *vals_d[], double *grad_lapl_d[], int num, int row_stride)
 {
   dim3 dimBlock(SPLINE_BLOCK_SIZE);
