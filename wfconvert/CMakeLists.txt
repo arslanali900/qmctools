@@ -122,7 +122,7 @@ CHECK_INCLUDE_FILE(unistd.h HAVE_UNISTD_H)
 # BUILD_SANDBOX    build test programs
 # MPIP_PROFILE     profile mpi performance
 ######################################################################
-SET(QMC_BUILD_STATIC 0 CACHE BOOL "Build static libraries and binary")
+#SET(QMC_BUILD_STATIC 0 CACHE BOOL "Build static libraries and binary")
 
 
 ######################################################################
@@ -139,8 +139,10 @@ SET(HAVE_LIBBLITZ 0)
 SET(HAVE_LIBGSL 0)
 SET(MAC_VECLIB 0)
 SET(ENABLE_GTK_GUI 0)
-SET(HAVE_EINSPLINE 0)
+
+SET(HAVE_EINSPLINE 1)
 SET(HAVE_EINSPLINE_EXT 0)
+
 set(ENABLE_TAU_PROFILE 0 CACHE BOOL "Enable tau for profiling")
 SET(HAVE_COMMON 1)
 set(TAU_HOME $ENV{TAU_HOME})
@@ -362,29 +364,12 @@ IF(FFTW_FOUND)
   LINK_LIBRARIES(${FFTW_LIBRARIES})
 ENDIF(FFTW_FOUND)
 
-######################################################################
-# Manage Einspline library
-# - check if libeinspline can be found in $EINSPLINE_HOME/include and
-# $EINSPLINE_HOME/lib
-# - if not found, build it from the source directory in $EINSPLINE_HOME
-# - if everything fails, do not use it
-######################################################################
-INCLUDE(${PROJECT_CMAKE}/FindEinspline.cmake)
-if(EINSPLINE_FOUND)
-  set(HAVE_EINSPLINE 1)
-  IF(HAVE_EINSPLINE_EXT)
-    INCLUDE_DIRECTORIES(${EINSPLINE_INCLUDE_DIR})
-    LINK_LIBRARIES(${EINSPLINE_LIBRARIES})  
-  ENDIF(HAVE_EINSPLINE_EXT)
-  MESSAGE(STATUS "EINSPLINE_INCLUDE_DIR="${EINSPLINE_INCLUDE_DIR})
-endif()
-
-#######################################################################
-## Manage GTK+ and GTKMM packages for GUI
-## search headers and libraries
-##   1) -lXYZ-${XYZ_VERSION} 
-##   2) -lXYZ
-## example: -lgtk-${GTK_VERSION} | -lgtk
+########################################################################
+# Manage GTK+ and GTKMM packages for GUI
+# search headers and libraries
+#   1) -lXYZ-${XYZ_VERSION} 
+#   2) -lXYZ
+# example: -lgtk-${GTK_VERSION} | -lgtk
 #######################################################################
 #SET(GTK_VERSION 2.0)
 #SET(PANGO_VERSION 1.0)
@@ -426,4 +411,6 @@ endif()
 CONFIGURE_FILE(${PROJECT_SOURCE_DIR}/src/config.h.cmake.in
                ${PROJECT_BINARY_DIR}/src/Common/config.h)
 
-SUBDIRS(src/Common src)
+include_directories(${PROJECT_BINARY_DIR}/src/Common)
+
+SUBDIRS(src/einspline src/Common src)
