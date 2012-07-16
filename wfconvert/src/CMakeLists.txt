@@ -34,7 +34,7 @@ set (TOOLS_SRCS
 ADD_LIBRARY(qmctools ${TOOLS_SRCS})
 link_libraries(qmctools common einspline)
 
-#ADD_EXECUTABLE(wfconvert  WFConv.cc)        
+ADD_EXECUTABLE(wfconvert  WFConv.cc)        
 ADD_EXECUTABLE(ppconvert  NLPPClass.cc)        
 #ADD_EXECUTABLE(fit_sk  FitSk.cc)
 #ADD_EXECUTABLE(test_tile  TestTile.cc)
