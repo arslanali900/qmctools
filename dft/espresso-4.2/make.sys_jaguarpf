@@ -31,13 +31,15 @@
 # With the exception of IBM xlf, FDFLAGS = $(DFLAGS)
 # For IBM xlf, FDFLAGS is the same as DFLAGS with separating commas 
 
-DFLAGS         =  -D__GFORTRAN -D__STD_F95 -D__FFTW -DEXX -DH5_USE_16_API -D__MPI -D__PARA
+DFLAGS         =  -D__GFORTRAN -D__STD_F95 -D__FFTW -D__MPI -D__PARA -DEXX -DH5_USE_16_API
 FDFLAGS        = $(DFLAGS)
 
 # IFLAGS = how to locate directories where files to be included are
 # In most cases, IFLAGS = -I../include
 
-IFLAGS         = -I../include -I/opt/cray/hdf5/1.8.3.1/hdf5-gnu/include
+IFLAGS         = -I../include 
+
+HDF5_HOME      = /opt/cray/hdf5/1.8.6/gnu/46/lib
 
 # MOD_FLAGS = flag used by f90 compiler to locate modules
 # Each Makefile defines the list of needed modules in MODFLAGS
@@ -56,20 +58,20 @@ MOD_FLAG      = -I
 MPIF90         = ftn
 #F90           = gfortran
 CC             = cc
-F77            = gfortran
+F77            = ftn
 
 # C preprocessor and preprocessing flags - for explicit preprocessing, 
 # if needed (see the compilation rules above)
 # preprocessing flags must include DFLAGS and IFLAGS
 
 CPP            = cpp
-CPPFLAGS       = -std=c99 -P -traditional $(DFLAGS) $(IFLAGS) 
+CPPFLAGS       = -std=c99 -P -traditional $(DFLAGS) $(IFLAGS)
 
 # compiler flags: C, F90, F77
 # C flags must include DFLAGS and IFLAGS
 # F90 flags must include MODFLAGS, IFLAGS, and FDFLAGS with appropriate syntax
 
-CFLAGS         = -std=c99 -O3 $(DFLAGS) $(IFLAGS)
+CFLAGS         = -O3 -std=c99 $(DFLAGS) $(IFLAGS) -I$(HDF5_HOME)/include
 F90FLAGS       = $(FFLAGS) -x f95-cpp-input $(FDFLAGS) $(IFLAGS) $(MODFLAGS)
 FFLAGS         = -O3 -g
 
@@ -91,8 +93,8 @@ LD_LIBS        =
 # BLAS_LIBS = /your/path/to/espresso/BLAS/blas.a
 # BLAS_LIBS_SWITCH = internal
 
-BLAS_LIBS      = /ccs/home/jtkrogel/svnwork/espresso/espresso-4.2/BLAS/blas.a
-BLAS_LIBS_SWITCH = internal
+BLAS_LIBS      = 
+BLAS_LIBS_SWITCH = external
 
 # If you have nothing better, use the local copy :
 # LAPACK_LIBS = /your/path/to/espresso/LAPACK/lapack.a
@@ -104,8 +106,8 @@ BLAS_LIBS_SWITCH = internal
 # For IBM machines with essl (-D__ESSL): load essl BEFORE lapack !
 # remember that LAPACK_LIBS precedes BLAS_LIBS in loading order
 
-LAPACK_LIBS    = /ccs/home/jtkrogel/svnwork/espresso/espresso-4.2/lapack-3.2/lapack.a
-LAPACK_LIBS_SWITCH = internal
+LAPACK_LIBS    = 
+LAPACK_LIBS_SWITCH = external
 
 SCALAPACK_LIBS = 
 
@@ -140,9 +142,10 @@ RANLIB         = ranlib
 # all internal and external libraries - do not modify
 
 FLIB_TARGETS   = all
-H5LIBS = -L/opt/cray/hdf5/1.8.3.1/hdf5-gnu/lib -lhdf5 -lhdf5_hl
+H5_LIBS =  /opt/cray/hdf5/1.8.6/gnu/46/lib/libhdf5_hl.a  /opt/cray/hdf5/1.8.6/gnu/46/lib/libhdf5.a
+
 LIBOBJS        = ../flib/ptools.a ../flib/flib.a ../clib/clib.a ../iotk/src/libiotk.a ../Multigrid/mglib.a
-LIBS           = $(SCALAPACK_LIBS) $(LAPACK_LIBS) $(FFT_LIBS) $(BLAS_LIBS) $(MPI_LIBS) $(MASS_LIBS) $(PGPLOT_LIBS) $(LD_LIBS) $(H5LIBS)
+LIBS           = $(SCALAPACK_LIBS) $(LAPACK_LIBS) $(FFT_LIBS) $(BLAS_LIBS) $(MPI_LIBS) $(MASS_LIBS) $(PGPLOT_LIBS) $(LD_LIBS) $(H5_LIBS)
 
 # topdir for linking espresso libs with plugins
-TOPDIR = /ccs/home/jtkrogel/svnwork/espresso/espresso-4.2
+TOPDIR = /global/homes/m/mcminis2/src/espresso-4.2

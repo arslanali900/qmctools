@@ -1,4 +1,4 @@
-# Makefile for postprocessing (PP)
+#! Makefile for postprocessing (PP)
 
 include ../make.sys
 
@@ -7,6 +7,7 @@ MODFLAGS= $(MOD_FLAG)../iotk/src $(MOD_FLAG)../Modules \
           $(MOD_FLAG)../EE $(MOD_FLAG)../PW $(MOD_FLAG).
 
 PPOBJS = \
+read_file_min.o \
 addusdens1d.o \
 add_shift_cc.o \
 add_shift_lc.o \
@@ -56,7 +57,7 @@ all : tldeps average.x bands.x dos.x epsilon.x initial_state.x \
       plan_avg.x plotband.x plotproj.x plotrho.x pmw.x pp.x projwfc.x \
       pawplot.x sumpdos.x wfdd.x \
       pw2casino.x pw2wannier90.x pw_export.x pw2gw.x \
-      wannier_ham.x wannier_plot.x pw2qmcpack.x pw2qmcpack_add.x
+      wannier_ham.x wannier_plot.x pw2qmcpack.x
 
 qexml: qexml.x
 qexml.x: qexml.o qexml_example.o
@@ -129,15 +130,7 @@ pw2casino.x : pw2casino.o pw2casino_write.o pw2blip.o $(PPOBJS) $(MODULES) $(LIB
 		pw2casino.o pw2casino_write.o pw2blip.o $(PPOBJS) $(MODULES) $(LIBOBJS) $(LIBS)
 	- ( cd ../bin ; ln -fs ../PP/$@ . )
 
-HDF5_INC = -DH5_USE_16_API -I${HDF5_HOME}/include
-
-#HDF5_LIBS = -L${HDF5_HOME}/lib -lhdf5
-HDF5_LIBS = -L${HOME}/lib -lhdf5 -lhdf5_hl
-HDF5OBJS = esh5_interfaces.o
-#HDF5_LIBS = -L${HDF5_HOME}/lib -lhdf5
-#HDF5OBJS = esh5_interfaces.o
-
-pw2qmcpack.x : pw2qmcpack.o $(PPOBJS) $(PWOBJS) $(MODULES) $(LIBOBJS) 
+pw2qmcpack.x : pw2qmcpack.o $(PPOBJS) $(PWOBJS) $(MODULES) $(LIBOBJS)  
 	$(LD) $(LDFLAGS) -o $@ pw2qmcpack.o $(PPOBJS) $(MODULES) $(PWOBJS) $(LIBOBJS) $(LIBS) 
 	- ( cd ../bin ; ln -fs ../PP/$@ . )
 
