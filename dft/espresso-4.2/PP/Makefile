@@ -131,12 +131,12 @@ pw2casino.x : pw2casino.o pw2casino_write.o pw2blip.o $(PPOBJS) $(MODULES) $(LIB
 	- ( cd ../bin ; ln -fs ../PP/$@ . )
 
 pw2qmcpack.x : pw2qmcpack.o $(PPOBJS) $(PWOBJS) $(MODULES) $(LIBOBJS)  
-	$(LD) $(LDFLAGS) -o $@ pw2qmcpack.o $(PPOBJS) $(MODULES) $(PWOBJS) $(LIBOBJS) $(LIBS) 
+	$(LD) $(LDFLAGS) -o $@ pw2qmcpack.o $(PPOBJS) $(MODULES) $(PWOBJS) $(LIBOBJS) $(LIBS) $(HDF5_LIBS)
 	- ( cd ../bin ; ln -fs ../PP/$@ . )
 
-pw2qmcpack_add.x : pw2qmcpack_add.o $(PPOBJS) $(PWOBJS) $(MODULES) $(LIBOBJS) 
-	$(LD) $(LDFLAGS) -o $@ pw2qmcpack_add.o $(PPOBJS) $(MODULES) $(PWOBJS) $(LIBOBJS) $(LIBS) 
-	- ( cd ../bin ; ln -fs ../PP/$@ . )
+#pw2qmcpack_add.x : pw2qmcpack_add.o $(PPOBJS) $(PWOBJS) $(MODULES) $(LIBOBJS) 
+#	$(LD) $(LDFLAGS) -o $@ pw2qmcpack_add.o $(PPOBJS) $(MODULES) $(PWOBJS) $(LIBOBJS) $(LIBS) 
+#	- ( cd ../bin ; ln -fs ../PP/$@ . )
 
 pw2wannier90.x : pw2wannier90.o $(PPOBJS) $(MODULES) $(LIBOBJS)
 	$(LD) $(LDFLAGS) -o $@ \
