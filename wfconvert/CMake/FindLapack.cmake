@@ -80,38 +80,6 @@ if(${CMAKE_C_COMPILER} MATCHES "icc")
 
     endif()
   endif()
-else()
-
-  if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-    SET(CMAKE_CXX_LINK_FLAGS "${CMAKE_CXX_LINK_FLAGS} -framework vecLib")
-    SET(LAPACK_LIBRARY_INIT 1 CACHE BOOL "use Mac Framework")
-    SET(MAC_VECLIB 1 CACHE BOOL "use Mac Framework")
-    MESSAGE(STATUS "Using Framework on Darwin.")
-    set(LAPACK_FOUND TRUE)
-    set(BLAS_FOUND TRUE)
-  endif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-
-  if(${CMAKE_SYSTEM_NAME} MATCHES "AIX")
-    link_libraries(-lessl -lmass -lmassv)
-    set(BLAS_FOUND TRUE)
-  endif(${CMAKE_SYSTEM_NAME} MATCHES "AIX")
-
-  if($ENV{LAPACK} MATCHES "lapack")
-    link_libraries($ENV{LAPACK})
-    set(LAPACK_FOUND TRUE)
-    if($ENV{LAPACK} MATCHES "blas")
-    set(BLAS_FOUND TRUE)
-    endif()
-  endif($ENV{LAPACK} MATCHES "lapack")
-
-  IF($ENV{ATLAS} MATCHES "atlas")
-    # COULD SEARCH THESE but..... 
-    set(atlas_libs "lapack;f77blas;cblas;atlas")
-    set(LAPACK_FOUND TRUE)
-    set(BLAS_FOUND TRUE)
-    link_libraries($ENV{ATLAS})
-  endif($ENV{ATLAS} MATCHES "atlas")
-
 endif()
 
 if(LAPACK_FOUND AND BLAS_FOUND)
@@ -127,7 +95,7 @@ else(LAPACK_FOUND AND BLAS_FOUND)
     set(LAPACK_FOUND TRUE)
     set(BLAS_FOUND TRUE)
   else()
-    MESSAGE(STATUS "Set LAPACK environment,e.g. export LAPACK="-L/somewhare/lib -llapack -lblas")
+    MESSAGE(STATUS "Set LAPACK environment,e.g. export LAPACK=-L/somewhare/lib -llapack -lblas")
   endif()
 endif(LAPACK_FOUND AND BLAS_FOUND)
 
@@ -170,4 +138,3 @@ endif(LAPACK_FOUND AND BLAS_FOUND)
 #    FOUND_SCALAPACK
 #    )
 #ENDIF(USE_SCALAPACK)
-
